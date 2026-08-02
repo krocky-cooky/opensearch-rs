@@ -1,14 +1,10 @@
 {
   "tasks.list":{
     "documentation":{
-      "url":"https://opensearch.org/docs/",
+      "url":"https://opensearch.org/docs/latest/api-reference/tasks/",
       "description":"Returns a list of tasks."
     },
     "stability":"experimental",
-    "visibility":"public",
-    "headers":{
-      "accept": [ "application/json"]
-    },
     "url":{
       "paths":[
         {

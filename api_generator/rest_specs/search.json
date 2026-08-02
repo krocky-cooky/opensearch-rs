@@ -1,15 +1,10 @@
 {
   "search":{
     "documentation":{
-      "url":"https://opensearch.org/docs/",
+      "url":"https://opensearch.org/docs/latest/api-reference/search/",
       "description":"Returns results matching a query."
     },
     "stability":"stable",
-    "visibility":"public",
-    "headers":{
-      "accept": [ "application/json"],
-      "content_type": ["application/json"]
-    },
     "url":{
       "paths":[
         {
@@ -231,9 +226,14 @@
         "description":"Indicates whether hits.total should be rendered as an integer or an object in the rest search response",
         "default":false
       },
-      "min_compatible_shard_node":{
-        "type":"string",
-        "description":"The minimum compatible version that all shards involved in search should have for this request to be successful"
+      "search_pipeline": {
+        "type": "string",
+        "description": "The search pipeline to use to execute this request"
+      },
+      "include_named_queries_score":{
+        "type": "boolean",
+        "description":"Indicates whether hit.matched_queries should be rendered as a map that includes the name of the matched query associated with its score (true) or as an array containing the name of the matched queries (false)",
+        "default":false
       }
     },
     "body":{

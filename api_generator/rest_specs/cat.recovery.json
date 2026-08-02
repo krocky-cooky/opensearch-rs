@@ -1,14 +1,10 @@
 {
   "cat.recovery":{
     "documentation":{
-      "url":"https://opensearch.org/docs/",
+      "url":"https://opensearch.org/docs/latest/api-reference/cat/cat-recovery/",
       "description":"Returns information about index shard recoveries, both on-going completed."
     },
     "stability":"stable",
-    "visibility":"public",
-    "headers":{
-      "accept": [ "text/plain", "application/json"]
-    },
     "url":{
       "paths":[
         {

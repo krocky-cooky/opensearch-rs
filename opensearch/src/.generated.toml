@@ -5,10 +5,11 @@ written = [
     "indices.rs",
     "ingest.rs",
     "nodes.rs",
+    "remote_store.rs",
     "root/mod.rs",
+    "search_pipeline.rs",
     "snapshot.rs",
     "tasks.rs",
-    "text_structure.rs",
 ]
 merged = [
     "lib.rs",

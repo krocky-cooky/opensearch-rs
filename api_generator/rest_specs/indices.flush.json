@@ -1,14 +1,10 @@
 {
   "indices.flush":{
     "documentation":{
-      "url":"https://opensearch.org/docs/",
+      "url":"https://www.elastic.co/guide/en/elasticsearch/reference/master/indices-flush.html",
       "description":"Performs the flush operation on one or more indices."
     },
     "stability":"stable",
-    "visibility":"public",
-    "headers":{
-      "accept": [ "application/json"]
-    },
     "url":{
       "paths":[
         {

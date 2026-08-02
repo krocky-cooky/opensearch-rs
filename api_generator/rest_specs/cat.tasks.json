@@ -1,14 +1,10 @@
 {
   "cat.tasks":{
     "documentation":{
-      "url":"https://opensearch.org/docs/",
+      "url":"https://opensearch.org/docs/latest/api-reference/cat/cat-tasks/",
       "description":"Returns information about the tasks currently executing on one or more nodes in the cluster."
     },
     "stability":"stable",
-    "visibility":"public",
-    "headers":{
-      "accept": [ "text/plain", "application/json"]
-    },
     "url":{
       "paths":[
         {

@@ -1,14 +1,10 @@
 {
   "search_shards":{
     "documentation":{
-      "url":"https://opensearch.org/docs/",
+      "url":"https://www.elastic.co/guide/en/elasticsearch/reference/master/search-shards.html",
       "description":"Returns information about the indices and shards that a search request would be executed against."
     },
     "stability":"stable",
-    "visibility":"public",
-    "headers":{
-      "accept": [ "application/json"]
-    },
     "url":{
       "paths":[
         {
@@ -44,7 +40,7 @@
       },
       "local":{
         "type":"boolean",
-        "description":"Return local information, do not retrieve the state from cluster-manager node (default: false)"
+        "description":"Return local information, do not retrieve the state from master node (default: false)"
       },
       "ignore_unavailable":{
         "type":"boolean",
@@ -66,6 +62,9 @@
         "default":"open",
         "description":"Whether to expand wildcard expression to concrete indices that are open, closed or both."
       }
+    },
+    "body":{
+      "description":"The search source (in order to specify slice parameters)"
     }
   }
 }

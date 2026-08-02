@@ -1,14 +1,10 @@
 {
   "cluster.stats":{
     "documentation":{
-      "url":"https://opensearch.org/docs/",
+      "url":"https://opensearch.org/docs/latest/api-reference/cluster-api/cluster-stats/",
       "description":"Returns high-level overview of cluster statistics."
     },
     "stability":"stable",
-    "visibility":"public",
-    "headers":{
-      "accept": [ "application/json"]
-    },
     "url":{
       "paths":[
         {

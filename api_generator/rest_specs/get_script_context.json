@@ -1,14 +1,10 @@
 {
   "get_script_context":{
     "documentation":{
-      "url": "https://opensearch.org/docs/",
+      "url": "https://opensearch.org/docs/latest/api-reference/script-apis/get-script-language/",
       "description":"Returns all script contexts."
     },
     "stability":"experimental",
-    "visibility":"public",
-    "headers":{
-      "accept": [ "application/json"]
-    },
     "url":{
       "paths":[
         {

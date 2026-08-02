@@ -1,15 +1,10 @@
 {
   "msearch":{
     "documentation":{
-      "url":"https://opensearch.org/docs/",
+      "url":"https://opensearch.org/docs/latest/api-reference/multi-search/",
       "description":"Allows to execute several search operations in one request."
     },
     "stability":"stable",
-    "visibility":"public",
-    "headers":{
-      "accept": [ "application/json"],
-      "content_type": ["application/x-ndjson"]
-    },
     "url":{
       "paths":[
         {
@@ -20,15 +15,15 @@
           ]
         },
         {
-          "path":"/{index}/_msearch",
-          "methods":[
+          "path": "/{index}/_msearch",
+          "methods": [
             "GET",
             "POST"
           ],
-          "parts":{
-            "index":{
-              "type":"list",
-              "description":"A comma-separated list of index names to use as default"
+          "parts": {
+            "index": {
+              "type": "list",
+              "description": "A comma-separated list of index names to use as default"
             }
           }
         }

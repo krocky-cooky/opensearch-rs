@@ -1,14 +1,10 @@
 {
   "nodes.info":{
     "documentation":{
-      "url":"https://opensearch.org/docs/",
+      "url":"https://opensearch.org/docs/latest/api-reference/nodes-apis/nodes-info/",
       "description":"Returns information about nodes in the cluster."
     },
     "stability":"stable",
-    "visibility":"public",
-    "headers":{
-      "accept": [ "application/json"]
-    },
     "url":{
       "paths":[
         {

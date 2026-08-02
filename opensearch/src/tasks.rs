@@ -73,7 +73,7 @@ impl<'b> TasksCancelParts<'b> {
         }
     }
 }
-#[doc = "Builder for the [Tasks Cancel API](https://opensearch.org/docs/)\n\nCancels a task, if it can be cancelled through an API."]
+#[doc = "Builder for the [Tasks Cancel API](https://opensearch.org/docs/latest/api-reference/tasks/)\n\nCancels a task, if it can be cancelled through an API."]
 #[doc = "&nbsp;\n# Optional, experimental\nThis requires the `experimental-apis` feature. Can have breaking changes in future\nversions or might even be removed entirely.\n        "]
 #[cfg(feature = "experimental-apis")]
 #[derive(Clone, Debug)]
@@ -241,6 +241,130 @@ where
 }
 #[cfg(feature = "experimental-apis")]
 #[derive(Debug, Clone, PartialEq, Eq)]
+#[doc = "API parts for the Tasks Delete API"]
+pub enum TasksDeleteParts<'b> {
+    #[doc = "TaskId"]
+    TaskId(&'b str),
+}
+#[cfg(feature = "experimental-apis")]
+impl<'b> TasksDeleteParts<'b> {
+    #[doc = "Builds a relative URL path to the Tasks Delete API"]
+    pub fn url(self) -> Cow<'static, str> {
+        match self {
+            TasksDeleteParts::TaskId(task_id) => {
+                let encoded_task_id: Cow<str> =
+                    percent_encode(task_id.as_bytes(), PARTS_ENCODED).into();
+                let mut p = String::with_capacity(8usize + encoded_task_id.len());
+                p.push_str("/_tasks/");
+                p.push_str(encoded_task_id.as_ref());
+                p.into()
+            }
+        }
+    }
+}
+#[doc = "Builder for the [Tasks Delete API](https://opensearch.org/docs/latest/api-reference/tasks/)\n\nDeletes a stored completed task result."]
+#[doc = "&nbsp;\n# Optional, experimental\nThis requires the `experimental-apis` feature. Can have breaking changes in future\nversions or might even be removed entirely.\n        "]
+#[cfg(feature = "experimental-apis")]
+#[derive(Clone, Debug)]
+pub struct TasksDelete<'a, 'b> {
+    transport: &'a Transport,
+    parts: TasksDeleteParts<'b>,
+    error_trace: Option<bool>,
+    filter_path: Option<&'b [&'b str]>,
+    headers: HeaderMap,
+    human: Option<bool>,
+    pretty: Option<bool>,
+    request_timeout: Option<Duration>,
+    source: Option<&'b str>,
+}
+#[cfg(feature = "experimental-apis")]
+impl<'a, 'b> TasksDelete<'a, 'b> {
+    #[doc = "Creates a new instance of [TasksDelete] with the specified API parts"]
+    pub fn new(transport: &'a Transport, parts: TasksDeleteParts<'b>) -> Self {
+        let headers = HeaderMap::new();
+        TasksDelete {
+            transport,
+            parts,
+            headers,
+            error_trace: None,
+            filter_path: None,
+            human: None,
+            pretty: None,
+            request_timeout: None,
+            source: None,
+        }
+    }
+    #[doc = "Include the stack trace of returned errors."]
+    pub fn error_trace(mut self, error_trace: bool) -> Self {
+        self.error_trace = Some(error_trace);
+        self
+    }
+    #[doc = "A comma-separated list of filters used to reduce the response."]
+    pub fn filter_path(mut self, filter_path: &'b [&'b str]) -> Self {
+        self.filter_path = Some(filter_path);
+        self
+    }
+    #[doc = "Adds a HTTP header"]
+    pub fn header(mut self, key: HeaderName, value: HeaderValue) -> Self {
+        self.headers.insert(key, value);
+        self
+    }
+    #[doc = "Return human readable values for statistics."]
+    pub fn human(mut self, human: bool) -> Self {
+        self.human = Some(human);
+        self
+    }
+    #[doc = "Pretty format the returned JSON response."]
+    pub fn pretty(mut self, pretty: bool) -> Self {
+        self.pretty = Some(pretty);
+        self
+    }
+    #[doc = "Sets a request timeout for this API call.\n\nThe timeout is applied from when the request starts connecting until the response body has finished."]
+    pub fn request_timeout(mut self, timeout: Duration) -> Self {
+        self.request_timeout = Some(timeout);
+        self
+    }
+    #[doc = "The URL-encoded request definition. Useful for libraries that do not accept a request body for non-POST requests."]
+    pub fn source(mut self, source: &'b str) -> Self {
+        self.source = Some(source);
+        self
+    }
+    #[doc = "Creates an asynchronous call to the Tasks Delete API that can be awaited"]
+    pub async fn send(self) -> Result<Response, Error> {
+        let path = self.parts.url();
+        let method = Method::Delete;
+        let headers = self.headers;
+        let timeout = self.request_timeout;
+        let query_string = {
+            #[serde_with::skip_serializing_none]
+            #[derive(Serialize)]
+            struct QueryParams<'b> {
+                error_trace: Option<bool>,
+                #[serde(serialize_with = "crate::client::serialize_coll_qs")]
+                filter_path: Option<&'b [&'b str]>,
+                human: Option<bool>,
+                pretty: Option<bool>,
+                source: Option<&'b str>,
+            }
+            let query_params = QueryParams {
+                error_trace: self.error_trace,
+                filter_path: self.filter_path,
+                human: self.human,
+                pretty: self.pretty,
+                source: self.source,
+            };
+            Some(query_params)
+        };
+        let body = Option::<()>::None;
+        let response = self
+            .transport
+            .send(method, &path, headers, query_string.as_ref(), body, timeout)
+            .await?;
+        Ok(response)
+    }
+}
+#[cfg(feature = "experimental-apis")]
+#[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Tasks Get API"]
 pub enum TasksGetParts<'b> {
     #[doc = "TaskId"]
@@ -262,7 +386,7 @@ impl<'b> TasksGetParts<'b> {
         }
     }
 }
-#[doc = "Builder for the [Tasks Get API](https://opensearch.org/docs/)\n\nReturns information about a task."]
+#[doc = "Builder for the [Tasks Get API](https://opensearch.org/docs/latest/api-reference/tasks/)\n\nReturns information about a task."]
 #[doc = "&nbsp;\n# Optional, experimental\nThis requires the `experimental-apis` feature. Can have breaking changes in future\nversions or might even be removed entirely.\n        "]
 #[cfg(feature = "experimental-apis")]
 #[derive(Clone, Debug)]
@@ -397,7 +521,7 @@ impl TasksListParts {
         }
     }
 }
-#[doc = "Builder for the [Tasks List API](https://opensearch.org/docs/)\n\nReturns a list of tasks."]
+#[doc = "Builder for the [Tasks List API](https://opensearch.org/docs/latest/api-reference/tasks/)\n\nReturns a list of tasks."]
 #[doc = "&nbsp;\n# Optional, experimental\nThis requires the `experimental-apis` feature. Can have breaking changes in future\nversions or might even be removed entirely.\n        "]
 #[cfg(feature = "experimental-apis")]
 #[derive(Clone, Debug)]
@@ -578,19 +702,25 @@ impl<'a> Tasks<'a> {
     pub fn transport(&self) -> &Transport {
         self.transport
     }
-    #[doc = "[Tasks Cancel API](https://opensearch.org/docs/)\n\nCancels a task, if it can be cancelled through an API."]
+    #[doc = "[Tasks Cancel API](https://opensearch.org/docs/latest/api-reference/tasks/)\n\nCancels a task, if it can be cancelled through an API."]
     #[doc = "&nbsp;\n# Optional, experimental\nThis requires the `experimental-apis` feature. Can have breaking changes in future\nversions or might even be removed entirely.\n        "]
     #[cfg(feature = "experimental-apis")]
     pub fn cancel<'b>(&'a self, parts: TasksCancelParts<'b>) -> TasksCancel<'a, 'b, ()> {
         TasksCancel::new(self.transport(), parts)
     }
-    #[doc = "[Tasks Get API](https://opensearch.org/docs/)\n\nReturns information about a task."]
+    #[doc = "[Tasks Delete API](https://opensearch.org/docs/latest/api-reference/tasks/)\n\nDeletes a stored completed task result."]
+    #[doc = "&nbsp;\n# Optional, experimental\nThis requires the `experimental-apis` feature. Can have breaking changes in future\nversions or might even be removed entirely.\n        "]
+    #[cfg(feature = "experimental-apis")]
+    pub fn delete<'b>(&'a self, parts: TasksDeleteParts<'b>) -> TasksDelete<'a, 'b> {
+        TasksDelete::new(self.transport(), parts)
+    }
+    #[doc = "[Tasks Get API](https://opensearch.org/docs/latest/api-reference/tasks/)\n\nReturns information about a task."]
     #[doc = "&nbsp;\n# Optional, experimental\nThis requires the `experimental-apis` feature. Can have breaking changes in future\nversions or might even be removed entirely.\n        "]
     #[cfg(feature = "experimental-apis")]
     pub fn get<'b>(&'a self, parts: TasksGetParts<'b>) -> TasksGet<'a, 'b> {
         TasksGet::new(self.transport(), parts)
     }
-    #[doc = "[Tasks List API](https://opensearch.org/docs/)\n\nReturns a list of tasks."]
+    #[doc = "[Tasks List API](https://opensearch.org/docs/latest/api-reference/tasks/)\n\nReturns a list of tasks."]
     #[doc = "&nbsp;\n# Optional, experimental\nThis requires the `experimental-apis` feature. Can have breaking changes in future\nversions or might even be removed entirely.\n        "]
     #[cfg(feature = "experimental-apis")]
     pub fn list<'b>(&'a self) -> TasksList<'a, 'b> {

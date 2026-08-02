@@ -1,14 +1,10 @@
 {
   "update_by_query_rethrottle":{
     "documentation":{
-      "url":"https://opensearch.org/docs/",
+      "url":"https://opensearch.org/docs/latest/api-reference/document-apis/update-by-query/",
       "description":"Changes the number of requests per second for a particular Update By Query operation."
     },
     "stability":"stable",
-    "visibility":"public",
-    "headers":{
-      "accept": [ "application/json"]
-    },
     "url":{
       "paths":[
         {

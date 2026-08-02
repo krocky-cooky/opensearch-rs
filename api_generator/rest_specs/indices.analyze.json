@@ -1,15 +1,10 @@
 {
   "indices.analyze":{
     "documentation":{
-      "url":"https://opensearch.org/docs/",
+      "url":"https://opensearch.org/docs/latest/api-reference/analyze-apis/",
       "description":"Performs the analysis process on a text and return the tokens breakdown of the text."
     },
     "stability":"stable",
-    "visibility":"public",
-    "headers":{
-      "accept": [ "application/json"],
-      "content_type": ["application/json"]
-    },
     "url":{
       "paths":[
         {

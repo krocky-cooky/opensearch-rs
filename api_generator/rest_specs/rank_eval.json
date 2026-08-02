@@ -1,15 +1,10 @@
 {
   "rank_eval":{
     "documentation":{
-      "url":"https://opensearch.org/docs/",
+      "url":"https://opensearch.org/docs/latest/api-reference/rank-eval/",
       "description":"Allows to evaluate the quality of ranked search results over a set of typical search queries"
     },
     "stability":"experimental",
-    "visibility":"public",
-    "headers":{
-      "accept": [ "application/json"],
-      "content_type": ["application/json"]
-    },
     "url":{
       "paths":[
         {

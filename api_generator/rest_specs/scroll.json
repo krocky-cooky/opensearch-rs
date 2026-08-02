@@ -1,15 +1,10 @@
 {
   "scroll":{
     "documentation":{
-      "url":"https://opensearch.org/docs/",
+      "url":"https://opensearch.org/docs/latest/api-reference/scroll/",
       "description":"Allows to retrieve a large numbers of results from a single search request."
     },
     "stability":"stable",
-    "visibility":"public",
-    "headers":{
-      "accept": [ "application/json"],
-      "content_type": ["application/json"]
-    },
     "url":{
       "paths":[
         {
@@ -28,7 +23,8 @@
           "parts":{
             "scroll_id":{
               "type":"string",
-              "description":"The scroll ID"
+              "description":"The scroll ID",
+              "deprecated":true
             }
           },
           "deprecated":{

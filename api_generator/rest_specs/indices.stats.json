@@ -1,14 +1,10 @@
 {
   "indices.stats":{
     "documentation":{
-      "url":"https://opensearch.org/docs/",
+      "url":"https://opensearch.org/docs/latest/api-reference/index-apis/stats/",
       "description":"Provides statistics on operations happening in an index."
     },
     "stability":"stable",
-    "visibility":"public",
-    "headers":{
-      "accept": [ "application/json"]
-    },
     "url":{
       "paths":[
         {
@@ -121,10 +117,6 @@
           "shards"
         ],
         "default":"indices"
-      },
-      "types":{
-        "type":"list",
-        "description":"A comma-separated list of document types for the `indexing` index metric"
       },
       "include_segment_file_sizes":{
         "type":"boolean",

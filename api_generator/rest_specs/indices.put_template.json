@@ -1,15 +1,10 @@
 {
   "indices.put_template":{
     "documentation":{
-      "url":"https://opensearch.org/docs/",
+      "url":"https://opensearch.org/docs/latest/im-plugin/index-templates",
       "description":"Creates or updates an index template."
     },
     "stability":"stable",
-    "visibility":"public",
-    "headers":{
-      "accept": [ "application/json"],
-      "content_type": ["application/json"]
-    },
     "url":{
       "paths":[
         {
@@ -39,7 +34,7 @@
       },
       "master_timeout":{
         "type":"time",
-        "description":"Specify timeout for connection to cluster-manager node node",
+        "description":"Specify timeout for connection to master node",
         "deprecated":{
           "version":"2.0.0",
           "description":"To support inclusive language, use 'cluster_manager_timeout' instead."

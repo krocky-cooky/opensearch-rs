@@ -1,14 +1,10 @@
 {
   "cat.count":{
     "documentation":{
-      "url":"https://opensearch.org/docs/",
+      "url":"https://opensearch.org/docs/latest/api-reference/cat/cat-count/",
       "description":"Provides quick access to the document count of the entire cluster, or individual indices."
     },
     "stability":"stable",
-    "visibility":"public",
-    "headers":{
-      "accept": [ "text/plain", "application/json"]
-    },
     "url":{
       "paths":[
         {

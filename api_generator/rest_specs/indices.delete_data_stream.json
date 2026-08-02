@@ -1,14 +1,10 @@
 {
   "indices.delete_data_stream":{
     "documentation":{
-      "url":"https://opensearch.org/docs/",
+      "url":"https://opensearch.org/docs/latest/im-plugin/data-streams/",
       "description":"Deletes a data stream."
     },
-    "stability":"stable",
-    "visibility":"public",
-    "headers":{
-      "accept": [ "application/json"]
-    },
+    "stability":"experimental",
     "url":{
       "paths":[
         {
@@ -25,19 +21,6 @@
         }
       ]
     },
-    "params":{
-      "expand_wildcards":{
-        "type":"enum",
-        "options":[
-          "open",
-          "closed",
-          "hidden",
-          "none",
-          "all"
-        ],
-        "default":"open",
-        "description":"Whether wildcard expressions should get expanded to open or closed indices (default: open)"
-      }
-    }
+    "params":{}
   }
 }

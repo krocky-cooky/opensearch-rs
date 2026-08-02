@@ -1,15 +1,10 @@
 {
   "msearch_template":{
     "documentation":{
-      "url":"https://opensearch.org/docs/",
+      "url":"https://opensearch.org/docs/latest/api-reference/search-template/",
       "description":"Allows to execute several search template operations in one request."
     },
     "stability":"stable",
-    "visibility":"public",
-    "headers":{
-      "accept": [ "application/json"],
-      "content_type": ["application/x-ndjson"]
-    },
     "url":{
       "paths":[
         {

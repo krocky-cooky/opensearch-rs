@@ -1,14 +1,10 @@
 {
   "indices.forcemerge":{
     "documentation":{
-      "url":"https://opensearch.org/docs/",
+      "url":"https://opensearch.org/docs/latest/api-reference/index-apis/force-merge/",
       "description":"Performs the force merge operation on one or more indices."
     },
     "stability":"stable",
-    "visibility":"public",
-    "headers":{
-      "accept": [ "application/json"]
-    },
     "url":{
       "paths":[
         {
@@ -63,6 +59,14 @@
       "only_expunge_deletes":{
         "type":"boolean",
         "description":"Specify whether the operation should only expunge deleted documents"
+      },
+      "wait_for_completion": {
+        "type" : "boolean",
+        "description" : "If false, the request will return a task immediately and the operation will run in background. Defaults to true."
+      },
+      "primary_only": {
+        "type" : "boolean",
+        "description" : "Specify whether the operation should only perform on primary shards. Defaults to false."
       }
     }
   }

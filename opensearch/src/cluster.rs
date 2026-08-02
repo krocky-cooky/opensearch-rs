@@ -26,7 +26,7 @@
 
 //! Cluster APIs
 //!
-//! [Manage settings](https://opensearch.org/docs/opensearch/rest-api/cluster-settings/),
+//! [Manage settings](https://docs.opensearch.org/latest/api-reference/cluster-settings/),
 //! perform operations, and retrieve information about an OpenSearch cluster.
 
 #![allow(unused_imports)]
@@ -59,7 +59,7 @@ impl ClusterAllocationExplainParts {
         }
     }
 }
-#[doc = "Builder for the [Cluster Allocation Explain API](https://opensearch.org/docs/)\n\nProvides explanations for shard allocations in the cluster."]
+#[doc = "Builder for the [Cluster Allocation Explain API](https://opensearch.org/docs/latest/api-reference/cluster-api/cluster-allocation/)\n\nProvides explanations for shard allocations in the cluster."]
 #[derive(Clone, Debug)]
 pub struct ClusterAllocationExplain<'a, 'b, B> {
     transport: &'a Transport,
@@ -203,12 +203,14 @@ where
         Ok(response)
     }
 }
+#[cfg(feature = "experimental-apis")]
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Cluster Delete Component Template API"]
 pub enum ClusterDeleteComponentTemplateParts<'b> {
     #[doc = "Name"]
     Name(&'b str),
 }
+#[cfg(feature = "experimental-apis")]
 impl<'b> ClusterDeleteComponentTemplateParts<'b> {
     #[doc = "Builds a relative URL path to the Cluster Delete Component Template API"]
     pub fn url(self) -> Cow<'static, str> {
@@ -223,7 +225,9 @@ impl<'b> ClusterDeleteComponentTemplateParts<'b> {
         }
     }
 }
-#[doc = "Builder for the [Cluster Delete Component Template API](https://opensearch.org/docs/)\n\nDeletes a component template"]
+#[doc = "Builder for the [Cluster Delete Component Template API](https://opensearch.org/docs/latest/im-plugin/index-templates/#create-a-component-template)\n\nDeletes a component template"]
+#[doc = "&nbsp;\n# Optional, experimental\nThis requires the `experimental-apis` feature. Can have breaking changes in future\nversions or might even be removed entirely.\n        "]
+#[cfg(feature = "experimental-apis")]
 #[derive(Clone, Debug)]
 pub struct ClusterDeleteComponentTemplate<'a, 'b> {
     transport: &'a Transport,
@@ -239,6 +243,7 @@ pub struct ClusterDeleteComponentTemplate<'a, 'b> {
     source: Option<&'b str>,
     timeout: Option<&'b str>,
 }
+#[cfg(feature = "experimental-apis")]
 impl<'a, 'b> ClusterDeleteComponentTemplate<'a, 'b> {
     #[doc = "Creates a new instance of [ClusterDeleteComponentTemplate] with the specified API parts"]
     pub fn new(transport: &'a Transport, parts: ClusterDeleteComponentTemplateParts<'b>) -> Self {
@@ -283,7 +288,7 @@ impl<'a, 'b> ClusterDeleteComponentTemplate<'a, 'b> {
         self.human = Some(human);
         self
     }
-    #[doc = "Specify timeout for connection to cluster-manager node node"]
+    #[doc = "Specify timeout for connection to master node"]
     #[deprecated = "To support inclusive language, use 'cluster_manager_timeout' instead."]
     pub fn master_timeout(mut self, master_timeout: &'b str) -> Self {
         self.master_timeout = Some(master_timeout);
@@ -349,6 +354,125 @@ impl<'a, 'b> ClusterDeleteComponentTemplate<'a, 'b> {
         Ok(response)
     }
 }
+#[cfg(feature = "experimental-apis")]
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[doc = "API parts for the Cluster Delete Decommission Awareness API"]
+pub enum ClusterDeleteDecommissionAwarenessParts {
+    #[doc = "No parts"]
+    None,
+}
+#[cfg(feature = "experimental-apis")]
+impl ClusterDeleteDecommissionAwarenessParts {
+    #[doc = "Builds a relative URL path to the Cluster Delete Decommission Awareness API"]
+    pub fn url(self) -> Cow<'static, str> {
+        match self {
+            ClusterDeleteDecommissionAwarenessParts::None => {
+                "/_cluster/decommission/awareness/".into()
+            }
+        }
+    }
+}
+#[doc = "Builder for the [Cluster Delete Decommission Awareness API](https://opensearch.org/docs/latest/api-reference/cluster-api/cluster-decommission/)\n\nDelete any existing decommission."]
+#[doc = "&nbsp;\n# Optional, experimental\nThis requires the `experimental-apis` feature. Can have breaking changes in future\nversions or might even be removed entirely.\n        "]
+#[cfg(feature = "experimental-apis")]
+#[derive(Clone, Debug)]
+pub struct ClusterDeleteDecommissionAwareness<'a, 'b> {
+    transport: &'a Transport,
+    parts: ClusterDeleteDecommissionAwarenessParts,
+    error_trace: Option<bool>,
+    filter_path: Option<&'b [&'b str]>,
+    headers: HeaderMap,
+    human: Option<bool>,
+    pretty: Option<bool>,
+    request_timeout: Option<Duration>,
+    source: Option<&'b str>,
+}
+#[cfg(feature = "experimental-apis")]
+impl<'a, 'b> ClusterDeleteDecommissionAwareness<'a, 'b> {
+    #[doc = "Creates a new instance of [ClusterDeleteDecommissionAwareness]"]
+    pub fn new(transport: &'a Transport) -> Self {
+        let headers = HeaderMap::new();
+        ClusterDeleteDecommissionAwareness {
+            transport,
+            parts: ClusterDeleteDecommissionAwarenessParts::None,
+            headers,
+            error_trace: None,
+            filter_path: None,
+            human: None,
+            pretty: None,
+            request_timeout: None,
+            source: None,
+        }
+    }
+    #[doc = "Include the stack trace of returned errors."]
+    pub fn error_trace(mut self, error_trace: bool) -> Self {
+        self.error_trace = Some(error_trace);
+        self
+    }
+    #[doc = "A comma-separated list of filters used to reduce the response."]
+    pub fn filter_path(mut self, filter_path: &'b [&'b str]) -> Self {
+        self.filter_path = Some(filter_path);
+        self
+    }
+    #[doc = "Adds a HTTP header"]
+    pub fn header(mut self, key: HeaderName, value: HeaderValue) -> Self {
+        self.headers.insert(key, value);
+        self
+    }
+    #[doc = "Return human readable values for statistics."]
+    pub fn human(mut self, human: bool) -> Self {
+        self.human = Some(human);
+        self
+    }
+    #[doc = "Pretty format the returned JSON response."]
+    pub fn pretty(mut self, pretty: bool) -> Self {
+        self.pretty = Some(pretty);
+        self
+    }
+    #[doc = "Sets a request timeout for this API call.\n\nThe timeout is applied from when the request starts connecting until the response body has finished."]
+    pub fn request_timeout(mut self, timeout: Duration) -> Self {
+        self.request_timeout = Some(timeout);
+        self
+    }
+    #[doc = "The URL-encoded request definition. Useful for libraries that do not accept a request body for non-POST requests."]
+    pub fn source(mut self, source: &'b str) -> Self {
+        self.source = Some(source);
+        self
+    }
+    #[doc = "Creates an asynchronous call to the Cluster Delete Decommission Awareness API that can be awaited"]
+    pub async fn send(self) -> Result<Response, Error> {
+        let path = self.parts.url();
+        let method = Method::Delete;
+        let headers = self.headers;
+        let timeout = self.request_timeout;
+        let query_string = {
+            #[serde_with::skip_serializing_none]
+            #[derive(Serialize)]
+            struct QueryParams<'b> {
+                error_trace: Option<bool>,
+                #[serde(serialize_with = "crate::client::serialize_coll_qs")]
+                filter_path: Option<&'b [&'b str]>,
+                human: Option<bool>,
+                pretty: Option<bool>,
+                source: Option<&'b str>,
+            }
+            let query_params = QueryParams {
+                error_trace: self.error_trace,
+                filter_path: self.filter_path,
+                human: self.human,
+                pretty: self.pretty,
+                source: self.source,
+            };
+            Some(query_params)
+        };
+        let body = Option::<()>::None;
+        let response = self
+            .transport
+            .send(method, &path, headers, query_string.as_ref(), body, timeout)
+            .await?;
+        Ok(response)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Cluster Delete Voting Config Exclusions API"]
 pub enum ClusterDeleteVotingConfigExclusionsParts {
@@ -365,7 +489,7 @@ impl ClusterDeleteVotingConfigExclusionsParts {
         }
     }
 }
-#[doc = "Builder for the [Cluster Delete Voting Config Exclusions API](https://opensearch.org/docs/)\n\nClears cluster voting config exclusions."]
+#[doc = "Builder for the [Cluster Delete Voting Config Exclusions API](https://www.elastic.co/guide/en/elasticsearch/reference/3.0/voting-config-exclusions.html)\n\nClears cluster voting config exclusions."]
 #[derive(Clone, Debug)]
 pub struct ClusterDeleteVotingConfigExclusions<'a, 'b> {
     transport: &'a Transport,
@@ -473,64 +597,47 @@ impl<'a, 'b> ClusterDeleteVotingConfigExclusions<'a, 'b> {
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
-#[doc = "API parts for the Cluster Exists Component Template API"]
-pub enum ClusterExistsComponentTemplateParts<'b> {
-    #[doc = "Name"]
-    Name(&'b str),
+#[doc = "API parts for the Cluster Delete Weighted Routing API"]
+pub enum ClusterDeleteWeightedRoutingParts {
+    #[doc = "No parts"]
+    None,
 }
-impl<'b> ClusterExistsComponentTemplateParts<'b> {
-    #[doc = "Builds a relative URL path to the Cluster Exists Component Template API"]
+impl ClusterDeleteWeightedRoutingParts {
+    #[doc = "Builds a relative URL path to the Cluster Delete Weighted Routing API"]
     pub fn url(self) -> Cow<'static, str> {
         match self {
-            ClusterExistsComponentTemplateParts::Name(name) => {
-                let encoded_name: Cow<str> = percent_encode(name.as_bytes(), PARTS_ENCODED).into();
-                let mut p = String::with_capacity(21usize + encoded_name.len());
-                p.push_str("/_component_template/");
-                p.push_str(encoded_name.as_ref());
-                p.into()
-            }
+            ClusterDeleteWeightedRoutingParts::None => "/_cluster/routing/awareness/weights".into(),
         }
     }
 }
-#[doc = "Builder for the [Cluster Exists Component Template API](https://opensearch.org/docs/)\n\nReturns information about whether a particular component template exist"]
+#[doc = "Builder for the [Cluster Delete Weighted Routing API](https://opensearch.org/docs/latest/api-reference/cluster-api/cluster-awareness)\n\nDelete weighted shard routing weights"]
 #[derive(Clone, Debug)]
-pub struct ClusterExistsComponentTemplate<'a, 'b> {
+pub struct ClusterDeleteWeightedRouting<'a, 'b> {
     transport: &'a Transport,
-    parts: ClusterExistsComponentTemplateParts<'b>,
-    cluster_manager_timeout: Option<&'b str>,
+    parts: ClusterDeleteWeightedRoutingParts,
     error_trace: Option<bool>,
     filter_path: Option<&'b [&'b str]>,
     headers: HeaderMap,
     human: Option<bool>,
-    local: Option<bool>,
-    master_timeout: Option<&'b str>,
     pretty: Option<bool>,
     request_timeout: Option<Duration>,
     source: Option<&'b str>,
 }
-impl<'a, 'b> ClusterExistsComponentTemplate<'a, 'b> {
-    #[doc = "Creates a new instance of [ClusterExistsComponentTemplate] with the specified API parts"]
-    pub fn new(transport: &'a Transport, parts: ClusterExistsComponentTemplateParts<'b>) -> Self {
+impl<'a, 'b> ClusterDeleteWeightedRouting<'a, 'b> {
+    #[doc = "Creates a new instance of [ClusterDeleteWeightedRouting]"]
+    pub fn new(transport: &'a Transport) -> Self {
         let headers = HeaderMap::new();
-        ClusterExistsComponentTemplate {
+        ClusterDeleteWeightedRouting {
             transport,
-            parts,
+            parts: ClusterDeleteWeightedRoutingParts::None,
             headers,
-            cluster_manager_timeout: None,
             error_trace: None,
             filter_path: None,
             human: None,
-            local: None,
-            master_timeout: None,
             pretty: None,
             request_timeout: None,
             source: None,
         }
-    }
-    #[doc = "Specify timeout for connection to cluster-manager node"]
-    pub fn cluster_manager_timeout(mut self, cluster_manager_timeout: &'b str) -> Self {
-        self.cluster_manager_timeout = Some(cluster_manager_timeout);
-        self
     }
     #[doc = "Include the stack trace of returned errors."]
     pub fn error_trace(mut self, error_trace: bool) -> Self {
@@ -552,13 +659,139 @@ impl<'a, 'b> ClusterExistsComponentTemplate<'a, 'b> {
         self.human = Some(human);
         self
     }
-    #[doc = "Return local information, do not retrieve the state from cluster-manager node (default: false)"]
+    #[doc = "Pretty format the returned JSON response."]
+    pub fn pretty(mut self, pretty: bool) -> Self {
+        self.pretty = Some(pretty);
+        self
+    }
+    #[doc = "Sets a request timeout for this API call.\n\nThe timeout is applied from when the request starts connecting until the response body has finished."]
+    pub fn request_timeout(mut self, timeout: Duration) -> Self {
+        self.request_timeout = Some(timeout);
+        self
+    }
+    #[doc = "The URL-encoded request definition. Useful for libraries that do not accept a request body for non-POST requests."]
+    pub fn source(mut self, source: &'b str) -> Self {
+        self.source = Some(source);
+        self
+    }
+    #[doc = "Creates an asynchronous call to the Cluster Delete Weighted Routing API that can be awaited"]
+    pub async fn send(self) -> Result<Response, Error> {
+        let path = self.parts.url();
+        let method = Method::Delete;
+        let headers = self.headers;
+        let timeout = self.request_timeout;
+        let query_string = {
+            #[serde_with::skip_serializing_none]
+            #[derive(Serialize)]
+            struct QueryParams<'b> {
+                error_trace: Option<bool>,
+                #[serde(serialize_with = "crate::client::serialize_coll_qs")]
+                filter_path: Option<&'b [&'b str]>,
+                human: Option<bool>,
+                pretty: Option<bool>,
+                source: Option<&'b str>,
+            }
+            let query_params = QueryParams {
+                error_trace: self.error_trace,
+                filter_path: self.filter_path,
+                human: self.human,
+                pretty: self.pretty,
+                source: self.source,
+            };
+            Some(query_params)
+        };
+        let body = Option::<()>::None;
+        let response = self
+            .transport
+            .send(method, &path, headers, query_string.as_ref(), body, timeout)
+            .await?;
+        Ok(response)
+    }
+}
+#[cfg(feature = "experimental-apis")]
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[doc = "API parts for the Cluster Exists Component Template API"]
+pub enum ClusterExistsComponentTemplateParts<'b> {
+    #[doc = "Name"]
+    Name(&'b str),
+}
+#[cfg(feature = "experimental-apis")]
+impl<'b> ClusterExistsComponentTemplateParts<'b> {
+    #[doc = "Builds a relative URL path to the Cluster Exists Component Template API"]
+    pub fn url(self) -> Cow<'static, str> {
+        match self {
+            ClusterExistsComponentTemplateParts::Name(name) => {
+                let encoded_name: Cow<str> = percent_encode(name.as_bytes(), PARTS_ENCODED).into();
+                let mut p = String::with_capacity(21usize + encoded_name.len());
+                p.push_str("/_component_template/");
+                p.push_str(encoded_name.as_ref());
+                p.into()
+            }
+        }
+    }
+}
+#[doc = "Builder for the [Cluster Exists Component Template API](https://www.elastic.co/guide/en/elasticsearch/reference/3.0/indices-component-template.html)\n\nReturns information about whether a particular component template exist"]
+#[doc = "&nbsp;\n# Optional, experimental\nThis requires the `experimental-apis` feature. Can have breaking changes in future\nversions or might even be removed entirely.\n        "]
+#[cfg(feature = "experimental-apis")]
+#[derive(Clone, Debug)]
+pub struct ClusterExistsComponentTemplate<'a, 'b> {
+    transport: &'a Transport,
+    parts: ClusterExistsComponentTemplateParts<'b>,
+    error_trace: Option<bool>,
+    filter_path: Option<&'b [&'b str]>,
+    headers: HeaderMap,
+    human: Option<bool>,
+    local: Option<bool>,
+    master_timeout: Option<&'b str>,
+    pretty: Option<bool>,
+    request_timeout: Option<Duration>,
+    source: Option<&'b str>,
+}
+#[cfg(feature = "experimental-apis")]
+impl<'a, 'b> ClusterExistsComponentTemplate<'a, 'b> {
+    #[doc = "Creates a new instance of [ClusterExistsComponentTemplate] with the specified API parts"]
+    pub fn new(transport: &'a Transport, parts: ClusterExistsComponentTemplateParts<'b>) -> Self {
+        let headers = HeaderMap::new();
+        ClusterExistsComponentTemplate {
+            transport,
+            parts,
+            headers,
+            error_trace: None,
+            filter_path: None,
+            human: None,
+            local: None,
+            master_timeout: None,
+            pretty: None,
+            request_timeout: None,
+            source: None,
+        }
+    }
+    #[doc = "Include the stack trace of returned errors."]
+    pub fn error_trace(mut self, error_trace: bool) -> Self {
+        self.error_trace = Some(error_trace);
+        self
+    }
+    #[doc = "A comma-separated list of filters used to reduce the response."]
+    pub fn filter_path(mut self, filter_path: &'b [&'b str]) -> Self {
+        self.filter_path = Some(filter_path);
+        self
+    }
+    #[doc = "Adds a HTTP header"]
+    pub fn header(mut self, key: HeaderName, value: HeaderValue) -> Self {
+        self.headers.insert(key, value);
+        self
+    }
+    #[doc = "Return human readable values for statistics."]
+    pub fn human(mut self, human: bool) -> Self {
+        self.human = Some(human);
+        self
+    }
+    #[doc = "Return local information, do not retrieve the state from master node (default: false)"]
     pub fn local(mut self, local: bool) -> Self {
         self.local = Some(local);
         self
     }
-    #[doc = "Specify timeout for connection to cluster-manager node"]
-    #[deprecated = "To promote inclusive language, use 'cluster_manager_timeout' instead."]
+    #[doc = "Explicit operation timeout for connection to master node"]
     pub fn master_timeout(mut self, master_timeout: &'b str) -> Self {
         self.master_timeout = Some(master_timeout);
         self
@@ -588,7 +821,6 @@ impl<'a, 'b> ClusterExistsComponentTemplate<'a, 'b> {
             #[serde_with::skip_serializing_none]
             #[derive(Serialize)]
             struct QueryParams<'b> {
-                cluster_manager_timeout: Option<&'b str>,
                 error_trace: Option<bool>,
                 #[serde(serialize_with = "crate::client::serialize_coll_qs")]
                 filter_path: Option<&'b [&'b str]>,
@@ -599,7 +831,6 @@ impl<'a, 'b> ClusterExistsComponentTemplate<'a, 'b> {
                 source: Option<&'b str>,
             }
             let query_params = QueryParams {
-                cluster_manager_timeout: self.cluster_manager_timeout,
                 error_trace: self.error_trace,
                 filter_path: self.filter_path,
                 human: self.human,
@@ -618,6 +849,7 @@ impl<'a, 'b> ClusterExistsComponentTemplate<'a, 'b> {
         Ok(response)
     }
 }
+#[cfg(feature = "experimental-apis")]
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Cluster Get Component Template API"]
 pub enum ClusterGetComponentTemplateParts<'b> {
@@ -626,6 +858,7 @@ pub enum ClusterGetComponentTemplateParts<'b> {
     #[doc = "Name"]
     Name(&'b [&'b str]),
 }
+#[cfg(feature = "experimental-apis")]
 impl<'b> ClusterGetComponentTemplateParts<'b> {
     #[doc = "Builds a relative URL path to the Cluster Get Component Template API"]
     pub fn url(self) -> Cow<'static, str> {
@@ -643,7 +876,9 @@ impl<'b> ClusterGetComponentTemplateParts<'b> {
         }
     }
 }
-#[doc = "Builder for the [Cluster Get Component Template API](https://opensearch.org/docs/)\n\nReturns one or more component templates"]
+#[doc = "Builder for the [Cluster Get Component Template API](https://www.elastic.co/guide/en/elasticsearch/reference/3.0/indices-component-template.html)\n\nReturns one or more component templates"]
+#[doc = "&nbsp;\n# Optional, experimental\nThis requires the `experimental-apis` feature. Can have breaking changes in future\nversions or might even be removed entirely.\n        "]
+#[cfg(feature = "experimental-apis")]
 #[derive(Clone, Debug)]
 pub struct ClusterGetComponentTemplate<'a, 'b> {
     transport: &'a Transport,
@@ -659,6 +894,7 @@ pub struct ClusterGetComponentTemplate<'a, 'b> {
     request_timeout: Option<Duration>,
     source: Option<&'b str>,
 }
+#[cfg(feature = "experimental-apis")]
 impl<'a, 'b> ClusterGetComponentTemplate<'a, 'b> {
     #[doc = "Creates a new instance of [ClusterGetComponentTemplate] with the specified API parts"]
     pub fn new(transport: &'a Transport, parts: ClusterGetComponentTemplateParts<'b>) -> Self {
@@ -703,12 +939,12 @@ impl<'a, 'b> ClusterGetComponentTemplate<'a, 'b> {
         self.human = Some(human);
         self
     }
-    #[doc = "Return local information, do not retrieve the state from cluster-manager node (default: false)"]
+    #[doc = "Return local information, do not retrieve the state from master node (default: false)"]
     pub fn local(mut self, local: bool) -> Self {
         self.local = Some(local);
         self
     }
-    #[doc = "Explicit operation timeout for connection to cluster-manager node"]
+    #[doc = "Explicit operation timeout for connection to master node"]
     #[deprecated = "To support inclusive language, use 'cluster_manager_timeout' instead."]
     pub fn master_timeout(mut self, master_timeout: &'b str) -> Self {
         self.master_timeout = Some(master_timeout);
@@ -769,6 +1005,133 @@ impl<'a, 'b> ClusterGetComponentTemplate<'a, 'b> {
         Ok(response)
     }
 }
+#[cfg(feature = "experimental-apis")]
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[doc = "API parts for the Cluster Get Decommission Awareness API"]
+pub enum ClusterGetDecommissionAwarenessParts<'b> {
+    #[doc = "AwarenessAttributeName"]
+    AwarenessAttributeName(&'b str),
+}
+#[cfg(feature = "experimental-apis")]
+impl<'b> ClusterGetDecommissionAwarenessParts<'b> {
+    #[doc = "Builds a relative URL path to the Cluster Get Decommission Awareness API"]
+    pub fn url(self) -> Cow<'static, str> {
+        match self {
+            ClusterGetDecommissionAwarenessParts::AwarenessAttributeName(
+                awareness_attribute_name,
+            ) => {
+                let encoded_awareness_attribute_name: Cow<str> =
+                    percent_encode(awareness_attribute_name.as_bytes(), PARTS_ENCODED).into();
+                let mut p = String::with_capacity(41usize + encoded_awareness_attribute_name.len());
+                p.push_str("/_cluster/decommission/awareness/");
+                p.push_str(encoded_awareness_attribute_name.as_ref());
+                p.push_str("/_status");
+                p.into()
+            }
+        }
+    }
+}
+#[doc = "Builder for the [Cluster Get Decommission Awareness API](https://opensearch.org/docs/latest/api-reference/cluster-api/cluster-decommission/)\n\nGet details and status of decommissioned attribute"]
+#[doc = "&nbsp;\n# Optional, experimental\nThis requires the `experimental-apis` feature. Can have breaking changes in future\nversions or might even be removed entirely.\n        "]
+#[cfg(feature = "experimental-apis")]
+#[derive(Clone, Debug)]
+pub struct ClusterGetDecommissionAwareness<'a, 'b> {
+    transport: &'a Transport,
+    parts: ClusterGetDecommissionAwarenessParts<'b>,
+    error_trace: Option<bool>,
+    filter_path: Option<&'b [&'b str]>,
+    headers: HeaderMap,
+    human: Option<bool>,
+    pretty: Option<bool>,
+    request_timeout: Option<Duration>,
+    source: Option<&'b str>,
+}
+#[cfg(feature = "experimental-apis")]
+impl<'a, 'b> ClusterGetDecommissionAwareness<'a, 'b> {
+    #[doc = "Creates a new instance of [ClusterGetDecommissionAwareness] with the specified API parts"]
+    pub fn new(transport: &'a Transport, parts: ClusterGetDecommissionAwarenessParts<'b>) -> Self {
+        let headers = HeaderMap::new();
+        ClusterGetDecommissionAwareness {
+            transport,
+            parts,
+            headers,
+            error_trace: None,
+            filter_path: None,
+            human: None,
+            pretty: None,
+            request_timeout: None,
+            source: None,
+        }
+    }
+    #[doc = "Include the stack trace of returned errors."]
+    pub fn error_trace(mut self, error_trace: bool) -> Self {
+        self.error_trace = Some(error_trace);
+        self
+    }
+    #[doc = "A comma-separated list of filters used to reduce the response."]
+    pub fn filter_path(mut self, filter_path: &'b [&'b str]) -> Self {
+        self.filter_path = Some(filter_path);
+        self
+    }
+    #[doc = "Adds a HTTP header"]
+    pub fn header(mut self, key: HeaderName, value: HeaderValue) -> Self {
+        self.headers.insert(key, value);
+        self
+    }
+    #[doc = "Return human readable values for statistics."]
+    pub fn human(mut self, human: bool) -> Self {
+        self.human = Some(human);
+        self
+    }
+    #[doc = "Pretty format the returned JSON response."]
+    pub fn pretty(mut self, pretty: bool) -> Self {
+        self.pretty = Some(pretty);
+        self
+    }
+    #[doc = "Sets a request timeout for this API call.\n\nThe timeout is applied from when the request starts connecting until the response body has finished."]
+    pub fn request_timeout(mut self, timeout: Duration) -> Self {
+        self.request_timeout = Some(timeout);
+        self
+    }
+    #[doc = "The URL-encoded request definition. Useful for libraries that do not accept a request body for non-POST requests."]
+    pub fn source(mut self, source: &'b str) -> Self {
+        self.source = Some(source);
+        self
+    }
+    #[doc = "Creates an asynchronous call to the Cluster Get Decommission Awareness API that can be awaited"]
+    pub async fn send(self) -> Result<Response, Error> {
+        let path = self.parts.url();
+        let method = Method::Get;
+        let headers = self.headers;
+        let timeout = self.request_timeout;
+        let query_string = {
+            #[serde_with::skip_serializing_none]
+            #[derive(Serialize)]
+            struct QueryParams<'b> {
+                error_trace: Option<bool>,
+                #[serde(serialize_with = "crate::client::serialize_coll_qs")]
+                filter_path: Option<&'b [&'b str]>,
+                human: Option<bool>,
+                pretty: Option<bool>,
+                source: Option<&'b str>,
+            }
+            let query_params = QueryParams {
+                error_trace: self.error_trace,
+                filter_path: self.filter_path,
+                human: self.human,
+                pretty: self.pretty,
+                source: self.source,
+            };
+            Some(query_params)
+        };
+        let body = Option::<()>::None;
+        let response = self
+            .transport
+            .send(method, &path, headers, query_string.as_ref(), body, timeout)
+            .await?;
+        Ok(response)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Cluster Get Settings API"]
 pub enum ClusterGetSettingsParts {
@@ -783,7 +1146,7 @@ impl ClusterGetSettingsParts {
         }
     }
 }
-#[doc = "Builder for the [Cluster Get Settings API](https://opensearch.org/docs/)\n\nReturns cluster settings."]
+#[doc = "Builder for the [Cluster Get Settings API](https://opensearch.org/docs/latest/api-reference/cluster-api/cluster-settings/)\n\nReturns cluster settings."]
 #[derive(Clone, Debug)]
 pub struct ClusterGetSettings<'a, 'b> {
     transport: &'a Transport,
@@ -857,7 +1220,7 @@ impl<'a, 'b> ClusterGetSettings<'a, 'b> {
         self.include_defaults = Some(include_defaults);
         self
     }
-    #[doc = "Explicit operation timeout for connection to cluster-manager node"]
+    #[doc = "Explicit operation timeout for connection to master node"]
     #[deprecated = "To promote inclusive language, use 'cluster_manager_timeout' instead."]
     pub fn master_timeout(mut self, master_timeout: &'b str) -> Self {
         self.master_timeout = Some(master_timeout);
@@ -928,6 +1291,126 @@ impl<'a, 'b> ClusterGetSettings<'a, 'b> {
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
+#[doc = "API parts for the Cluster Get Weighted Routing API"]
+pub enum ClusterGetWeightedRoutingParts<'b> {
+    #[doc = "Attribute"]
+    Attribute(&'b str),
+}
+impl<'b> ClusterGetWeightedRoutingParts<'b> {
+    #[doc = "Builds a relative URL path to the Cluster Get Weighted Routing API"]
+    pub fn url(self) -> Cow<'static, str> {
+        match self {
+            ClusterGetWeightedRoutingParts::Attribute(attribute) => {
+                let encoded_attribute: Cow<str> =
+                    percent_encode(attribute.as_bytes(), PARTS_ENCODED).into();
+                let mut p = String::with_capacity(36usize + encoded_attribute.len());
+                p.push_str("/_cluster/routing/awareness/");
+                p.push_str(encoded_attribute.as_ref());
+                p.push_str("/weights");
+                p.into()
+            }
+        }
+    }
+}
+#[doc = "Builder for the [Cluster Get Weighted Routing API](https://opensearch.org/docs/latest/api-reference/cluster-api/cluster-awareness/)\n\nFetches weighted shard routing weights"]
+#[derive(Clone, Debug)]
+pub struct ClusterGetWeightedRouting<'a, 'b> {
+    transport: &'a Transport,
+    parts: ClusterGetWeightedRoutingParts<'b>,
+    error_trace: Option<bool>,
+    filter_path: Option<&'b [&'b str]>,
+    headers: HeaderMap,
+    human: Option<bool>,
+    pretty: Option<bool>,
+    request_timeout: Option<Duration>,
+    source: Option<&'b str>,
+}
+impl<'a, 'b> ClusterGetWeightedRouting<'a, 'b> {
+    #[doc = "Creates a new instance of [ClusterGetWeightedRouting] with the specified API parts"]
+    pub fn new(transport: &'a Transport, parts: ClusterGetWeightedRoutingParts<'b>) -> Self {
+        let headers = HeaderMap::new();
+        ClusterGetWeightedRouting {
+            transport,
+            parts,
+            headers,
+            error_trace: None,
+            filter_path: None,
+            human: None,
+            pretty: None,
+            request_timeout: None,
+            source: None,
+        }
+    }
+    #[doc = "Include the stack trace of returned errors."]
+    pub fn error_trace(mut self, error_trace: bool) -> Self {
+        self.error_trace = Some(error_trace);
+        self
+    }
+    #[doc = "A comma-separated list of filters used to reduce the response."]
+    pub fn filter_path(mut self, filter_path: &'b [&'b str]) -> Self {
+        self.filter_path = Some(filter_path);
+        self
+    }
+    #[doc = "Adds a HTTP header"]
+    pub fn header(mut self, key: HeaderName, value: HeaderValue) -> Self {
+        self.headers.insert(key, value);
+        self
+    }
+    #[doc = "Return human readable values for statistics."]
+    pub fn human(mut self, human: bool) -> Self {
+        self.human = Some(human);
+        self
+    }
+    #[doc = "Pretty format the returned JSON response."]
+    pub fn pretty(mut self, pretty: bool) -> Self {
+        self.pretty = Some(pretty);
+        self
+    }
+    #[doc = "Sets a request timeout for this API call.\n\nThe timeout is applied from when the request starts connecting until the response body has finished."]
+    pub fn request_timeout(mut self, timeout: Duration) -> Self {
+        self.request_timeout = Some(timeout);
+        self
+    }
+    #[doc = "The URL-encoded request definition. Useful for libraries that do not accept a request body for non-POST requests."]
+    pub fn source(mut self, source: &'b str) -> Self {
+        self.source = Some(source);
+        self
+    }
+    #[doc = "Creates an asynchronous call to the Cluster Get Weighted Routing API that can be awaited"]
+    pub async fn send(self) -> Result<Response, Error> {
+        let path = self.parts.url();
+        let method = Method::Get;
+        let headers = self.headers;
+        let timeout = self.request_timeout;
+        let query_string = {
+            #[serde_with::skip_serializing_none]
+            #[derive(Serialize)]
+            struct QueryParams<'b> {
+                error_trace: Option<bool>,
+                #[serde(serialize_with = "crate::client::serialize_coll_qs")]
+                filter_path: Option<&'b [&'b str]>,
+                human: Option<bool>,
+                pretty: Option<bool>,
+                source: Option<&'b str>,
+            }
+            let query_params = QueryParams {
+                error_trace: self.error_trace,
+                filter_path: self.filter_path,
+                human: self.human,
+                pretty: self.pretty,
+                source: self.source,
+            };
+            Some(query_params)
+        };
+        let body = Option::<()>::None;
+        let response = self
+            .transport
+            .send(method, &path, headers, query_string.as_ref(), body, timeout)
+            .await?;
+        Ok(response)
+    }
+}
+#[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Cluster Health API"]
 pub enum ClusterHealthParts<'b> {
     #[doc = "No parts"]
@@ -952,12 +1435,14 @@ impl<'b> ClusterHealthParts<'b> {
         }
     }
 }
-#[doc = "Builder for the [Cluster Health API](https://opensearch.org/docs/)\n\nReturns basic information about the health of the cluster."]
+#[doc = "Builder for the [Cluster Health API](https://opensearch.org/docs/latest/api-reference/cluster-api/cluster-health/)\n\nReturns basic information about the health of the cluster."]
 #[derive(Clone, Debug)]
 pub struct ClusterHealth<'a, 'b> {
     transport: &'a Transport,
     parts: ClusterHealthParts<'b>,
+    awareness_attribute: Option<&'b str>,
     cluster_manager_timeout: Option<&'b str>,
+    ensure_node_weighed_in: Option<bool>,
     error_trace: Option<bool>,
     expand_wildcards: Option<&'b [ExpandWildcards]>,
     filter_path: Option<&'b [&'b str]>,
@@ -985,7 +1470,9 @@ impl<'a, 'b> ClusterHealth<'a, 'b> {
             transport,
             parts,
             headers,
+            awareness_attribute: None,
             cluster_manager_timeout: None,
+            ensure_node_weighed_in: None,
             error_trace: None,
             expand_wildcards: None,
             filter_path: None,
@@ -1005,9 +1492,19 @@ impl<'a, 'b> ClusterHealth<'a, 'b> {
             wait_for_status: None,
         }
     }
+    #[doc = "The awareness attribute for which the health is required"]
+    pub fn awareness_attribute(mut self, awareness_attribute: &'b str) -> Self {
+        self.awareness_attribute = Some(awareness_attribute);
+        self
+    }
     #[doc = "Explicit operation timeout for connection to cluster-manager node"]
     pub fn cluster_manager_timeout(mut self, cluster_manager_timeout: &'b str) -> Self {
         self.cluster_manager_timeout = Some(cluster_manager_timeout);
+        self
+    }
+    #[doc = "Ensures whether the local node is commissioned and weighed in or not. (default: false)"]
+    pub fn ensure_node_weighed_in(mut self, ensure_node_weighed_in: bool) -> Self {
+        self.ensure_node_weighed_in = Some(ensure_node_weighed_in);
         self
     }
     #[doc = "Include the stack trace of returned errors."]
@@ -1040,12 +1537,12 @@ impl<'a, 'b> ClusterHealth<'a, 'b> {
         self.level = Some(level);
         self
     }
-    #[doc = "Return local information, do not retrieve the state from cluster-manager node (default: false)"]
+    #[doc = "Return local information, do not retrieve the state from master node (default: false)"]
     pub fn local(mut self, local: bool) -> Self {
         self.local = Some(local);
         self
     }
-    #[doc = "Explicit operation timeout for connection to cluster-manager node"]
+    #[doc = "Explicit operation timeout for connection to master node"]
     #[deprecated = "To promote inclusive language, use 'cluster_manager_timeout' instead."]
     pub fn master_timeout(mut self, master_timeout: &'b str) -> Self {
         self.master_timeout = Some(master_timeout);
@@ -1114,7 +1611,9 @@ impl<'a, 'b> ClusterHealth<'a, 'b> {
             #[serde_with::skip_serializing_none]
             #[derive(Serialize)]
             struct QueryParams<'b> {
+                awareness_attribute: Option<&'b str>,
                 cluster_manager_timeout: Option<&'b str>,
+                ensure_node_weighed_in: Option<bool>,
                 error_trace: Option<bool>,
                 #[serde(serialize_with = "crate::client::serialize_coll_qs")]
                 expand_wildcards: Option<&'b [ExpandWildcards]>,
@@ -1135,7 +1634,9 @@ impl<'a, 'b> ClusterHealth<'a, 'b> {
                 wait_for_status: Option<WaitForStatus>,
             }
             let query_params = QueryParams {
+                awareness_attribute: self.awareness_attribute,
                 cluster_manager_timeout: self.cluster_manager_timeout,
+                ensure_node_weighed_in: self.ensure_node_weighed_in,
                 error_trace: self.error_trace,
                 expand_wildcards: self.expand_wildcards,
                 filter_path: self.filter_path,
@@ -1177,7 +1678,7 @@ impl ClusterPendingTasksParts {
         }
     }
 }
-#[doc = "Builder for the [Cluster Pending Tasks API](https://opensearch.org/docs/)\n\nReturns a list of any cluster-level changes (e.g. create index, update mapping,\nallocate or fail shard) which have not yet been executed."]
+#[doc = "Builder for the [Cluster Pending Tasks API](https://www.elastic.co/guide/en/elasticsearch/reference/3.0/cluster-pending.html)\n\nReturns a list of any cluster-level changes (e.g. create index, update mapping,\nallocate or fail shard) which have not yet been executed."]
 #[derive(Clone, Debug)]
 pub struct ClusterPendingTasks<'a, 'b> {
     transport: &'a Transport,
@@ -1237,12 +1738,12 @@ impl<'a, 'b> ClusterPendingTasks<'a, 'b> {
         self.human = Some(human);
         self
     }
-    #[doc = "Return local information, do not retrieve the state from cluster-manager node (default: false)"]
+    #[doc = "Return local information, do not retrieve the state from master node (default: false)"]
     pub fn local(mut self, local: bool) -> Self {
         self.local = Some(local);
         self
     }
-    #[doc = "Specify timeout for connection to cluster-manager node"]
+    #[doc = "Specify timeout for connection to master"]
     #[deprecated = "To promote inclusive language, use 'cluster_manager_timeout' instead."]
     pub fn master_timeout(mut self, master_timeout: &'b str) -> Self {
         self.master_timeout = Some(master_timeout);
@@ -1319,7 +1820,7 @@ impl ClusterPostVotingConfigExclusionsParts {
         }
     }
 }
-#[doc = "Builder for the [Cluster Post Voting Config Exclusions API](https://opensearch.org/docs/)\n\nUpdates the cluster voting config exclusions by node ids or node names."]
+#[doc = "Builder for the [Cluster Post Voting Config Exclusions API](https://www.elastic.co/guide/en/elasticsearch/reference/3.0/voting-config-exclusions.html)\n\nUpdates the cluster voting config exclusions by node ids or node names."]
 #[derive(Clone, Debug)]
 pub struct ClusterPostVotingConfigExclusions<'a, 'b, B> {
     transport: &'a Transport,
@@ -1470,12 +1971,14 @@ where
         Ok(response)
     }
 }
+#[cfg(feature = "experimental-apis")]
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Cluster Put Component Template API"]
 pub enum ClusterPutComponentTemplateParts<'b> {
     #[doc = "Name"]
     Name(&'b str),
 }
+#[cfg(feature = "experimental-apis")]
 impl<'b> ClusterPutComponentTemplateParts<'b> {
     #[doc = "Builds a relative URL path to the Cluster Put Component Template API"]
     pub fn url(self) -> Cow<'static, str> {
@@ -1490,7 +1993,9 @@ impl<'b> ClusterPutComponentTemplateParts<'b> {
         }
     }
 }
-#[doc = "Builder for the [Cluster Put Component Template API](https://opensearch.org/docs/)\n\nCreates or updates a component template"]
+#[doc = "Builder for the [Cluster Put Component Template API](https://opensearch.org/docs/latest/im-plugin/index-templates/#create-a-component-template)\n\nCreates or updates a component template"]
+#[doc = "&nbsp;\n# Optional, experimental\nThis requires the `experimental-apis` feature. Can have breaking changes in future\nversions or might even be removed entirely.\n        "]
+#[cfg(feature = "experimental-apis")]
 #[derive(Clone, Debug)]
 pub struct ClusterPutComponentTemplate<'a, 'b, B> {
     transport: &'a Transport,
@@ -1508,6 +2013,7 @@ pub struct ClusterPutComponentTemplate<'a, 'b, B> {
     source: Option<&'b str>,
     timeout: Option<&'b str>,
 }
+#[cfg(feature = "experimental-apis")]
 impl<'a, 'b, B> ClusterPutComponentTemplate<'a, 'b, B>
 where
     B: Body,
@@ -1584,7 +2090,7 @@ where
         self.human = Some(human);
         self
     }
-    #[doc = "Specify timeout for connection to cluster-manager node node"]
+    #[doc = "Specify timeout for connection to master node"]
     #[deprecated = "To support inclusive language, use 'cluster_manager_timeout' instead."]
     pub fn master_timeout(mut self, master_timeout: &'b str) -> Self {
         self.master_timeout = Some(master_timeout);
@@ -1652,6 +2158,164 @@ where
         Ok(response)
     }
 }
+#[cfg(feature = "experimental-apis")]
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[doc = "API parts for the Cluster Put Decommission Awareness API"]
+pub enum ClusterPutDecommissionAwarenessParts<'b> {
+    #[doc = "AwarenessAttributeName and AwarenessAttributeValue"]
+    AwarenessAttributeNameAwarenessAttributeValue(&'b str, &'b str),
+}
+#[cfg(feature = "experimental-apis")]
+impl<'b> ClusterPutDecommissionAwarenessParts<'b> {
+    #[doc = "Builds a relative URL path to the Cluster Put Decommission Awareness API"]
+    pub fn url(self) -> Cow<'static, str> {
+        match self {
+            ClusterPutDecommissionAwarenessParts::AwarenessAttributeNameAwarenessAttributeValue(
+                awareness_attribute_name,
+                awareness_attribute_value,
+            ) => {
+                let encoded_awareness_attribute_name: Cow<str> =
+                    percent_encode(awareness_attribute_name.as_bytes(), PARTS_ENCODED).into();
+                let encoded_awareness_attribute_value: Cow<str> =
+                    percent_encode(awareness_attribute_value.as_bytes(), PARTS_ENCODED).into();
+                let mut p = String::with_capacity(
+                    34usize
+                        + encoded_awareness_attribute_name.len()
+                        + encoded_awareness_attribute_value.len(),
+                );
+                p.push_str("/_cluster/decommission/awareness/");
+                p.push_str(encoded_awareness_attribute_name.as_ref());
+                p.push('/');
+                p.push_str(encoded_awareness_attribute_value.as_ref());
+                p.into()
+            }
+        }
+    }
+}
+#[doc = "Builder for the [Cluster Put Decommission Awareness API](https://opensearch.org/docs/latest/api-reference/cluster-api/cluster-decommission/)\n\nDecommissions an awareness attribute"]
+#[doc = "&nbsp;\n# Optional, experimental\nThis requires the `experimental-apis` feature. Can have breaking changes in future\nversions or might even be removed entirely.\n        "]
+#[cfg(feature = "experimental-apis")]
+#[derive(Clone, Debug)]
+pub struct ClusterPutDecommissionAwareness<'a, 'b, B> {
+    transport: &'a Transport,
+    parts: ClusterPutDecommissionAwarenessParts<'b>,
+    body: Option<B>,
+    error_trace: Option<bool>,
+    filter_path: Option<&'b [&'b str]>,
+    headers: HeaderMap,
+    human: Option<bool>,
+    pretty: Option<bool>,
+    request_timeout: Option<Duration>,
+    source: Option<&'b str>,
+}
+#[cfg(feature = "experimental-apis")]
+impl<'a, 'b, B> ClusterPutDecommissionAwareness<'a, 'b, B>
+where
+    B: Body,
+{
+    #[doc = "Creates a new instance of [ClusterPutDecommissionAwareness] with the specified API parts"]
+    pub fn new(transport: &'a Transport, parts: ClusterPutDecommissionAwarenessParts<'b>) -> Self {
+        let headers = HeaderMap::new();
+        ClusterPutDecommissionAwareness {
+            transport,
+            parts,
+            headers,
+            body: None,
+            error_trace: None,
+            filter_path: None,
+            human: None,
+            pretty: None,
+            request_timeout: None,
+            source: None,
+        }
+    }
+    #[doc = "The body for the API call"]
+    pub fn body<T>(self, body: T) -> ClusterPutDecommissionAwareness<'a, 'b, JsonBody<T>>
+    where
+        T: Serialize,
+    {
+        ClusterPutDecommissionAwareness {
+            transport: self.transport,
+            parts: self.parts,
+            body: Some(body.into()),
+            error_trace: self.error_trace,
+            filter_path: self.filter_path,
+            headers: self.headers,
+            human: self.human,
+            pretty: self.pretty,
+            request_timeout: self.request_timeout,
+            source: self.source,
+        }
+    }
+    #[doc = "Include the stack trace of returned errors."]
+    pub fn error_trace(mut self, error_trace: bool) -> Self {
+        self.error_trace = Some(error_trace);
+        self
+    }
+    #[doc = "A comma-separated list of filters used to reduce the response."]
+    pub fn filter_path(mut self, filter_path: &'b [&'b str]) -> Self {
+        self.filter_path = Some(filter_path);
+        self
+    }
+    #[doc = "Adds a HTTP header"]
+    pub fn header(mut self, key: HeaderName, value: HeaderValue) -> Self {
+        self.headers.insert(key, value);
+        self
+    }
+    #[doc = "Return human readable values for statistics."]
+    pub fn human(mut self, human: bool) -> Self {
+        self.human = Some(human);
+        self
+    }
+    #[doc = "Pretty format the returned JSON response."]
+    pub fn pretty(mut self, pretty: bool) -> Self {
+        self.pretty = Some(pretty);
+        self
+    }
+    #[doc = "Sets a request timeout for this API call.\n\nThe timeout is applied from when the request starts connecting until the response body has finished."]
+    pub fn request_timeout(mut self, timeout: Duration) -> Self {
+        self.request_timeout = Some(timeout);
+        self
+    }
+    #[doc = "The URL-encoded request definition. Useful for libraries that do not accept a request body for non-POST requests."]
+    pub fn source(mut self, source: &'b str) -> Self {
+        self.source = Some(source);
+        self
+    }
+    #[doc = "Creates an asynchronous call to the Cluster Put Decommission Awareness API that can be awaited"]
+    pub async fn send(self) -> Result<Response, Error> {
+        let path = self.parts.url();
+        let method = Method::Put;
+        let headers = self.headers;
+        let timeout = self.request_timeout;
+        let query_string = {
+            #[serde_with::skip_serializing_none]
+            #[derive(Serialize)]
+            struct QueryParams<'b> {
+                error_trace: Option<bool>,
+                #[serde(serialize_with = "crate::client::serialize_coll_qs")]
+                filter_path: Option<&'b [&'b str]>,
+                human: Option<bool>,
+                pretty: Option<bool>,
+                source: Option<&'b str>,
+            }
+            let query_params = QueryParams {
+                error_trace: self.error_trace,
+                filter_path: self.filter_path,
+                human: self.human,
+                pretty: self.pretty,
+                source: self.source,
+            };
+            Some(query_params)
+        };
+        let body = self.body;
+        let response = self
+            .transport
+            .send(method, &path, headers, query_string.as_ref(), body, timeout)
+            .await?;
+        Ok(response)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Cluster Put Settings API"]
 pub enum ClusterPutSettingsParts {
@@ -1666,7 +2330,7 @@ impl ClusterPutSettingsParts {
         }
     }
 }
-#[doc = "Builder for the [Cluster Put Settings API](https://opensearch.org/docs/)\n\nUpdates the cluster settings."]
+#[doc = "Builder for the [Cluster Put Settings API](https://opensearch.org/docs/latest/api-reference/cluster-api/cluster-settings/)\n\nUpdates the cluster settings."]
 #[derive(Clone, Debug)]
 pub struct ClusterPutSettings<'a, 'b, B> {
     transport: &'a Transport,
@@ -1760,7 +2424,7 @@ where
         self.human = Some(human);
         self
     }
-    #[doc = "Explicit operation timeout for connection to cluster-manager node"]
+    #[doc = "Explicit operation timeout for connection to master node"]
     #[deprecated = "To promote inclusive language, use 'cluster_manager_timeout' instead."]
     pub fn master_timeout(mut self, master_timeout: &'b str) -> Self {
         self.master_timeout = Some(master_timeout);
@@ -1829,6 +2493,149 @@ where
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
+#[doc = "API parts for the Cluster Put Weighted Routing API"]
+pub enum ClusterPutWeightedRoutingParts<'b> {
+    #[doc = "Attribute"]
+    Attribute(&'b str),
+}
+impl<'b> ClusterPutWeightedRoutingParts<'b> {
+    #[doc = "Builds a relative URL path to the Cluster Put Weighted Routing API"]
+    pub fn url(self) -> Cow<'static, str> {
+        match self {
+            ClusterPutWeightedRoutingParts::Attribute(attribute) => {
+                let encoded_attribute: Cow<str> =
+                    percent_encode(attribute.as_bytes(), PARTS_ENCODED).into();
+                let mut p = String::with_capacity(36usize + encoded_attribute.len());
+                p.push_str("/_cluster/routing/awareness/");
+                p.push_str(encoded_attribute.as_ref());
+                p.push_str("/weights");
+                p.into()
+            }
+        }
+    }
+}
+#[doc = "Builder for the [Cluster Put Weighted Routing API](https://opensearch.org/docs/latest/api-reference/cluster-api/cluster-awareness)\n\nUpdates weighted shard routing weights"]
+#[derive(Clone, Debug)]
+pub struct ClusterPutWeightedRouting<'a, 'b, B> {
+    transport: &'a Transport,
+    parts: ClusterPutWeightedRoutingParts<'b>,
+    body: Option<B>,
+    error_trace: Option<bool>,
+    filter_path: Option<&'b [&'b str]>,
+    headers: HeaderMap,
+    human: Option<bool>,
+    pretty: Option<bool>,
+    request_timeout: Option<Duration>,
+    source: Option<&'b str>,
+}
+impl<'a, 'b, B> ClusterPutWeightedRouting<'a, 'b, B>
+where
+    B: Body,
+{
+    #[doc = "Creates a new instance of [ClusterPutWeightedRouting] with the specified API parts"]
+    pub fn new(transport: &'a Transport, parts: ClusterPutWeightedRoutingParts<'b>) -> Self {
+        let headers = HeaderMap::new();
+        ClusterPutWeightedRouting {
+            transport,
+            parts,
+            headers,
+            body: None,
+            error_trace: None,
+            filter_path: None,
+            human: None,
+            pretty: None,
+            request_timeout: None,
+            source: None,
+        }
+    }
+    #[doc = "The body for the API call"]
+    pub fn body<T>(self, body: T) -> ClusterPutWeightedRouting<'a, 'b, JsonBody<T>>
+    where
+        T: Serialize,
+    {
+        ClusterPutWeightedRouting {
+            transport: self.transport,
+            parts: self.parts,
+            body: Some(body.into()),
+            error_trace: self.error_trace,
+            filter_path: self.filter_path,
+            headers: self.headers,
+            human: self.human,
+            pretty: self.pretty,
+            request_timeout: self.request_timeout,
+            source: self.source,
+        }
+    }
+    #[doc = "Include the stack trace of returned errors."]
+    pub fn error_trace(mut self, error_trace: bool) -> Self {
+        self.error_trace = Some(error_trace);
+        self
+    }
+    #[doc = "A comma-separated list of filters used to reduce the response."]
+    pub fn filter_path(mut self, filter_path: &'b [&'b str]) -> Self {
+        self.filter_path = Some(filter_path);
+        self
+    }
+    #[doc = "Adds a HTTP header"]
+    pub fn header(mut self, key: HeaderName, value: HeaderValue) -> Self {
+        self.headers.insert(key, value);
+        self
+    }
+    #[doc = "Return human readable values for statistics."]
+    pub fn human(mut self, human: bool) -> Self {
+        self.human = Some(human);
+        self
+    }
+    #[doc = "Pretty format the returned JSON response."]
+    pub fn pretty(mut self, pretty: bool) -> Self {
+        self.pretty = Some(pretty);
+        self
+    }
+    #[doc = "Sets a request timeout for this API call.\n\nThe timeout is applied from when the request starts connecting until the response body has finished."]
+    pub fn request_timeout(mut self, timeout: Duration) -> Self {
+        self.request_timeout = Some(timeout);
+        self
+    }
+    #[doc = "The URL-encoded request definition. Useful for libraries that do not accept a request body for non-POST requests."]
+    pub fn source(mut self, source: &'b str) -> Self {
+        self.source = Some(source);
+        self
+    }
+    #[doc = "Creates an asynchronous call to the Cluster Put Weighted Routing API that can be awaited"]
+    pub async fn send(self) -> Result<Response, Error> {
+        let path = self.parts.url();
+        let method = Method::Put;
+        let headers = self.headers;
+        let timeout = self.request_timeout;
+        let query_string = {
+            #[serde_with::skip_serializing_none]
+            #[derive(Serialize)]
+            struct QueryParams<'b> {
+                error_trace: Option<bool>,
+                #[serde(serialize_with = "crate::client::serialize_coll_qs")]
+                filter_path: Option<&'b [&'b str]>,
+                human: Option<bool>,
+                pretty: Option<bool>,
+                source: Option<&'b str>,
+            }
+            let query_params = QueryParams {
+                error_trace: self.error_trace,
+                filter_path: self.filter_path,
+                human: self.human,
+                pretty: self.pretty,
+                source: self.source,
+            };
+            Some(query_params)
+        };
+        let body = self.body;
+        let response = self
+            .transport
+            .send(method, &path, headers, query_string.as_ref(), body, timeout)
+            .await?;
+        Ok(response)
+    }
+}
+#[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Cluster Remote Info API"]
 pub enum ClusterRemoteInfoParts {
     #[doc = "No parts"]
@@ -1842,7 +2649,7 @@ impl ClusterRemoteInfoParts {
         }
     }
 }
-#[doc = "Builder for the [Cluster Remote Info API](https://opensearch.org/docs/)\n\nReturns the information about configured remote clusters."]
+#[doc = "Builder for the [Cluster Remote Info API](https://opensearch.org/docs/latest/api-reference/remote-info/)\n\nReturns the information about configured remote clusters."]
 #[derive(Clone, Debug)]
 pub struct ClusterRemoteInfo<'a, 'b> {
     transport: &'a Transport,
@@ -1954,7 +2761,7 @@ impl ClusterRerouteParts {
         }
     }
 }
-#[doc = "Builder for the [Cluster Reroute API](https://opensearch.org/docs/)\n\nAllows to manually change the allocation of individual shards in the cluster."]
+#[doc = "Builder for the [Cluster Reroute API](https://www.elastic.co/guide/en/elasticsearch/reference/3.0/cluster-reroute.html)\n\nAllows to manually change the allocation of individual shards in the cluster."]
 #[derive(Clone, Debug)]
 pub struct ClusterReroute<'a, 'b, B> {
     transport: &'a Transport,
@@ -2062,7 +2869,7 @@ where
         self.human = Some(human);
         self
     }
-    #[doc = "Explicit operation timeout for connection to cluster-manager node"]
+    #[doc = "Explicit operation timeout for connection to master node"]
     #[deprecated = "To promote inclusive language, use 'cluster_manager_timeout' instead."]
     pub fn master_timeout(mut self, master_timeout: &'b str) -> Self {
         self.master_timeout = Some(master_timeout);
@@ -2189,7 +2996,7 @@ impl<'b> ClusterStateParts<'b> {
         }
     }
 }
-#[doc = "Builder for the [Cluster State API](https://opensearch.org/docs/)\n\nReturns a comprehensive information about the state of the cluster."]
+#[doc = "Builder for the [Cluster State API](https://opensearch.org/docs/latest/api-reference/count/)\n\nReturns a comprehensive information about the state of the cluster."]
 #[derive(Clone, Debug)]
 pub struct ClusterState<'a, 'b> {
     transport: &'a Transport,
@@ -2281,12 +3088,12 @@ impl<'a, 'b> ClusterState<'a, 'b> {
         self.ignore_unavailable = Some(ignore_unavailable);
         self
     }
-    #[doc = "Return local information, do not retrieve the state from cluster-manager node (default: false)"]
+    #[doc = "Return local information, do not retrieve the state from master node (default: false)"]
     pub fn local(mut self, local: bool) -> Self {
         self.local = Some(local);
         self
     }
-    #[doc = "Specify timeout for connection to cluster-manager node"]
+    #[doc = "Specify timeout for connection to master"]
     #[deprecated = "To promote inclusive language, use 'cluster_manager_timeout' instead."]
     pub fn master_timeout(mut self, master_timeout: &'b str) -> Self {
         self.master_timeout = Some(master_timeout);
@@ -2395,7 +3202,7 @@ impl<'b> ClusterStatsParts<'b> {
         }
     }
 }
-#[doc = "Builder for the [Cluster Stats API](https://opensearch.org/docs/)\n\nReturns high-level overview of cluster statistics."]
+#[doc = "Builder for the [Cluster Stats API](https://opensearch.org/docs/latest/api-reference/cluster-api/cluster-stats/)\n\nReturns high-level overview of cluster statistics."]
 #[derive(Clone, Debug)]
 pub struct ClusterStats<'a, 'b> {
     transport: &'a Transport,
@@ -2523,79 +3330,131 @@ impl<'a> Cluster<'a> {
     pub fn transport(&self) -> &Transport {
         self.transport
     }
-    #[doc = "[Cluster Allocation Explain API](https://opensearch.org/docs/)\n\nProvides explanations for shard allocations in the cluster."]
+    #[doc = "[Cluster Allocation Explain API](https://opensearch.org/docs/latest/api-reference/cluster-api/cluster-allocation/)\n\nProvides explanations for shard allocations in the cluster."]
     pub fn allocation_explain<'b>(&'a self) -> ClusterAllocationExplain<'a, 'b, ()> {
         ClusterAllocationExplain::new(self.transport())
     }
-    #[doc = "[Cluster Delete Component Template API](https://opensearch.org/docs/)\n\nDeletes a component template"]
+    #[doc = "[Cluster Delete Component Template API](https://opensearch.org/docs/latest/im-plugin/index-templates/#create-a-component-template)\n\nDeletes a component template"]
+    #[doc = "&nbsp;\n# Optional, experimental\nThis requires the `experimental-apis` feature. Can have breaking changes in future\nversions or might even be removed entirely.\n        "]
+    #[cfg(feature = "experimental-apis")]
     pub fn delete_component_template<'b>(
         &'a self,
         parts: ClusterDeleteComponentTemplateParts<'b>,
     ) -> ClusterDeleteComponentTemplate<'a, 'b> {
         ClusterDeleteComponentTemplate::new(self.transport(), parts)
     }
-    #[doc = "[Cluster Delete Voting Config Exclusions API](https://opensearch.org/docs/)\n\nClears cluster voting config exclusions."]
+    #[doc = "[Cluster Delete Decommission Awareness API](https://opensearch.org/docs/latest/api-reference/cluster-api/cluster-decommission/)\n\nDelete any existing decommission."]
+    #[doc = "&nbsp;\n# Optional, experimental\nThis requires the `experimental-apis` feature. Can have breaking changes in future\nversions or might even be removed entirely.\n        "]
+    #[cfg(feature = "experimental-apis")]
+    pub fn delete_decommission_awareness<'b>(
+        &'a self,
+    ) -> ClusterDeleteDecommissionAwareness<'a, 'b> {
+        ClusterDeleteDecommissionAwareness::new(self.transport())
+    }
+    #[doc = "[Cluster Delete Voting Config Exclusions API](https://www.elastic.co/guide/en/elasticsearch/reference/3.0/voting-config-exclusions.html)\n\nClears cluster voting config exclusions."]
     pub fn delete_voting_config_exclusions<'b>(
         &'a self,
     ) -> ClusterDeleteVotingConfigExclusions<'a, 'b> {
         ClusterDeleteVotingConfigExclusions::new(self.transport())
     }
-    #[doc = "[Cluster Exists Component Template API](https://opensearch.org/docs/)\n\nReturns information about whether a particular component template exist"]
+    #[doc = "[Cluster Delete Weighted Routing API](https://opensearch.org/docs/latest/api-reference/cluster-api/cluster-awareness)\n\nDelete weighted shard routing weights"]
+    pub fn delete_weighted_routing<'b>(&'a self) -> ClusterDeleteWeightedRouting<'a, 'b> {
+        ClusterDeleteWeightedRouting::new(self.transport())
+    }
+    #[doc = "[Cluster Exists Component Template API](https://www.elastic.co/guide/en/elasticsearch/reference/3.0/indices-component-template.html)\n\nReturns information about whether a particular component template exist"]
+    #[doc = "&nbsp;\n# Optional, experimental\nThis requires the `experimental-apis` feature. Can have breaking changes in future\nversions or might even be removed entirely.\n        "]
+    #[cfg(feature = "experimental-apis")]
     pub fn exists_component_template<'b>(
         &'a self,
         parts: ClusterExistsComponentTemplateParts<'b>,
     ) -> ClusterExistsComponentTemplate<'a, 'b> {
         ClusterExistsComponentTemplate::new(self.transport(), parts)
     }
-    #[doc = "[Cluster Get Component Template API](https://opensearch.org/docs/)\n\nReturns one or more component templates"]
+    #[doc = "[Cluster Get Component Template API](https://www.elastic.co/guide/en/elasticsearch/reference/3.0/indices-component-template.html)\n\nReturns one or more component templates"]
+    #[doc = "&nbsp;\n# Optional, experimental\nThis requires the `experimental-apis` feature. Can have breaking changes in future\nversions or might even be removed entirely.\n        "]
+    #[cfg(feature = "experimental-apis")]
     pub fn get_component_template<'b>(
         &'a self,
         parts: ClusterGetComponentTemplateParts<'b>,
     ) -> ClusterGetComponentTemplate<'a, 'b> {
         ClusterGetComponentTemplate::new(self.transport(), parts)
     }
-    #[doc = "[Cluster Get Settings API](https://opensearch.org/docs/)\n\nReturns cluster settings."]
+    #[doc = "[Cluster Get Decommission Awareness API](https://opensearch.org/docs/latest/api-reference/cluster-api/cluster-decommission/)\n\nGet details and status of decommissioned attribute"]
+    #[doc = "&nbsp;\n# Optional, experimental\nThis requires the `experimental-apis` feature. Can have breaking changes in future\nversions or might even be removed entirely.\n        "]
+    #[cfg(feature = "experimental-apis")]
+    pub fn get_decommission_awareness<'b>(
+        &'a self,
+        parts: ClusterGetDecommissionAwarenessParts<'b>,
+    ) -> ClusterGetDecommissionAwareness<'a, 'b> {
+        ClusterGetDecommissionAwareness::new(self.transport(), parts)
+    }
+    #[doc = "[Cluster Get Settings API](https://opensearch.org/docs/latest/api-reference/cluster-api/cluster-settings/)\n\nReturns cluster settings."]
     pub fn get_settings<'b>(&'a self) -> ClusterGetSettings<'a, 'b> {
         ClusterGetSettings::new(self.transport())
     }
-    #[doc = "[Cluster Health API](https://opensearch.org/docs/)\n\nReturns basic information about the health of the cluster."]
+    #[doc = "[Cluster Get Weighted Routing API](https://opensearch.org/docs/latest/api-reference/cluster-api/cluster-awareness/)\n\nFetches weighted shard routing weights"]
+    pub fn get_weighted_routing<'b>(
+        &'a self,
+        parts: ClusterGetWeightedRoutingParts<'b>,
+    ) -> ClusterGetWeightedRouting<'a, 'b> {
+        ClusterGetWeightedRouting::new(self.transport(), parts)
+    }
+    #[doc = "[Cluster Health API](https://opensearch.org/docs/latest/api-reference/cluster-api/cluster-health/)\n\nReturns basic information about the health of the cluster."]
     pub fn health<'b>(&'a self, parts: ClusterHealthParts<'b>) -> ClusterHealth<'a, 'b> {
         ClusterHealth::new(self.transport(), parts)
     }
-    #[doc = "[Cluster Pending Tasks API](https://opensearch.org/docs/)\n\nReturns a list of any cluster-level changes (e.g. create index, update mapping,\nallocate or fail shard) which have not yet been executed."]
+    #[doc = "[Cluster Pending Tasks API](https://www.elastic.co/guide/en/elasticsearch/reference/3.0/cluster-pending.html)\n\nReturns a list of any cluster-level changes (e.g. create index, update mapping,\nallocate or fail shard) which have not yet been executed."]
     pub fn pending_tasks<'b>(&'a self) -> ClusterPendingTasks<'a, 'b> {
         ClusterPendingTasks::new(self.transport())
     }
-    #[doc = "[Cluster Post Voting Config Exclusions API](https://opensearch.org/docs/)\n\nUpdates the cluster voting config exclusions by node ids or node names."]
+    #[doc = "[Cluster Post Voting Config Exclusions API](https://www.elastic.co/guide/en/elasticsearch/reference/3.0/voting-config-exclusions.html)\n\nUpdates the cluster voting config exclusions by node ids or node names."]
     pub fn post_voting_config_exclusions<'b>(
         &'a self,
     ) -> ClusterPostVotingConfigExclusions<'a, 'b, ()> {
         ClusterPostVotingConfigExclusions::new(self.transport())
     }
-    #[doc = "[Cluster Put Component Template API](https://opensearch.org/docs/)\n\nCreates or updates a component template"]
+    #[doc = "[Cluster Put Component Template API](https://opensearch.org/docs/latest/im-plugin/index-templates/#create-a-component-template)\n\nCreates or updates a component template"]
+    #[doc = "&nbsp;\n# Optional, experimental\nThis requires the `experimental-apis` feature. Can have breaking changes in future\nversions or might even be removed entirely.\n        "]
+    #[cfg(feature = "experimental-apis")]
     pub fn put_component_template<'b>(
         &'a self,
         parts: ClusterPutComponentTemplateParts<'b>,
     ) -> ClusterPutComponentTemplate<'a, 'b, ()> {
         ClusterPutComponentTemplate::new(self.transport(), parts)
     }
-    #[doc = "[Cluster Put Settings API](https://opensearch.org/docs/)\n\nUpdates the cluster settings."]
+    #[doc = "[Cluster Put Decommission Awareness API](https://opensearch.org/docs/latest/api-reference/cluster-api/cluster-decommission/)\n\nDecommissions an awareness attribute"]
+    #[doc = "&nbsp;\n# Optional, experimental\nThis requires the `experimental-apis` feature. Can have breaking changes in future\nversions or might even be removed entirely.\n        "]
+    #[cfg(feature = "experimental-apis")]
+    pub fn put_decommission_awareness<'b>(
+        &'a self,
+        parts: ClusterPutDecommissionAwarenessParts<'b>,
+    ) -> ClusterPutDecommissionAwareness<'a, 'b, ()> {
+        ClusterPutDecommissionAwareness::new(self.transport(), parts)
+    }
+    #[doc = "[Cluster Put Settings API](https://opensearch.org/docs/latest/api-reference/cluster-api/cluster-settings/)\n\nUpdates the cluster settings."]
     pub fn put_settings<'b>(&'a self) -> ClusterPutSettings<'a, 'b, ()> {
         ClusterPutSettings::new(self.transport())
     }
-    #[doc = "[Cluster Remote Info API](https://opensearch.org/docs/)\n\nReturns the information about configured remote clusters."]
+    #[doc = "[Cluster Put Weighted Routing API](https://opensearch.org/docs/latest/api-reference/cluster-api/cluster-awareness)\n\nUpdates weighted shard routing weights"]
+    pub fn put_weighted_routing<'b>(
+        &'a self,
+        parts: ClusterPutWeightedRoutingParts<'b>,
+    ) -> ClusterPutWeightedRouting<'a, 'b, ()> {
+        ClusterPutWeightedRouting::new(self.transport(), parts)
+    }
+    #[doc = "[Cluster Remote Info API](https://opensearch.org/docs/latest/api-reference/remote-info/)\n\nReturns the information about configured remote clusters."]
     pub fn remote_info<'b>(&'a self) -> ClusterRemoteInfo<'a, 'b> {
         ClusterRemoteInfo::new(self.transport())
     }
-    #[doc = "[Cluster Reroute API](https://opensearch.org/docs/)\n\nAllows to manually change the allocation of individual shards in the cluster."]
+    #[doc = "[Cluster Reroute API](https://www.elastic.co/guide/en/elasticsearch/reference/3.0/cluster-reroute.html)\n\nAllows to manually change the allocation of individual shards in the cluster."]
     pub fn reroute<'b>(&'a self) -> ClusterReroute<'a, 'b, ()> {
         ClusterReroute::new(self.transport())
     }
-    #[doc = "[Cluster State API](https://opensearch.org/docs/)\n\nReturns a comprehensive information about the state of the cluster."]
+    #[doc = "[Cluster State API](https://opensearch.org/docs/latest/api-reference/count/)\n\nReturns a comprehensive information about the state of the cluster."]
     pub fn state<'b>(&'a self, parts: ClusterStateParts<'b>) -> ClusterState<'a, 'b> {
         ClusterState::new(self.transport(), parts)
     }
-    #[doc = "[Cluster Stats API](https://opensearch.org/docs/)\n\nReturns high-level overview of cluster statistics."]
+    #[doc = "[Cluster Stats API](https://opensearch.org/docs/latest/api-reference/cluster-api/cluster-stats/)\n\nReturns high-level overview of cluster statistics."]
     pub fn stats<'b>(&'a self, parts: ClusterStatsParts<'b>) -> ClusterStats<'a, 'b> {
         ClusterStats::new(self.transport(), parts)
     }

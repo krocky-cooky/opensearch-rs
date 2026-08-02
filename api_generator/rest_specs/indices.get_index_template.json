@@ -1,14 +1,10 @@
 {
   "indices.get_index_template":{
     "documentation":{
-      "url":"https://opensearch.org/docs/",
+      "url":"https://opensearch.org/docs/latest/im-plugin/index-templates",
       "description":"Returns an index template."
     },
-    "stability":"stable",
-    "visibility":"public",
-    "headers":{
-      "accept": [ "application/json"]
-    },
+    "stability":"experimental",
     "url":{
       "paths":[
         {
@@ -38,7 +34,7 @@
       },
       "master_timeout":{
         "type":"time",
-        "description":"Explicit operation timeout for connection to cluster-manager node",
+        "description":"Explicit operation timeout for connection to master node",
         "deprecated":{
           "version":"2.0.0",
           "description":"To support inclusive language, use 'cluster_manager_timeout' instead."
@@ -50,7 +46,7 @@
       },
       "local":{
         "type":"boolean",
-        "description":"Return local information, do not retrieve the state from cluster-manager node (default: false)"
+        "description":"Return local information, do not retrieve the state from master node (default: false)"
       }
     }
   }

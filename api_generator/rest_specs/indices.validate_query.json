@@ -1,15 +1,10 @@
 {
   "indices.validate_query":{
     "documentation":{
-      "url":"https://opensearch.org/docs/",
+      "url":"https://www.elastic.co/guide/en/elasticsearch/reference/master/search-validate.html",
       "description":"Allows a user to validate a potentially expensive query without executing it."
     },
     "stability":"stable",
-    "visibility":"public",
-    "headers":{
-      "accept": [ "application/json"],
-      "content_type": ["application/json"]
-    },
     "url":{
       "paths":[
         {

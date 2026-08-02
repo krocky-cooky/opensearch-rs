@@ -1,14 +1,10 @@
 {
   "indices.recovery":{
     "documentation":{
-      "url":"https://opensearch.org/docs/",
+      "url":"https://www.elastic.co/guide/en/elasticsearch/reference/master/indices-recovery.html",
       "description":"Returns information about ongoing index shard recoveries."
     },
     "stability":"stable",
-    "visibility":"public",
-    "headers":{
-      "accept": [ "application/json"]
-    },
     "url":{
       "paths":[
         {

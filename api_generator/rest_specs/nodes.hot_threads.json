@@ -1,14 +1,10 @@
 {
   "nodes.hot_threads":{
     "documentation":{
-      "url":"https://opensearch.org/docs/",
+      "url":"https://opensearch.org/docs/latest/api-reference/nodes-apis/nodes-hot-threads/",
       "description":"Returns information about hot threads on each node in the cluster."
     },
     "stability":"stable",
-    "visibility":"public",
-    "headers":{
-      "accept": [ "text/plain"]
-    },
     "url":{
       "paths":[
         {

@@ -1,14 +1,10 @@
 {
   "tasks.cancel":{
     "documentation":{
-      "url":"https://opensearch.org/docs/",
+      "url":"https://opensearch.org/docs/latest/api-reference/tasks/",
       "description":"Cancels a task, if it can be cancelled through an API."
     },
     "stability":"experimental",
-    "visibility":"public",
-    "headers":{
-      "accept": [ "application/json"]
-    },
     "url":{
       "paths":[
         {

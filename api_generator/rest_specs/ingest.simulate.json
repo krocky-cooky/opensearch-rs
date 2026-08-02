@@ -1,15 +1,10 @@
 {
   "ingest.simulate":{
     "documentation":{
-      "url":"https://opensearch.org/docs/",
+      "url":"https://opensearch.org/docs/latest/ingest-pipelines/simulate-ingest/",
       "description":"Allows to simulate a pipeline with example documents."
     },
     "stability":"stable",
-    "visibility":"public",
-    "headers":{
-      "accept": [ "application/json"],
-      "content_type": ["application/json"]
-    },
     "url":{
       "paths":[
         {

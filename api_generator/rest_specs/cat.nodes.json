@@ -1,14 +1,10 @@
 {
   "cat.nodes":{
     "documentation":{
-      "url":"https://opensearch.org/docs/",
+      "url":"https://opensearch.org/docs/latest/api-reference/cat/cat-nodes/",
       "description":"Returns basic statistics about performance of cluster nodes."
     },
     "stability":"stable",
-    "visibility":"public",
-    "headers":{
-      "accept": [ "text/plain", "application/json"]
-    },
     "url":{
       "paths":[
         {
@@ -47,7 +43,7 @@
       },
       "local":{
         "type":"boolean",
-        "description":"Calculate the selected nodes using the local cluster state rather than the state from cluster-manager node (default: false)",
+        "description":"Calculate the selected nodes using the local cluster state rather than the state from master node (default: false)",
         "deprecated":{
           "version":"7.6.0",
           "description":"This parameter does not cause this API to act locally."
@@ -55,7 +51,7 @@
       },
       "master_timeout":{
         "type":"time",
-        "description":"Explicit operation timeout for connection to cluster-manager node",
+        "description":"Explicit operation timeout for connection to master node",
         "deprecated":{
           "version":"2.0.0",
           "description":"To promote inclusive language, use 'cluster_manager_timeout' instead."

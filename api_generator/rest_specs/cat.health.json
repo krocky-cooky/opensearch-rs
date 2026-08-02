@@ -1,14 +1,10 @@
 {
   "cat.health":{
     "documentation":{
-      "url":"https://opensearch.org/docs/",
+      "url":"https://www.elastic.co/guide/en/elasticsearch/reference/master/cat-health.html",
       "description":"Returns a concise representation of the cluster health."
     },
     "stability":"stable",
-    "visibility":"public",
-    "headers":{
-      "accept": [ "text/plain", "application/json"]
-    },
     "url":{
       "paths":[
         {

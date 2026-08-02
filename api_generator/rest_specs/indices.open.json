@@ -1,14 +1,10 @@
 {
   "indices.open":{
     "documentation":{
-      "url":"https://opensearch.org/docs/",
+      "url":"https://opensearch.org/docs/latest/api-reference/index-apis/open-index/",
       "description":"Opens an index."
     },
     "stability":"stable",
-    "visibility":"public",
-    "headers":{
-      "accept": [ "application/json"]
-    },
     "url":{
       "paths":[
         {
@@ -32,7 +28,7 @@
       },
       "master_timeout":{
         "type":"time",
-        "description":"Specify timeout for connection to cluster-manager node",
+        "description":"Specify timeout for connection to master",
         "deprecated":{
           "version":"2.0.0",
           "description":"To promote inclusive language, use 'cluster_manager_timeout' instead."
@@ -65,6 +61,14 @@
       "wait_for_active_shards":{
         "type":"string",
         "description":"Sets the number of active shards to wait for before the operation returns."
+      },
+      "wait_for_completion": {
+        "type" : "boolean",
+        "description" : "If false, the request will return a task immediately and the operation will run in background. Defaults to true."
+      },
+      "task_execution_timeout": {
+        "type" : "time",
+        "description" : "Explicit task execution timeout, only useful when wait_for_completion is false, defaults to 1h."
       }
     }
   }

@@ -5,10 +5,23 @@ Inspired from [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ### ⚠️ Breaking Changes ⚠️
 - Internalized the `BuildError` type, consolidating on the `Error` type ([#228](https://github.com/opensearch-project/opensearch-rs/pull/228))
 - `ConnectionPool::next` now returns a `Connection` wrapping an `Arc<Url>`, not a reference. ([#391](https://github.com/opensearch-project/opensearch-rs/pull/391))
+- Regenerated the client from the OpenSearch `main` branch REST API specification, removing APIs that no longer exist in OpenSearch: `cat.master`, `indices.unfreeze`, `indices.reload_search_analyzers`, `indices.migrate_to_data_stream`, `indices.promote_data_stream`, `snapshot.get_features` and the `text_structure` namespace. See [UPGRADING.md](UPGRADING.md)
+- Removed legacy query parameters that no longer exist in OpenSearch (e.g. `min_compatible_shard_node` on the Search API)
+- Removed OpenSearch 1.x from the integration test matrix
 
 ### Added
 - Added middleware types to allow intercepting construction and handling of the underlying `reqwest` client & requests ([#232](https://github.com/opensearch-project/opensearch-rs/pull/232)) 
 - Added `auth::cache::CachedCredentialsProvider`, an opt-in helper that caches AWS credentials between requests so users can avoid querying ECS / EC2 metadata endpoints on every signed request ([#419](https://github.com/opensearch-project/opensearch-rs/pull/419))
+- Added data stream APIs: `indices.create_data_stream`, `indices.get_data_stream`, `indices.data_streams_stats`, `indices.modify_data_stream`
+- Added search pipeline APIs: `search_pipeline.put`, `search_pipeline.get`, `search_pipeline.delete`
+- Added cluster weighted routing APIs: `cluster.put_weighted_routing`, `cluster.get_weighted_routing`, `cluster.delete_weighted_routing`
+- Added cluster decommission awareness APIs: `cluster.put_decommission_awareness`, `cluster.get_decommission_awareness`, `cluster.delete_decommission_awareness`
+- Added `tasks.delete` API
+- Added workload management `wlm_stats_list` API
+- Added remote store APIs behind the `experimental-apis` feature: `remote_store.restore`, `remote_store.stats`
+- Added `cat.segment_replication` API behind the `experimental-apis` feature
+- Added new query parameters to existing APIs (e.g. `search_pipeline` and `include_named_queries_score` on the Search API)
+- Added support for boolean-style `deprecated` fields in the REST API spec to the API generator
 
 ### Dependencies
 - Bumps `sysinfo` from 0.31.2 to 0.39.1 ([#331](https://github.com/opensearch-project/opensearch-rs/pull/331), [#339](https://github.com/opensearch-project/opensearch-rs/pull/339), [#346](https://github.com/opensearch-project/opensearch-rs/pull/346), [#352](https://github.com/opensearch-project/opensearch-rs/pull/352), [#389](https://github.com/opensearch-project/opensearch-rs/pull/389), [#420](https://github.com/opensearch-project/opensearch-rs/pull/420))
@@ -36,6 +49,8 @@ Inspired from [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 ### Changed
 - Changed documentation link in Cargo.toml to utilize standard docs.rs generation ([#323](https://github.com/opensearch-project/opensearch-rs/pull/323))
+- Updated the REST API specifications to the OpenSearch `main` branch (previously `1.x`)
+- Updated the test workflow matrices to cover OpenSearch 3.x (up to 3.7.0) and the latest 2.x releases, and to build the unreleased `3.8` branch
 
 ### Deprecated
 

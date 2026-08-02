@@ -1,14 +1,10 @@
 {
   "cat.help":{
     "documentation":{
-      "url":"https://opensearch.org/docs/",
+      "url":"https://opensearch.org/docs/latest/api-reference/cat/index/",
       "description":"Returns help for the Cat APIs."
     },
     "stability":"stable",
-    "visibility":"public",
-    "headers":{
-      "accept": [ "text/plain" ]
-    },
     "url":{
       "paths":[
         {

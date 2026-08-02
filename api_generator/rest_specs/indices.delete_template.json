@@ -1,14 +1,10 @@
 {
   "indices.delete_template":{
     "documentation":{
-      "url":"https://opensearch.org/docs/",
+      "url":"https://opensearch.org/docs/latest/im-plugin/index-templates",
       "description":"Deletes an index template."
     },
     "stability":"stable",
-    "visibility":"public",
-    "headers":{
-      "accept": [ "application/json"]
-    },
     "url":{
       "paths":[
         {
@@ -32,10 +28,10 @@
       },
       "master_timeout":{
         "type":"time",
-        "description":"Specify timeout for connection to cluster-manager node",
+        "description":"Specify timeout for connection to master node",
         "deprecated":{
           "version":"2.0.0",
-          "description":"To promote inclusive language, use 'cluster_manager_timeout' instead."
+          "description":"To support inclusive language, use 'cluster_manager_timeout' instead."
         }
       },
       "cluster_manager_timeout":{

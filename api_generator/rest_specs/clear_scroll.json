@@ -1,15 +1,10 @@
 {
   "clear_scroll":{
     "documentation":{
-      "url":"https://opensearch.org/docs/",
+      "url":"https://opensearch.org/docs/latest/api-reference/scroll/",
       "description":"Explicitly clears the search context for a scroll."
     },
     "stability":"stable",
-    "visibility":"public",
-    "headers":{
-      "accept": [ "application/json"],
-      "content_type": ["application/json","text/plain"]
-    },
     "url":{
       "paths":[
         {
@@ -26,7 +21,8 @@
           "parts":{
             "scroll_id":{
               "type":"list",
-              "description":"A comma-separated list of scroll IDs to clear"
+              "description":"A comma-separated list of scroll IDs to clear",
+              "deprecated":true
             }
           },
           "deprecated":{

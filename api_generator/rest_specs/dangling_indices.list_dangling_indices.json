@@ -1,14 +1,10 @@
 {
   "dangling_indices.list_dangling_indices": {
     "documentation": {
-      "url": "https://opensearch.org/docs/",
+      "url": "https://opensearch.org/docs/latest/api-reference/index-apis/dangling-index/",
       "description": "Returns all dangling indices."
     },
     "stability": "stable",
-    "visibility":"public",
-    "headers":{
-      "accept": [ "application/json"]
-    },
     "url": {
       "paths": [
         {

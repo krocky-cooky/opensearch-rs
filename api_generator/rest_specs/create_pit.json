@@ -2,7 +2,7 @@
 {
   "create_pit":{
     "documentation":{
-      "url":"https://docs.opensearch.org/latest/api-reference/search-apis/point-in-time-api/",
+      "url":"https://opensearch.org/docs/latest/search-plugins/searching-data/point-in-time-api",
       "description":"Creates point in time context."
     },
     "stability":"stable",
@@ -26,16 +26,6 @@
       "allow_partial_pit_creation":{
         "type":"boolean",
         "description":"Allow if point in time can be created with partial failures"
-      },
-      "expand_wildcards": {
-        "type": "enum",
-        "options": ["open", "closed", "hidden", "none", "all"],
-        "default": "open",
-        "description": "The type of index that can match the wildcard pattern. Supports comma-separated values. Optional. Default is `open`."
-      },
-      "ignore_unavailable": {
-        "type": "boolean",
-        "description": "Whether specified concrete indices should be ignored when unavailable (missing or closed)"
       },
       "keep_alive":{
         "type":"string",

@@ -1,15 +1,10 @@
 {
   "nodes.reload_secure_settings":{
     "documentation":{
-      "url":"https://opensearch.org/docs/",
+      "url":"https://opensearch.org/docs/latest/api-reference/nodes-apis/nodes-reload-secure/",
       "description":"Reloads secure settings."
     },
     "stability":"stable",
-    "visibility":"public",
-    "headers":{
-      "accept": [ "application/json"],
-      "content_type": [ "application/json" ]
-    },
     "url":{
       "paths":[
         {

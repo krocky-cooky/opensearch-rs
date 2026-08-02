@@ -1,15 +1,10 @@
 {
   "cluster.allocation_explain":{
     "documentation":{
-      "url":"https://opensearch.org/docs/",
+      "url":"https://opensearch.org/docs/latest/api-reference/cluster-api/cluster-allocation/",
       "description":"Provides explanations for shard allocations in the cluster."
     },
     "stability":"stable",
-    "visibility":"public",
-    "headers":{
-      "accept": [ "application/json"],
-      "content_type": ["application/json"]
-    },
     "url":{
       "paths":[
         {

@@ -1,14 +1,10 @@
 {
   "reindex_rethrottle":{
     "documentation":{
-      "url":"https://opensearch.org/docs/",
+      "url":"https://opensearch.org/docs/latest/im-plugin/reindex-data/",
       "description":"Changes the number of requests per second for a particular Reindex operation."
     },
     "stability":"stable",
-    "visibility":"public",
-    "headers":{
-      "accept": [ "application/json"]
-    },
     "url":{
       "paths":[
         {

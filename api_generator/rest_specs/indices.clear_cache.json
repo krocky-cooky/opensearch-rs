@@ -1,14 +1,10 @@
 {
   "indices.clear_cache":{
     "documentation":{
-      "url":"https://opensearch.org/docs/",
+      "url":"https://opensearch.org/docs/latest/api-reference/index-apis/clear-index-cache/",
       "description":"Clears all or specific caches for one or more indices."
     },
     "stability":"stable",
-    "visibility":"public",
-    "headers":{
-      "accept": [ "application/json"]
-    },
     "url":{
       "paths":[
         {
@@ -71,6 +67,10 @@
       "request":{
         "type":"boolean",
         "description":"Clear request cache"
+      },
+      "file":{
+        "type":"boolean",
+        "description":"Clear filecache"
       }
     }
   }

@@ -93,20 +93,6 @@ pub enum ExpandWildcards {
     #[serde(rename = "all")]
     All,
 }
-#[doc = "Optional parameter to specify the high level file format"]
-#[doc = "&nbsp;\n# Optional, experimental\nThis requires the `experimental-apis` feature. Can have breaking changes in future\nversions or might even be removed entirely.\n        "]
-#[cfg(feature = "experimental-apis")]
-#[derive(Debug, PartialEq, Eq, Deserialize, Serialize, Clone, Copy)]
-pub enum Format {
-    #[serde(rename = "ndjson")]
-    Ndjson,
-    #[serde(rename = "xml")]
-    Xml,
-    #[serde(rename = "delimited")]
-    Delimited,
-    #[serde(rename = "semi_structured_text")]
-    SemiStructuredText,
-}
 #[doc = "Group tasks by nodes or parent/child relationships"]
 #[doc = "&nbsp;\n# Optional, experimental\nThis requires the `experimental-apis` feature. Can have breaking changes in future\nversions or might even be removed entirely.\n        "]
 #[cfg(feature = "experimental-apis")]
@@ -138,6 +124,8 @@ pub enum Level {
     Indices,
     #[serde(rename = "shards")]
     Shards,
+    #[serde(rename = "awareness_attributes")]
+    AwarenessAttributes,
 }
 #[doc = "Explicit operation type. Defaults to `index` for requests with an explicit document ID, and to `create`for requests without an explicit document ID"]
 #[derive(Debug, PartialEq, Eq, Deserialize, Serialize, Clone, Copy)]

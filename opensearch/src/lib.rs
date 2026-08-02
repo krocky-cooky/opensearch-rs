@@ -430,9 +430,10 @@ pub mod dangling_indices;
 pub mod indices;
 pub mod ingest;
 pub mod nodes;
+pub mod remote_store;
+pub mod search_pipeline;
 pub mod snapshot;
 pub mod tasks;
-pub mod text_structure;
 // GENERATED-END
 
 mod client;

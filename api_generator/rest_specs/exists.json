@@ -1,14 +1,10 @@
 {
   "exists":{
     "documentation":{
-      "url":"https://opensearch.org/docs/",
+      "url":"https://opensearch.org/docs/latest/api-reference/document-apis/get-documents/",
       "description":"Returns information about whether a document exists in an index."
     },
     "stability":"stable",
-    "visibility":"public",
-    "headers":{
-      "accept": [ "application/json"]
-    },
     "url":{
       "paths":[
         {

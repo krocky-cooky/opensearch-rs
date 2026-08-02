@@ -26,7 +26,7 @@
 
 //! Cat APIs
 //!
-//! The [Cat APIs](https://opensearch.org/docs/opensearch/rest-api/cat/index/) aim to
+//! The [Cat APIs](https://docs.opensearch.org/latest/api-reference/cat/index/) aim to
 //! meet the needs of humans when looking at data returned from OpenSearch,
 //! formatting it as compact, column aligned text, making it easier on human eyes.
 //!
@@ -160,7 +160,7 @@ impl<'b> CatAliasesParts<'b> {
         }
     }
 }
-#[doc = "Builder for the [Cat Aliases API](https://opensearch.org/docs/)\n\nShows information about currently configured aliases to indices including filter and routing infos."]
+#[doc = "Builder for the [Cat Aliases API](https://opensearch.org/docs/latest/api-reference/cat/cat-aliases/)\n\nShows information about currently configured aliases to indices including filter and routing infos."]
 #[derive(Clone, Debug)]
 pub struct CatAliases<'a, 'b> {
     transport: &'a Transport,
@@ -245,7 +245,7 @@ impl<'a, 'b> CatAliases<'a, 'b> {
         self.human = Some(human);
         self
     }
-    #[doc = "Return local information, do not retrieve the state from cluster-manager node (default: false)"]
+    #[doc = "Return local information, do not retrieve the state from master node (default: false)"]
     pub fn local(mut self, local: bool) -> Self {
         self.local = Some(local);
         self
@@ -351,7 +351,7 @@ impl<'b> CatAllocationParts<'b> {
         }
     }
 }
-#[doc = "Builder for the [Cat Allocation API](https://opensearch.org/docs/)\n\nProvides a snapshot of how many shards are allocated to each data node and how much disk space they are using."]
+#[doc = "Builder for the [Cat Allocation API](https://opensearch.org/docs/latest/api-reference/cat/cat-allocation/)\n\nProvides a snapshot of how many shards are allocated to each data node and how much disk space they are using."]
 #[derive(Clone, Debug)]
 pub struct CatAllocation<'a, 'b> {
     transport: &'a Transport,
@@ -445,12 +445,12 @@ impl<'a, 'b> CatAllocation<'a, 'b> {
         self.human = Some(human);
         self
     }
-    #[doc = "Return local information, do not retrieve the state from cluster-manager node (default: false)"]
+    #[doc = "Return local information, do not retrieve the state from master node (default: false)"]
     pub fn local(mut self, local: bool) -> Self {
         self.local = Some(local);
         self
     }
-    #[doc = "Explicit operation timeout for connection to cluster-manager node"]
+    #[doc = "Explicit operation timeout for connection to master node"]
     #[deprecated = "To promote inclusive language, use 'cluster_manager_timeout' instead."]
     pub fn master_timeout(mut self, master_timeout: &'b str) -> Self {
         self.master_timeout = Some(master_timeout);
@@ -549,7 +549,7 @@ impl CatClusterManagerParts {
         }
     }
 }
-#[doc = "Builder for the [Cat Cluster Manager API](https://opensearch.org/docs/latest/opensearch/rest-api/cat/cat-cluster_manager/)\n\nReturns information about the cluster-manager node."]
+#[doc = "Builder for the [Cat Cluster Manager API](https://opensearch.org/docs/latest/api-reference/cat/cat-cluster_manager/)\n\nReturns information about the cluster-manager node."]
 #[derive(Clone, Debug)]
 pub struct CatClusterManager<'a, 'b> {
     transport: &'a Transport,
@@ -641,7 +641,7 @@ impl<'a, 'b> CatClusterManager<'a, 'b> {
         self.local = Some(local);
         self
     }
-    #[doc = "Explicit operation timeout for connection to cluster-manager node"]
+    #[doc = "Explicit operation timeout for connection to master node"]
     #[deprecated = "To promote inclusive language, use 'cluster_manager_timeout' instead."]
     pub fn master_timeout(mut self, master_timeout: &'b str) -> Self {
         self.master_timeout = Some(master_timeout);
@@ -749,7 +749,7 @@ impl<'b> CatCountParts<'b> {
         }
     }
 }
-#[doc = "Builder for the [Cat Count API](https://opensearch.org/docs/)\n\nProvides quick access to the document count of the entire cluster, or individual indices."]
+#[doc = "Builder for the [Cat Count API](https://opensearch.org/docs/latest/api-reference/cat/cat-count/)\n\nProvides quick access to the document count of the entire cluster, or individual indices."]
 #[derive(Clone, Debug)]
 pub struct CatCount<'a, 'b> {
     transport: &'a Transport,
@@ -921,7 +921,7 @@ impl<'b> CatFielddataParts<'b> {
         }
     }
 }
-#[doc = "Builder for the [Cat Fielddata API](https://opensearch.org/docs/)\n\nShows how much heap memory is currently being used by fielddata on every data node in the cluster."]
+#[doc = "Builder for the [Cat Fielddata API](https://opensearch.org/docs/latest/api-reference/cat/cat-field-data/)\n\nShows how much heap memory is currently being used by fielddata on every data node in the cluster."]
 #[derive(Clone, Debug)]
 pub struct CatFielddata<'a, 'b> {
     transport: &'a Transport,
@@ -1101,7 +1101,7 @@ impl CatHealthParts {
         }
     }
 }
-#[doc = "Builder for the [Cat Health API](https://opensearch.org/docs/)\n\nReturns a concise representation of the cluster health."]
+#[doc = "Builder for the [Cat Health API](https://www.elastic.co/guide/en/elasticsearch/reference/3.0/cat-health.html)\n\nReturns a concise representation of the cluster health."]
 #[derive(Clone, Debug)]
 pub struct CatHealth<'a, 'b> {
     transport: &'a Transport,
@@ -1280,7 +1280,7 @@ impl CatHelpParts {
         }
     }
 }
-#[doc = "Builder for the [Cat Help API](https://opensearch.org/docs/)\n\nReturns help for the Cat APIs."]
+#[doc = "Builder for the [Cat Help API](https://opensearch.org/docs/latest/api-reference/cat/index/)\n\nReturns help for the Cat APIs."]
 #[derive(Clone, Debug)]
 pub struct CatHelp<'a, 'b> {
     transport: &'a Transport,
@@ -1424,7 +1424,7 @@ impl<'b> CatIndicesParts<'b> {
         }
     }
 }
-#[doc = "Builder for the [Cat Indices API](https://opensearch.org/docs/)\n\nReturns information about indices: number of primaries and replicas, document counts, disk size, ..."]
+#[doc = "Builder for the [Cat Indices API](https://opensearch.org/docs/latest/api-reference/cat/cat-indices/)\n\nReturns information about indices: number of primaries and replicas, document counts, disk size, ..."]
 #[derive(Clone, Debug)]
 pub struct CatIndices<'a, 'b> {
     transport: &'a Transport,
@@ -1543,12 +1543,12 @@ impl<'a, 'b> CatIndices<'a, 'b> {
         self.include_unloaded_segments = Some(include_unloaded_segments);
         self
     }
-    #[doc = "Return local information, do not retrieve the state from cluster-manager node (default: false)"]
+    #[doc = "Return local information, do not retrieve the state from master node (default: false)"]
     pub fn local(mut self, local: bool) -> Self {
         self.local = Some(local);
         self
     }
-    #[doc = "Explicit operation timeout for connection to cluster-manager node"]
+    #[doc = "Explicit operation timeout for connection to master node"]
     #[deprecated = "To promote inclusive language, use 'cluster_manager_timeout' instead."]
     pub fn master_timeout(mut self, master_timeout: &'b str) -> Self {
         self.master_timeout = Some(master_timeout);
@@ -1654,200 +1654,6 @@ impl<'a, 'b> CatIndices<'a, 'b> {
         Ok(response)
     }
 }
-#[deprecated = "To promote inclusive language, please use '/_cat/cluster_manager' instead."]
-#[derive(Debug, Clone, PartialEq, Eq)]
-#[doc = "API parts for the Cat Master API"]
-pub enum CatMasterParts {
-    #[doc = "No parts"]
-    None,
-}
-#[allow(deprecated)]
-impl CatMasterParts {
-    #[doc = "Builds a relative URL path to the Cat Master API"]
-    pub fn url(self) -> Cow<'static, str> {
-        match self {
-            CatMasterParts::None => "/_cat/master".into(),
-        }
-    }
-}
-#[doc = "Builder for the [Cat Master API](https://opensearch.org/docs/latest/opensearch/rest-api/cat/cat-cluster_manager/)\n\nReturns information about the cluster-manager node."]
-#[deprecated = "To promote inclusive language, please use '/_cat/cluster_manager' instead."]
-#[allow(deprecated)]
-#[derive(Clone, Debug)]
-pub struct CatMaster<'a, 'b> {
-    transport: &'a Transport,
-    parts: CatMasterParts,
-    cluster_manager_timeout: Option<&'b str>,
-    error_trace: Option<bool>,
-    filter_path: Option<&'b [&'b str]>,
-    format: Option<&'b str>,
-    h: Option<&'b [&'b str]>,
-    headers: HeaderMap,
-    help: Option<bool>,
-    human: Option<bool>,
-    local: Option<bool>,
-    master_timeout: Option<&'b str>,
-    pretty: Option<bool>,
-    request_timeout: Option<Duration>,
-    s: Option<&'b [&'b str]>,
-    source: Option<&'b str>,
-    v: Option<bool>,
-}
-#[allow(deprecated)]
-impl<'a, 'b> CatMaster<'a, 'b> {
-    #[doc = "Creates a new instance of [CatMaster]"]
-    pub fn new(transport: &'a Transport) -> Self {
-        let mut headers = HeaderMap::with_capacity(2);
-        headers.insert(CONTENT_TYPE, HeaderValue::from_static("text/plain"));
-        headers.insert(ACCEPT, HeaderValue::from_static("text/plain"));
-        CatMaster {
-            transport,
-            parts: CatMasterParts::None,
-            headers,
-            cluster_manager_timeout: None,
-            error_trace: None,
-            filter_path: None,
-            format: None,
-            h: None,
-            help: None,
-            human: None,
-            local: None,
-            master_timeout: None,
-            pretty: None,
-            request_timeout: None,
-            s: None,
-            source: None,
-            v: None,
-        }
-    }
-    #[doc = "Explicit operation timeout for connection to cluster-manager node"]
-    pub fn cluster_manager_timeout(mut self, cluster_manager_timeout: &'b str) -> Self {
-        self.cluster_manager_timeout = Some(cluster_manager_timeout);
-        self
-    }
-    #[doc = "Include the stack trace of returned errors."]
-    pub fn error_trace(mut self, error_trace: bool) -> Self {
-        self.error_trace = Some(error_trace);
-        self
-    }
-    #[doc = "A comma-separated list of filters used to reduce the response."]
-    pub fn filter_path(mut self, filter_path: &'b [&'b str]) -> Self {
-        self.filter_path = Some(filter_path);
-        self
-    }
-    #[doc = "a short version of the Accept header, e.g. json, yaml"]
-    pub fn format(mut self, format: &'b str) -> Self {
-        self.format = Some(format);
-        self
-    }
-    #[doc = "Comma-separated list of column names to display"]
-    pub fn h(mut self, h: &'b [&'b str]) -> Self {
-        self.h = Some(h);
-        self
-    }
-    #[doc = "Adds a HTTP header"]
-    pub fn header(mut self, key: HeaderName, value: HeaderValue) -> Self {
-        self.headers.insert(key, value);
-        self
-    }
-    #[doc = "Return help information"]
-    pub fn help(mut self, help: bool) -> Self {
-        self.help = Some(help);
-        self
-    }
-    #[doc = "Return human readable values for statistics."]
-    pub fn human(mut self, human: bool) -> Self {
-        self.human = Some(human);
-        self
-    }
-    #[doc = "Return local information, do not retrieve the state from cluster-manager node (default: false)"]
-    pub fn local(mut self, local: bool) -> Self {
-        self.local = Some(local);
-        self
-    }
-    #[doc = "Explicit operation timeout for connection to cluster-manager node"]
-    #[deprecated = "This parameter is deprecated in favor of cluster_manager_timeout to support inclusive terminology."]
-    pub fn master_timeout(mut self, master_timeout: &'b str) -> Self {
-        self.master_timeout = Some(master_timeout);
-        self
-    }
-    #[doc = "Pretty format the returned JSON response."]
-    pub fn pretty(mut self, pretty: bool) -> Self {
-        self.pretty = Some(pretty);
-        self
-    }
-    #[doc = "Sets a request timeout for this API call.\n\nThe timeout is applied from when the request starts connecting until the response body has finished."]
-    pub fn request_timeout(mut self, timeout: Duration) -> Self {
-        self.request_timeout = Some(timeout);
-        self
-    }
-    #[doc = "Comma-separated list of column names or column aliases to sort by"]
-    pub fn s(mut self, s: &'b [&'b str]) -> Self {
-        self.s = Some(s);
-        self
-    }
-    #[doc = "The URL-encoded request definition. Useful for libraries that do not accept a request body for non-POST requests."]
-    pub fn source(mut self, source: &'b str) -> Self {
-        self.source = Some(source);
-        self
-    }
-    #[doc = "Verbose mode. Display column headers"]
-    pub fn v(mut self, v: bool) -> Self {
-        self.v = Some(v);
-        self
-    }
-    #[doc = "Creates an asynchronous call to the Cat Master API that can be awaited"]
-    pub async fn send(self) -> Result<Response, Error> {
-        let path = self.parts.url();
-        let method = Method::Get;
-        let headers = self.headers;
-        let timeout = self.request_timeout;
-        let query_string = {
-            #[serde_with::skip_serializing_none]
-            #[derive(Serialize)]
-            struct QueryParams<'b> {
-                cluster_manager_timeout: Option<&'b str>,
-                error_trace: Option<bool>,
-                #[serde(serialize_with = "crate::client::serialize_coll_qs")]
-                filter_path: Option<&'b [&'b str]>,
-                format: Option<&'b str>,
-                #[serde(serialize_with = "crate::client::serialize_coll_qs")]
-                h: Option<&'b [&'b str]>,
-                help: Option<bool>,
-                human: Option<bool>,
-                local: Option<bool>,
-                master_timeout: Option<&'b str>,
-                pretty: Option<bool>,
-                #[serde(serialize_with = "crate::client::serialize_coll_qs")]
-                s: Option<&'b [&'b str]>,
-                source: Option<&'b str>,
-                v: Option<bool>,
-            }
-            let query_params = QueryParams {
-                cluster_manager_timeout: self.cluster_manager_timeout,
-                error_trace: self.error_trace,
-                filter_path: self.filter_path,
-                format: self.format,
-                h: self.h,
-                help: self.help,
-                human: self.human,
-                local: self.local,
-                master_timeout: self.master_timeout,
-                pretty: self.pretty,
-                s: self.s,
-                source: self.source,
-                v: self.v,
-            };
-            Some(query_params)
-        };
-        let body = Option::<()>::None;
-        let response = self
-            .transport
-            .send(method, &path, headers, query_string.as_ref(), body, timeout)
-            .await?;
-        Ok(response)
-    }
-}
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Cat Nodeattrs API"]
 pub enum CatNodeattrsParts {
@@ -1862,7 +1668,7 @@ impl CatNodeattrsParts {
         }
     }
 }
-#[doc = "Builder for the [Cat Nodeattrs API](https://opensearch.org/docs/)\n\nReturns information about custom node attributes."]
+#[doc = "Builder for the [Cat Nodeattrs API](https://opensearch.org/docs/latest/api-reference/cat/cat-nodeattrs/)\n\nReturns information about custom node attributes."]
 #[derive(Clone, Debug)]
 pub struct CatNodeattrs<'a, 'b> {
     transport: &'a Transport,
@@ -1949,12 +1755,12 @@ impl<'a, 'b> CatNodeattrs<'a, 'b> {
         self.human = Some(human);
         self
     }
-    #[doc = "Return local information, do not retrieve the state from cluster-manager node (default: false)"]
+    #[doc = "Return local information, do not retrieve the state from master node (default: false)"]
     pub fn local(mut self, local: bool) -> Self {
         self.local = Some(local);
         self
     }
-    #[doc = "Explicit operation timeout for connection to cluster-manager node"]
+    #[doc = "Explicit operation timeout for connection to master node"]
     #[deprecated = "To promote inclusive language, use 'cluster_manager_timeout' instead."]
     pub fn master_timeout(mut self, master_timeout: &'b str) -> Self {
         self.master_timeout = Some(master_timeout);
@@ -2051,7 +1857,7 @@ impl CatNodesParts {
         }
     }
 }
-#[doc = "Builder for the [Cat Nodes API](https://opensearch.org/docs/)\n\nReturns basic statistics about performance of cluster nodes."]
+#[doc = "Builder for the [Cat Nodes API](https://opensearch.org/docs/latest/api-reference/cat/cat-nodes/)\n\nReturns basic statistics about performance of cluster nodes."]
 #[derive(Clone, Debug)]
 pub struct CatNodes<'a, 'b> {
     transport: &'a Transport,
@@ -2154,13 +1960,13 @@ impl<'a, 'b> CatNodes<'a, 'b> {
         self.human = Some(human);
         self
     }
-    #[doc = "Calculate the selected nodes using the local cluster state rather than the state from cluster-manager node (default: false)"]
+    #[doc = "Calculate the selected nodes using the local cluster state rather than the state from master node (default: false)"]
     #[deprecated = "This parameter does not cause this API to act locally."]
     pub fn local(mut self, local: bool) -> Self {
         self.local = Some(local);
         self
     }
-    #[doc = "Explicit operation timeout for connection to cluster-manager node"]
+    #[doc = "Explicit operation timeout for connection to master node"]
     #[deprecated = "To promote inclusive language, use 'cluster_manager_timeout' instead."]
     pub fn master_timeout(mut self, master_timeout: &'b str) -> Self {
         self.master_timeout = Some(master_timeout);
@@ -2268,7 +2074,7 @@ impl CatPendingTasksParts {
         }
     }
 }
-#[doc = "Builder for the [Cat Pending Tasks API](https://opensearch.org/docs/)\n\nReturns a concise representation of the cluster pending tasks."]
+#[doc = "Builder for the [Cat Pending Tasks API](https://opensearch.org/docs/latest/api-reference/cat/cat-pending-tasks/)\n\nReturns a concise representation of the cluster pending tasks."]
 #[derive(Clone, Debug)]
 pub struct CatPendingTasks<'a, 'b> {
     transport: &'a Transport,
@@ -2357,12 +2163,12 @@ impl<'a, 'b> CatPendingTasks<'a, 'b> {
         self.human = Some(human);
         self
     }
-    #[doc = "Return local information, do not retrieve the state from cluster-manager node (default: false)"]
+    #[doc = "Return local information, do not retrieve the state from master node (default: false)"]
     pub fn local(mut self, local: bool) -> Self {
         self.local = Some(local);
         self
     }
-    #[doc = "Explicit operation timeout for connection to cluster-manager node"]
+    #[doc = "Explicit operation timeout for connection to master node"]
     #[deprecated = "To promote inclusive language, use 'cluster_manager_timeout' instead."]
     pub fn master_timeout(mut self, master_timeout: &'b str) -> Self {
         self.master_timeout = Some(master_timeout);
@@ -2466,7 +2272,7 @@ impl CatPluginsParts {
         }
     }
 }
-#[doc = "Builder for the [Cat Plugins API](https://opensearch.org/docs/)\n\nReturns information about installed plugins across nodes node."]
+#[doc = "Builder for the [Cat Plugins API](https://opensearch.org/docs/latest/api-reference/cat/cat-plugins/)\n\nReturns information about installed plugins across nodes node."]
 #[derive(Clone, Debug)]
 pub struct CatPlugins<'a, 'b> {
     transport: &'a Transport,
@@ -2553,12 +2359,12 @@ impl<'a, 'b> CatPlugins<'a, 'b> {
         self.human = Some(human);
         self
     }
-    #[doc = "Return local information, do not retrieve the state from cluster-manager node (default: false)"]
+    #[doc = "Return local information, do not retrieve the state from master node (default: false)"]
     pub fn local(mut self, local: bool) -> Self {
         self.local = Some(local);
         self
     }
-    #[doc = "Explicit operation timeout for connection to cluster-manager node"]
+    #[doc = "Explicit operation timeout for connection to master node"]
     #[deprecated = "To promote inclusive language, use 'cluster_manager_timeout' instead."]
     pub fn master_timeout(mut self, master_timeout: &'b str) -> Self {
         self.master_timeout = Some(master_timeout);
@@ -2666,7 +2472,7 @@ impl<'b> CatRecoveryParts<'b> {
         }
     }
 }
-#[doc = "Builder for the [Cat Recovery API](https://opensearch.org/docs/)\n\nReturns information about index shard recoveries, both on-going completed."]
+#[doc = "Builder for the [Cat Recovery API](https://opensearch.org/docs/latest/api-reference/cat/cat-recovery/)\n\nReturns information about index shard recoveries, both on-going completed."]
 #[derive(Clone, Debug)]
 pub struct CatRecovery<'a, 'b> {
     transport: &'a Transport,
@@ -2873,7 +2679,7 @@ impl CatRepositoriesParts {
         }
     }
 }
-#[doc = "Builder for the [Cat Repositories API](https://opensearch.org/docs/)\n\nReturns information about snapshot repositories registered in the cluster."]
+#[doc = "Builder for the [Cat Repositories API](https://opensearch.org/docs/latest/api-reference/cat/cat-repositories/)\n\nReturns information about snapshot repositories registered in the cluster."]
 #[derive(Clone, Debug)]
 pub struct CatRepositories<'a, 'b> {
     transport: &'a Transport,
@@ -2960,12 +2766,12 @@ impl<'a, 'b> CatRepositories<'a, 'b> {
         self.human = Some(human);
         self
     }
-    #[doc = "Calculate the selected nodes using the local cluster state rather than the state from cluster-manager node (default: false)"]
+    #[doc = "Return local information, do not retrieve the state from master node"]
     pub fn local(mut self, local: bool) -> Self {
         self.local = Some(local);
         self
     }
-    #[doc = "Explicit operation timeout for connection to cluster-manager node"]
+    #[doc = "Explicit operation timeout for connection to master node"]
     #[deprecated = "To promote inclusive language, use 'cluster_manager_timeout' instead."]
     pub fn master_timeout(mut self, master_timeout: &'b str) -> Self {
         self.master_timeout = Some(master_timeout);
@@ -3048,6 +2854,239 @@ impl<'a, 'b> CatRepositories<'a, 'b> {
         Ok(response)
     }
 }
+#[cfg(feature = "experimental-apis")]
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[doc = "API parts for the Cat Segment Replication API"]
+pub enum CatSegmentReplicationParts<'b> {
+    #[doc = "No parts"]
+    None,
+    #[doc = "Index"]
+    Index(&'b [&'b str]),
+}
+#[cfg(feature = "experimental-apis")]
+impl<'b> CatSegmentReplicationParts<'b> {
+    #[doc = "Builds a relative URL path to the Cat Segment Replication API"]
+    pub fn url(self) -> Cow<'static, str> {
+        match self {
+            CatSegmentReplicationParts::None => "/_cat/segment_replication".into(),
+            CatSegmentReplicationParts::Index(index) => {
+                let index_str = index.join(",");
+                let encoded_index: Cow<str> =
+                    percent_encode(index_str.as_bytes(), PARTS_ENCODED).into();
+                let mut p = String::with_capacity(26usize + encoded_index.len());
+                p.push_str("/_cat/segment_replication/");
+                p.push_str(encoded_index.as_ref());
+                p.into()
+            }
+        }
+    }
+}
+#[doc = "Builder for the [Cat Segment Replication API](https://opensearch.org/docs/latest/api-reference/cat/cat-segment-replication/)\n\nReturns information about both on-going and latest completed Segment Replication events"]
+#[doc = "&nbsp;\n# Optional, experimental\nThis requires the `experimental-apis` feature. Can have breaking changes in future\nversions or might even be removed entirely.\n        "]
+#[cfg(feature = "experimental-apis")]
+#[derive(Clone, Debug)]
+pub struct CatSegmentReplication<'a, 'b> {
+    transport: &'a Transport,
+    parts: CatSegmentReplicationParts<'b>,
+    active_only: Option<bool>,
+    bytes: Option<Bytes>,
+    detailed: Option<bool>,
+    error_trace: Option<bool>,
+    filter_path: Option<&'b [&'b str]>,
+    format: Option<&'b str>,
+    h: Option<&'b [&'b str]>,
+    headers: HeaderMap,
+    help: Option<bool>,
+    human: Option<bool>,
+    index: Option<&'b [&'b str]>,
+    pretty: Option<bool>,
+    request_timeout: Option<Duration>,
+    s: Option<&'b [&'b str]>,
+    shards: Option<&'b [&'b str]>,
+    source: Option<&'b str>,
+    time: Option<Time>,
+    v: Option<bool>,
+}
+#[cfg(feature = "experimental-apis")]
+impl<'a, 'b> CatSegmentReplication<'a, 'b> {
+    #[doc = "Creates a new instance of [CatSegmentReplication] with the specified API parts"]
+    pub fn new(transport: &'a Transport, parts: CatSegmentReplicationParts<'b>) -> Self {
+        let mut headers = HeaderMap::with_capacity(2);
+        headers.insert(CONTENT_TYPE, HeaderValue::from_static("text/plain"));
+        headers.insert(ACCEPT, HeaderValue::from_static("text/plain"));
+        CatSegmentReplication {
+            transport,
+            parts,
+            headers,
+            active_only: None,
+            bytes: None,
+            detailed: None,
+            error_trace: None,
+            filter_path: None,
+            format: None,
+            h: None,
+            help: None,
+            human: None,
+            index: None,
+            pretty: None,
+            request_timeout: None,
+            s: None,
+            shards: None,
+            source: None,
+            time: None,
+            v: None,
+        }
+    }
+    #[doc = "If `true`, the response only includes ongoing segment replication events"]
+    pub fn active_only(mut self, active_only: bool) -> Self {
+        self.active_only = Some(active_only);
+        self
+    }
+    #[doc = "The unit in which to display byte values"]
+    pub fn bytes(mut self, bytes: Bytes) -> Self {
+        self.bytes = Some(bytes);
+        self
+    }
+    #[doc = "If `true`, the response includes detailed information about segment replications"]
+    pub fn detailed(mut self, detailed: bool) -> Self {
+        self.detailed = Some(detailed);
+        self
+    }
+    #[doc = "Include the stack trace of returned errors."]
+    pub fn error_trace(mut self, error_trace: bool) -> Self {
+        self.error_trace = Some(error_trace);
+        self
+    }
+    #[doc = "A comma-separated list of filters used to reduce the response."]
+    pub fn filter_path(mut self, filter_path: &'b [&'b str]) -> Self {
+        self.filter_path = Some(filter_path);
+        self
+    }
+    #[doc = "a short version of the Accept header, e.g. json, yaml"]
+    pub fn format(mut self, format: &'b str) -> Self {
+        self.format = Some(format);
+        self
+    }
+    #[doc = "Comma-separated list of column names to display"]
+    pub fn h(mut self, h: &'b [&'b str]) -> Self {
+        self.h = Some(h);
+        self
+    }
+    #[doc = "Adds a HTTP header"]
+    pub fn header(mut self, key: HeaderName, value: HeaderValue) -> Self {
+        self.headers.insert(key, value);
+        self
+    }
+    #[doc = "Return help information"]
+    pub fn help(mut self, help: bool) -> Self {
+        self.help = Some(help);
+        self
+    }
+    #[doc = "Return human readable values for statistics."]
+    pub fn human(mut self, human: bool) -> Self {
+        self.human = Some(human);
+        self
+    }
+    #[doc = "Comma-separated list or wildcard expression of index names to limit the returned information"]
+    pub fn index(mut self, index: &'b [&'b str]) -> Self {
+        self.index = Some(index);
+        self
+    }
+    #[doc = "Pretty format the returned JSON response."]
+    pub fn pretty(mut self, pretty: bool) -> Self {
+        self.pretty = Some(pretty);
+        self
+    }
+    #[doc = "Sets a request timeout for this API call.\n\nThe timeout is applied from when the request starts connecting until the response body has finished."]
+    pub fn request_timeout(mut self, timeout: Duration) -> Self {
+        self.request_timeout = Some(timeout);
+        self
+    }
+    #[doc = "Comma-separated list of column names or column aliases to sort by"]
+    pub fn s(mut self, s: &'b [&'b str]) -> Self {
+        self.s = Some(s);
+        self
+    }
+    #[doc = "Comma-separated list of shards to display"]
+    pub fn shards(mut self, shards: &'b [&'b str]) -> Self {
+        self.shards = Some(shards);
+        self
+    }
+    #[doc = "The URL-encoded request definition. Useful for libraries that do not accept a request body for non-POST requests."]
+    pub fn source(mut self, source: &'b str) -> Self {
+        self.source = Some(source);
+        self
+    }
+    #[doc = "The unit in which to display time values"]
+    pub fn time(mut self, time: Time) -> Self {
+        self.time = Some(time);
+        self
+    }
+    #[doc = "Verbose mode. Display column headers"]
+    pub fn v(mut self, v: bool) -> Self {
+        self.v = Some(v);
+        self
+    }
+    #[doc = "Creates an asynchronous call to the Cat Segment Replication API that can be awaited"]
+    pub async fn send(self) -> Result<Response, Error> {
+        let path = self.parts.url();
+        let method = Method::Get;
+        let headers = self.headers;
+        let timeout = self.request_timeout;
+        let query_string = {
+            #[serde_with::skip_serializing_none]
+            #[derive(Serialize)]
+            struct QueryParams<'b> {
+                active_only: Option<bool>,
+                bytes: Option<Bytes>,
+                detailed: Option<bool>,
+                error_trace: Option<bool>,
+                #[serde(serialize_with = "crate::client::serialize_coll_qs")]
+                filter_path: Option<&'b [&'b str]>,
+                format: Option<&'b str>,
+                #[serde(serialize_with = "crate::client::serialize_coll_qs")]
+                h: Option<&'b [&'b str]>,
+                help: Option<bool>,
+                human: Option<bool>,
+                #[serde(serialize_with = "crate::client::serialize_coll_qs")]
+                index: Option<&'b [&'b str]>,
+                pretty: Option<bool>,
+                #[serde(serialize_with = "crate::client::serialize_coll_qs")]
+                s: Option<&'b [&'b str]>,
+                #[serde(serialize_with = "crate::client::serialize_coll_qs")]
+                shards: Option<&'b [&'b str]>,
+                source: Option<&'b str>,
+                time: Option<Time>,
+                v: Option<bool>,
+            }
+            let query_params = QueryParams {
+                active_only: self.active_only,
+                bytes: self.bytes,
+                detailed: self.detailed,
+                error_trace: self.error_trace,
+                filter_path: self.filter_path,
+                format: self.format,
+                h: self.h,
+                help: self.help,
+                human: self.human,
+                index: self.index,
+                pretty: self.pretty,
+                s: self.s,
+                shards: self.shards,
+                source: self.source,
+                time: self.time,
+                v: self.v,
+            };
+            Some(query_params)
+        };
+        let body = Option::<()>::None;
+        let response = self
+            .transport
+            .send(method, &path, headers, query_string.as_ref(), body, timeout)
+            .await?;
+        Ok(response)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Cat Segments API"]
 pub enum CatSegmentsParts<'b> {
@@ -3073,7 +3112,7 @@ impl<'b> CatSegmentsParts<'b> {
         }
     }
 }
-#[doc = "Builder for the [Cat Segments API](https://opensearch.org/docs/)\n\nProvides low-level information about the segments in the shards of an index."]
+#[doc = "Builder for the [Cat Segments API](https://opensearch.org/docs/latest/api-reference/cat/cat-segments/)\n\nProvides low-level information about the segments in the shards of an index."]
 #[derive(Clone, Debug)]
 pub struct CatSegments<'a, 'b> {
     transport: &'a Transport,
@@ -3165,7 +3204,7 @@ impl<'a, 'b> CatSegments<'a, 'b> {
         self.human = Some(human);
         self
     }
-    #[doc = "Explicit operation timeout for connection to cluster-manager node"]
+    #[doc = "Explicit operation timeout for connection to master node"]
     #[deprecated = "To promote inclusive language, use 'cluster_manager_timeout' instead."]
     pub fn master_timeout(mut self, master_timeout: &'b str) -> Self {
         self.master_timeout = Some(master_timeout);
@@ -3273,7 +3312,7 @@ impl<'b> CatShardsParts<'b> {
         }
     }
 }
-#[doc = "Builder for the [Cat Shards API](https://opensearch.org/docs/)\n\nProvides a detailed view of shard allocation on nodes."]
+#[doc = "Builder for the [Cat Shards API](https://opensearch.org/docs/latest/api-reference/cat/cat-shards/)\n\nProvides a detailed view of shard allocation on nodes."]
 #[derive(Clone, Debug)]
 pub struct CatShards<'a, 'b> {
     transport: &'a Transport,
@@ -3369,12 +3408,12 @@ impl<'a, 'b> CatShards<'a, 'b> {
         self.human = Some(human);
         self
     }
-    #[doc = "Return local information, do not retrieve the state from cluster-manager node (default: false)"]
+    #[doc = "Return local information, do not retrieve the state from master node (default: false)"]
     pub fn local(mut self, local: bool) -> Self {
         self.local = Some(local);
         self
     }
-    #[doc = "Explicit operation timeout for connection to cluster-manager node"]
+    #[doc = "Explicit operation timeout for connection to master node"]
     #[deprecated = "To promote inclusive language, use 'cluster_manager_timeout' instead."]
     pub fn master_timeout(mut self, master_timeout: &'b str) -> Self {
         self.master_timeout = Some(master_timeout);
@@ -3491,7 +3530,7 @@ impl<'b> CatSnapshotsParts<'b> {
         }
     }
 }
-#[doc = "Builder for the [Cat Snapshots API](https://opensearch.org/docs/)\n\nReturns all snapshots in a specific repository."]
+#[doc = "Builder for the [Cat Snapshots API](https://opensearch.org/docs/latest/api-reference/cat/cat-snapshots/)\n\nReturns all snapshots in a specific repository."]
 #[derive(Clone, Debug)]
 pub struct CatSnapshots<'a, 'b> {
     transport: &'a Transport,
@@ -3585,7 +3624,7 @@ impl<'a, 'b> CatSnapshots<'a, 'b> {
         self.ignore_unavailable = Some(ignore_unavailable);
         self
     }
-    #[doc = "Explicit operation timeout for connection to cluster-manager node"]
+    #[doc = "Explicit operation timeout for connection to master node"]
     #[deprecated = "To promote inclusive language, use 'cluster_manager_timeout' instead."]
     pub fn master_timeout(mut self, master_timeout: &'b str) -> Self {
         self.master_timeout = Some(master_timeout);
@@ -3689,7 +3728,7 @@ impl CatTasksParts {
         }
     }
 }
-#[doc = "Builder for the [Cat Tasks API](https://opensearch.org/docs/)\n\nReturns information about the tasks currently executing on one or more nodes in the cluster."]
+#[doc = "Builder for the [Cat Tasks API](https://opensearch.org/docs/latest/api-reference/cat/cat-tasks/)\n\nReturns information about the tasks currently executing on one or more nodes in the cluster."]
 #[derive(Clone, Debug)]
 pub struct CatTasks<'a, 'b> {
     transport: &'a Transport,
@@ -3906,7 +3945,7 @@ impl<'b> CatTemplatesParts<'b> {
         }
     }
 }
-#[doc = "Builder for the [Cat Templates API](https://opensearch.org/docs/)\n\nReturns information about existing templates."]
+#[doc = "Builder for the [Cat Templates API](https://opensearch.org/docs/latest/api-reference/cat/cat-templates/)\n\nReturns information about existing templates."]
 #[derive(Clone, Debug)]
 pub struct CatTemplates<'a, 'b> {
     transport: &'a Transport,
@@ -3993,12 +4032,12 @@ impl<'a, 'b> CatTemplates<'a, 'b> {
         self.human = Some(human);
         self
     }
-    #[doc = "Return local information, do not retrieve the state from cluster-manager node (default: false)"]
+    #[doc = "Return local information, do not retrieve the state from master node (default: false)"]
     pub fn local(mut self, local: bool) -> Self {
         self.local = Some(local);
         self
     }
-    #[doc = "Explicit operation timeout for connection to cluster-manager node"]
+    #[doc = "Explicit operation timeout for connection to master node"]
     #[deprecated = "To promote inclusive language, use 'cluster_manager_timeout' instead."]
     pub fn master_timeout(mut self, master_timeout: &'b str) -> Self {
         self.master_timeout = Some(master_timeout);
@@ -4106,7 +4145,7 @@ impl<'b> CatThreadPoolParts<'b> {
         }
     }
 }
-#[doc = "Builder for the [Cat Thread Pool API](https://opensearch.org/docs/)\n\nReturns cluster-wide thread pool statistics per node.\nBy default the active, queue and rejected statistics are returned for all thread pools."]
+#[doc = "Builder for the [Cat Thread Pool API](https://opensearch.org/docs/latest/api-reference/cat/cat-thread-pool/)\n\nReturns cluster-wide thread pool statistics per node.\nBy default the active, queue and rejected statistics are returned for all thread pools."]
 #[derive(Clone, Debug)]
 pub struct CatThreadPool<'a, 'b> {
     transport: &'a Transport,
@@ -4195,12 +4234,12 @@ impl<'a, 'b> CatThreadPool<'a, 'b> {
         self.human = Some(human);
         self
     }
-    #[doc = "Return local information, do not retrieve the state from cluster-manager node (default: false)"]
+    #[doc = "Return local information, do not retrieve the state from master node (default: false)"]
     pub fn local(mut self, local: bool) -> Self {
         self.local = Some(local);
         self
     }
-    #[doc = "Explicit operation timeout for connection to cluster-manager node"]
+    #[doc = "Explicit operation timeout for connection to master node"]
     #[deprecated = "To promote inclusive language, use 'cluster_manager_timeout' instead."]
     pub fn master_timeout(mut self, master_timeout: &'b str) -> Self {
         self.master_timeout = Some(master_timeout);
@@ -4303,89 +4342,92 @@ impl<'a> Cat<'a> {
     pub fn transport(&self) -> &Transport {
         self.transport
     }
-    #[doc = "[Cat Aliases API](https://opensearch.org/docs/)\n\nShows information about currently configured aliases to indices including filter and routing infos."]
+    #[doc = "[Cat Aliases API](https://opensearch.org/docs/latest/api-reference/cat/cat-aliases/)\n\nShows information about currently configured aliases to indices including filter and routing infos."]
     pub fn aliases<'b>(&'a self, parts: CatAliasesParts<'b>) -> CatAliases<'a, 'b> {
         CatAliases::new(self.transport(), parts)
     }
-    #[doc = "[Cat Allocation API](https://opensearch.org/docs/)\n\nProvides a snapshot of how many shards are allocated to each data node and how much disk space they are using."]
+    #[doc = "[Cat Allocation API](https://opensearch.org/docs/latest/api-reference/cat/cat-allocation/)\n\nProvides a snapshot of how many shards are allocated to each data node and how much disk space they are using."]
     pub fn allocation<'b>(&'a self, parts: CatAllocationParts<'b>) -> CatAllocation<'a, 'b> {
         CatAllocation::new(self.transport(), parts)
     }
-    #[doc = "[Cat Cluster Manager API](https://opensearch.org/docs/latest/opensearch/rest-api/cat/cat-cluster_manager/)\n\nReturns information about the cluster-manager node."]
+    #[doc = "[Cat Cluster Manager API](https://opensearch.org/docs/latest/api-reference/cat/cat-cluster_manager/)\n\nReturns information about the cluster-manager node."]
     pub fn cluster_manager<'b>(&'a self) -> CatClusterManager<'a, 'b> {
         CatClusterManager::new(self.transport())
     }
-    #[doc = "[Cat Count API](https://opensearch.org/docs/)\n\nProvides quick access to the document count of the entire cluster, or individual indices."]
+    #[doc = "[Cat Count API](https://opensearch.org/docs/latest/api-reference/cat/cat-count/)\n\nProvides quick access to the document count of the entire cluster, or individual indices."]
     pub fn count<'b>(&'a self, parts: CatCountParts<'b>) -> CatCount<'a, 'b> {
         CatCount::new(self.transport(), parts)
     }
-    #[doc = "[Cat Fielddata API](https://opensearch.org/docs/)\n\nShows how much heap memory is currently being used by fielddata on every data node in the cluster."]
+    #[doc = "[Cat Fielddata API](https://opensearch.org/docs/latest/api-reference/cat/cat-field-data/)\n\nShows how much heap memory is currently being used by fielddata on every data node in the cluster."]
     pub fn fielddata<'b>(&'a self, parts: CatFielddataParts<'b>) -> CatFielddata<'a, 'b> {
         CatFielddata::new(self.transport(), parts)
     }
-    #[doc = "[Cat Health API](https://opensearch.org/docs/)\n\nReturns a concise representation of the cluster health."]
+    #[doc = "[Cat Health API](https://www.elastic.co/guide/en/elasticsearch/reference/3.0/cat-health.html)\n\nReturns a concise representation of the cluster health."]
     pub fn health<'b>(&'a self) -> CatHealth<'a, 'b> {
         CatHealth::new(self.transport())
     }
-    #[doc = "[Cat Help API](https://opensearch.org/docs/)\n\nReturns help for the Cat APIs."]
+    #[doc = "[Cat Help API](https://opensearch.org/docs/latest/api-reference/cat/index/)\n\nReturns help for the Cat APIs."]
     pub fn help<'b>(&'a self) -> CatHelp<'a, 'b> {
         CatHelp::new(self.transport())
     }
-    #[doc = "[Cat Indices API](https://opensearch.org/docs/)\n\nReturns information about indices: number of primaries and replicas, document counts, disk size, ..."]
+    #[doc = "[Cat Indices API](https://opensearch.org/docs/latest/api-reference/cat/cat-indices/)\n\nReturns information about indices: number of primaries and replicas, document counts, disk size, ..."]
     pub fn indices<'b>(&'a self, parts: CatIndicesParts<'b>) -> CatIndices<'a, 'b> {
         CatIndices::new(self.transport(), parts)
     }
-    #[doc = "[Cat Master API](https://opensearch.org/docs/latest/opensearch/rest-api/cat/cat-cluster_manager/)\n\nReturns information about the cluster-manager node."]
-    #[deprecated = "To promote inclusive language, please use '/_cat/cluster_manager' instead."]
-    #[allow(deprecated)]
-    pub fn master<'b>(&'a self) -> CatMaster<'a, 'b> {
-        CatMaster::new(self.transport())
-    }
-    #[doc = "[Cat Nodeattrs API](https://opensearch.org/docs/)\n\nReturns information about custom node attributes."]
+    #[doc = "[Cat Nodeattrs API](https://opensearch.org/docs/latest/api-reference/cat/cat-nodeattrs/)\n\nReturns information about custom node attributes."]
     pub fn nodeattrs<'b>(&'a self) -> CatNodeattrs<'a, 'b> {
         CatNodeattrs::new(self.transport())
     }
-    #[doc = "[Cat Nodes API](https://opensearch.org/docs/)\n\nReturns basic statistics about performance of cluster nodes."]
+    #[doc = "[Cat Nodes API](https://opensearch.org/docs/latest/api-reference/cat/cat-nodes/)\n\nReturns basic statistics about performance of cluster nodes."]
     pub fn nodes<'b>(&'a self) -> CatNodes<'a, 'b> {
         CatNodes::new(self.transport())
     }
-    #[doc = "[Cat Pending Tasks API](https://opensearch.org/docs/)\n\nReturns a concise representation of the cluster pending tasks."]
+    #[doc = "[Cat Pending Tasks API](https://opensearch.org/docs/latest/api-reference/cat/cat-pending-tasks/)\n\nReturns a concise representation of the cluster pending tasks."]
     pub fn pending_tasks<'b>(&'a self) -> CatPendingTasks<'a, 'b> {
         CatPendingTasks::new(self.transport())
     }
-    #[doc = "[Cat Plugins API](https://opensearch.org/docs/)\n\nReturns information about installed plugins across nodes node."]
+    #[doc = "[Cat Plugins API](https://opensearch.org/docs/latest/api-reference/cat/cat-plugins/)\n\nReturns information about installed plugins across nodes node."]
     pub fn plugins<'b>(&'a self) -> CatPlugins<'a, 'b> {
         CatPlugins::new(self.transport())
     }
-    #[doc = "[Cat Recovery API](https://opensearch.org/docs/)\n\nReturns information about index shard recoveries, both on-going completed."]
+    #[doc = "[Cat Recovery API](https://opensearch.org/docs/latest/api-reference/cat/cat-recovery/)\n\nReturns information about index shard recoveries, both on-going completed."]
     pub fn recovery<'b>(&'a self, parts: CatRecoveryParts<'b>) -> CatRecovery<'a, 'b> {
         CatRecovery::new(self.transport(), parts)
     }
-    #[doc = "[Cat Repositories API](https://opensearch.org/docs/)\n\nReturns information about snapshot repositories registered in the cluster."]
+    #[doc = "[Cat Repositories API](https://opensearch.org/docs/latest/api-reference/cat/cat-repositories/)\n\nReturns information about snapshot repositories registered in the cluster."]
     pub fn repositories<'b>(&'a self) -> CatRepositories<'a, 'b> {
         CatRepositories::new(self.transport())
     }
-    #[doc = "[Cat Segments API](https://opensearch.org/docs/)\n\nProvides low-level information about the segments in the shards of an index."]
+    #[doc = "[Cat Segment Replication API](https://opensearch.org/docs/latest/api-reference/cat/cat-segment-replication/)\n\nReturns information about both on-going and latest completed Segment Replication events"]
+    #[doc = "&nbsp;\n# Optional, experimental\nThis requires the `experimental-apis` feature. Can have breaking changes in future\nversions or might even be removed entirely.\n        "]
+    #[cfg(feature = "experimental-apis")]
+    pub fn segment_replication<'b>(
+        &'a self,
+        parts: CatSegmentReplicationParts<'b>,
+    ) -> CatSegmentReplication<'a, 'b> {
+        CatSegmentReplication::new(self.transport(), parts)
+    }
+    #[doc = "[Cat Segments API](https://opensearch.org/docs/latest/api-reference/cat/cat-segments/)\n\nProvides low-level information about the segments in the shards of an index."]
     pub fn segments<'b>(&'a self, parts: CatSegmentsParts<'b>) -> CatSegments<'a, 'b> {
         CatSegments::new(self.transport(), parts)
     }
-    #[doc = "[Cat Shards API](https://opensearch.org/docs/)\n\nProvides a detailed view of shard allocation on nodes."]
+    #[doc = "[Cat Shards API](https://opensearch.org/docs/latest/api-reference/cat/cat-shards/)\n\nProvides a detailed view of shard allocation on nodes."]
     pub fn shards<'b>(&'a self, parts: CatShardsParts<'b>) -> CatShards<'a, 'b> {
         CatShards::new(self.transport(), parts)
     }
-    #[doc = "[Cat Snapshots API](https://opensearch.org/docs/)\n\nReturns all snapshots in a specific repository."]
+    #[doc = "[Cat Snapshots API](https://opensearch.org/docs/latest/api-reference/cat/cat-snapshots/)\n\nReturns all snapshots in a specific repository."]
     pub fn snapshots<'b>(&'a self, parts: CatSnapshotsParts<'b>) -> CatSnapshots<'a, 'b> {
         CatSnapshots::new(self.transport(), parts)
     }
-    #[doc = "[Cat Tasks API](https://opensearch.org/docs/)\n\nReturns information about the tasks currently executing on one or more nodes in the cluster."]
+    #[doc = "[Cat Tasks API](https://opensearch.org/docs/latest/api-reference/cat/cat-tasks/)\n\nReturns information about the tasks currently executing on one or more nodes in the cluster."]
     pub fn tasks<'b>(&'a self) -> CatTasks<'a, 'b> {
         CatTasks::new(self.transport())
     }
-    #[doc = "[Cat Templates API](https://opensearch.org/docs/)\n\nReturns information about existing templates."]
+    #[doc = "[Cat Templates API](https://opensearch.org/docs/latest/api-reference/cat/cat-templates/)\n\nReturns information about existing templates."]
     pub fn templates<'b>(&'a self, parts: CatTemplatesParts<'b>) -> CatTemplates<'a, 'b> {
         CatTemplates::new(self.transport(), parts)
     }
-    #[doc = "[Cat Thread Pool API](https://opensearch.org/docs/)\n\nReturns cluster-wide thread pool statistics per node.\nBy default the active, queue and rejected statistics are returned for all thread pools."]
+    #[doc = "[Cat Thread Pool API](https://opensearch.org/docs/latest/api-reference/cat/cat-thread-pool/)\n\nReturns cluster-wide thread pool statistics per node.\nBy default the active, queue and rejected statistics are returned for all thread pools."]
     pub fn thread_pool<'b>(&'a self, parts: CatThreadPoolParts<'b>) -> CatThreadPool<'a, 'b> {
         CatThreadPool::new(self.transport(), parts)
     }
