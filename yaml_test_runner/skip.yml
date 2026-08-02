@@ -23,4 +23,14 @@
   tests:
     free/scripts/25_get_script_languages.yml:
       - "Action to get script languages"
+
+"<3.8.0":
+  tests:
+    free/search/10_source_filtering.yml:
+      # The yaml tests from main expect deprecation warnings for empty _source
+      # values that released versions up to 3.7.0 do not emit
+      - "_source as an empty object"
+      - "_source as an empty array"
+      - "_source as object with an empty excludes array"
+      - "_source as object with an empty includes array"
     
