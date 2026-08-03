@@ -57,6 +57,9 @@ Inspired from [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 ### Removed
 
 ### Fixed
+- Fixed `yaml_test_runner` ignoring comma-separated multi-range version skips in YAML tests (e.g. `" - 2.6.99, 2.13.0 - "`)
+- Fixed `yaml_test_runner` generating an unexpected parts argument for APIs whose paths all have no URL parts (e.g. `cat.cluster_manager` with its deprecated `cat.master` alias path)
+- Fixed the `deprecation_warning_headers` test relying on OpenSearch emitting a Warning header for the legacy `_term` aggregation order, which newer versions no longer do; the test now verifies Warning header parsing against a mock server with customizable response headers
 
 ### Security
 
