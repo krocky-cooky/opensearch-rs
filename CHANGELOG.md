@@ -15,6 +15,7 @@ Inspired from [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - Added plugin API namespaces generated from the OpenAPI specification: `asynchronous_search`, `flow_framework`, `geospatial`, `ingestion`, `insights`, `ism`, `knn`, `list`, `ltr`, `ml`, `neural`, `notifications`, `observability`, `ppl`, `query`, `replication`, `rollups`, `search_relevance`, `security`, `security_analytics`, `sm`, `sql`, `transforms`, `ubi` and `wlm`
 - Added core APIs present in the OpenAPI specification: data streams, search pipelines, point-in-time, cluster weighted routing and decommission awareness, remote store, `tasks.delete` and more
 - Added `Method::Patch` support to the HTTP transport for security plugin PATCH APIs
+- Added an `--openapi` option to `yaml_test_runner` to generate tests from the [opensearch-api-specification](https://github.com/opensearch-project/opensearch-api-specification) OpenAPI document instead of the legacy REST API specs, bridging representation differences with the yaml test suites ([#472](https://github.com/opensearch-project/opensearch-rs/issues/472))
 
 ### Dependencies
 - Bumps `sysinfo` from 0.31.2 to 0.39.1 ([#331](https://github.com/opensearch-project/opensearch-rs/pull/331), [#339](https://github.com/opensearch-project/opensearch-rs/pull/339), [#346](https://github.com/opensearch-project/opensearch-rs/pull/346), [#352](https://github.com/opensearch-project/opensearch-rs/pull/352), [#389](https://github.com/opensearch-project/opensearch-rs/pull/389), [#420](https://github.com/opensearch-project/opensearch-rs/pull/420))
