@@ -31,4 +31,15 @@
   tests:
     free/scripts/25_get_script_languages.yml:
       - "Action to get script languages"
-    
+
+">=3.0.0, <3.2.0":
+  when_secure:
+    tests:
+      free/search.aggregation/20_terms.yml:
+        # With the security plugin enabled, a terms aggregation with
+        # value_type string on an unmapped field fails shard-side with
+        # `Cannot invoke "String.endsWith(String)" because "field" is null`,
+        # returning partial results with hits.total 0. Server-side bug in
+        # 3.0.x/3.1.x, fixed in 3.2.0; insecure clusters are unaffected.
+        - "Unmapped strings"
+
