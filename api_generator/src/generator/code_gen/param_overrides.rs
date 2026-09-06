@@ -21,6 +21,7 @@ use crate::generator::TypeKind;
 pub enum TypeKindMatch {
     Boolean,
     Enum,
+    String,
     Union,
 }
 
@@ -30,6 +31,7 @@ impl TypeKindMatch {
             (self, kind),
             (TypeKindMatch::Boolean, TypeKind::Boolean)
                 | (TypeKindMatch::Enum, TypeKind::Enum)
+                | (TypeKindMatch::String, TypeKind::String)
                 | (TypeKindMatch::Union, TypeKind::Union(_))
         )
     }
@@ -71,6 +73,16 @@ const PARAM_TYPE_OVERRIDES: &[ParamTypeOverride] = &[
         name: "slices",
         applies_to: TypeKindMatch::Union,
         field_ty: "Slices",
+        fn_arg_ty: None,
+        comma_separated: false,
+    },
+    // enum with digit values ("1".."5" plus "ALL",
+    // security_analytics.alerts___AlertSeverityLevel), which the reader
+    // downgrades to string because the values cannot become variant names
+    ParamTypeOverride {
+        name: "severityLevel",
+        applies_to: TypeKindMatch::String,
+        field_ty: "AlertSeverityLevel",
         fn_arg_ty: None,
         comma_separated: false,
     },
@@ -128,6 +140,14 @@ mod tests {
     fn slices_overrides_union() {
         let kind = TypeKind::Union(Box::new((TypeKind::String, TypeKind::Long)));
         assert_eq!(param_type_override("slices", &kind, false), Some("Slices"));
+    }
+
+    #[test]
+    fn severity_level_overrides_the_string_downgrade() {
+        assert_eq!(
+            param_type_override("severityLevel", &TypeKind::String, false),
+            Some("AlertSeverityLevel")
+        );
     }
 
     #[test]

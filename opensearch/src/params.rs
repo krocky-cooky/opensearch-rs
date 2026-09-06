@@ -330,6 +330,24 @@ pub enum WaitForStatus {
 }
 // GENERATED-END
 
+/// Severity level of a Security Analytics alert, with 1 the highest and
+/// 5 the lowest. `All` designates no particular severity.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum AlertSeverityLevel {
+    #[serde(rename = "1")]
+    Level1,
+    #[serde(rename = "2")]
+    Level2,
+    #[serde(rename = "3")]
+    Level3,
+    #[serde(rename = "4")]
+    Level4,
+    #[serde(rename = "5")]
+    Level5,
+    #[serde(rename = "ALL")]
+    All,
+}
+
 /// Control how the total number of hits should be tracked.
 ///
 /// When set to `Track` with a value `true`, the response will always track the number of hits that

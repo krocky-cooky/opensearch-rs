@@ -71,7 +71,7 @@ pub struct SecurityAnalyticsGetAlerts<'a, 'b> {
     pretty: Option<bool>,
     request_timeout: Option<Duration>,
     searchstring: Option<&'b str>,
-    severitylevel: Option<&'b str>,
+    severitylevel: Option<AlertSeverityLevel>,
     size: Option<i64>,
     sortorder: Option<SortOrder>,
     sortstring: Option<&'b str>,
@@ -168,7 +168,7 @@ impl<'a, 'b> SecurityAnalyticsGetAlerts<'a, 'b> {
         self
     }
     #[doc = "Used to filter by alert severity level. Optional."]
-    pub fn severitylevel(mut self, severitylevel: &'b str) -> Self {
+    pub fn severitylevel(mut self, severitylevel: AlertSeverityLevel) -> Self {
         self.severitylevel = Some(severitylevel);
         self
     }
@@ -228,7 +228,7 @@ impl<'a, 'b> SecurityAnalyticsGetAlerts<'a, 'b> {
                 #[serde(rename = "searchString")]
                 searchstring: Option<&'b str>,
                 #[serde(rename = "severityLevel")]
-                severitylevel: Option<&'b str>,
+                severitylevel: Option<AlertSeverityLevel>,
                 size: Option<i64>,
                 #[serde(rename = "sortOrder")]
                 sortorder: Option<SortOrder>,
