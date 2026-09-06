@@ -6,25 +6,17 @@
  * compatible open source license.
  */
 
-//! Per-parameter type overrides.
+//! Per-parameter type overrides, compensating for spec unions the flattened
+//! [TypeKind] model cannot express. The target types are handwritten in
+//! `opensearch/src/params.rs` outside the generated section.
 //!
-//! A few query parameters are unions in the REST API specification (e.g.
-//! boolean-or-integer) that the flattened [TypeKind] model cannot express;
-//! their spec-derived kind would generate a type that loses one of the
-//! accepted forms. The entries in this module redirect such parameters to
-//! handwritten types (defined outside the generated sections of
-//! `opensearch/src/params.rs`) that model the full union.
-//!
-//! Every override names both the parameter and the [TypeKind] it applies
-//! to, because the same parameter name may legitimately carry different
-//! kinds on different endpoints (e.g. `slices` is an auto-or-integer union
-//! on most endpoints but a plain string on others); parameters whose kind
-//! does not match fall through to the general mapping.
+//! An override applies only when both name and kind match: the same name may
+//! carry different kinds on different endpoints (e.g. `slices` is an
+//! auto-or-integer union on most endpoints but a plain string on others).
 
 use crate::generator::TypeKind;
 
-/// Matches the spec-derived [TypeKind] an override expects, without
-/// requiring the boxed contents of [TypeKind::Union] to be spelled out
+/// Matches a [TypeKind] without spelling out [TypeKind::Union] contents
 #[derive(Debug, PartialEq, Clone, Copy)]
 pub enum TypeKindMatch {
     Boolean,
@@ -43,43 +35,33 @@ impl TypeKindMatch {
     }
 }
 
-/// A parameter whose generated type deviates from the general
-/// [TypeKind] mapping
+/// A parameter whose generated type deviates from the general mapping
 struct ParamTypeOverride {
-    /// The parameter name the override applies to
     name: &'static str,
-    /// The [TypeKind] the flattened specification is expected to produce
-    /// for this parameter
     applies_to: TypeKindMatch,
-    /// The type generated for the request builder struct field
+    /// Type of the request builder struct field
     field_ty: &'static str,
-    /// The type generated for the builder method argument, when it differs
-    /// from `field_ty` (e.g. an `Into<T>` bound for ergonomics)
+    /// Builder method argument type, when it differs from `field_ty`
     fn_arg_ty: Option<&'static str>,
 }
 
 const PARAM_TYPE_OVERRIDES: &[ParamTypeOverride] = &[
-    // boolean-or-integer union in the specification
-    // (_core.search___TrackHits), flattened to Boolean by the model; the
-    // handwritten TrackTotalHits enum models both forms and the Into bound
-    // lets callers pass either a bool or an i64
+    // boolean-or-integer union (_core.search___TrackHits)
     ParamTypeOverride {
         name: "track_total_hits",
         applies_to: TypeKindMatch::Boolean,
         field_ty: "TrackTotalHits",
         fn_arg_ty: Some("Into<TrackTotalHits>"),
     },
-    // accepts multiple comma-separated values, so the enum is generated as
-    // a slice. https://github.com/elastic/elasticsearch/issues/53212 was
-    // opened to discuss whether this really should be a collection
+    // comma-separated multi-value enum, generated as a slice
+    // (https://github.com/elastic/elasticsearch/issues/53212)
     ParamTypeOverride {
         name: "expand_wildcards",
         applies_to: TypeKindMatch::Enum,
         field_ty: "&'b [ExpandWildcards]",
         fn_arg_ty: None,
     },
-    // "auto"-or-integer union in the specification (_common___Slices),
-    // modelled by the handwritten Slices enum
+    // "auto"-or-integer union (_common___Slices)
     ParamTypeOverride {
         name: "slices",
         applies_to: TypeKindMatch::Union,
@@ -88,16 +70,8 @@ const PARAM_TYPE_OVERRIDES: &[ParamTypeOverride] = &[
     },
 ];
 
-/// Looks up the type override for a parameter, returning the type to
-/// generate for the request builder struct field (`fn_arg == false`) or the
-/// builder method argument (`fn_arg == true`).
-///
-/// An override applies only when both the parameter name and the
-/// spec-derived [TypeKind] match: the same parameter name may legitimately
-/// carry different kinds on different endpoints (e.g. `slices` is an
-/// auto-or-integer union on most endpoints but a plain string on others),
-/// and only the kind named by the override deviates from the general
-/// mapping.
+/// Returns the overridden type for a parameter, or `None` to use the
+/// general mapping
 pub fn param_type_override(name: &str, kind: &TypeKind, fn_arg: bool) -> Option<&'static str> {
     let o = PARAM_TYPE_OVERRIDES
         .iter()
@@ -142,15 +116,16 @@ mod tests {
 
     #[test]
     fn unoverridden_parameters_return_none() {
-        assert_eq!(param_type_override("pretty", &TypeKind::Boolean, false), None);
+        assert_eq!(
+            param_type_override("pretty", &TypeKind::Boolean, false),
+            None
+        );
         assert_eq!(param_type_override("timeout", &TypeKind::Time, true), None);
     }
 
     #[test]
     fn kind_mismatch_falls_through_to_the_general_mapping() {
-        // the same parameter name may carry a different kind on other
-        // endpoints: `slices` is a plain string on some APIs and must not
-        // be overridden there
+        // `slices` is a plain string on some endpoints
         assert_eq!(
             param_type_override("slices", &TypeKind::String, false),
             None
