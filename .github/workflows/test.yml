@@ -75,9 +75,6 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # The supported set tracks the OpenSearch releases still receiving
-        # patches: every release of the current major plus the latest release
-        # of the previous major. Re-evaluate this list at each release.
         version:
           - 3.8.0
           - 3.7.0
