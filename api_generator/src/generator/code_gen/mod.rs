@@ -17,7 +17,7 @@
  * under the License.
  */
 pub mod namespace_clients;
-pub mod overrides;
+pub mod param_overrides;
 pub mod params;
 pub mod request;
 pub mod root;
@@ -199,7 +199,7 @@ impl GetIdent for ImplItem {
 }
 
 /// Gets the Ty syntax token for a TypeKind. Per-parameter deviations from
-/// the general mapping live in the [overrides] module.
+/// the general mapping live in the [param_overrides] module.
 fn typekind_to_ty(name: &str, kind: &TypeKind, required: bool, fn_arg: bool) -> syn::Type {
     let mut v = String::new();
     if !required {
@@ -207,7 +207,7 @@ fn typekind_to_ty(name: &str, kind: &TypeKind, required: bool, fn_arg: bool) -> 
     }
 
     let str_type = "&'b str";
-    if let Some(ty) = overrides::param_type_override(name, kind, fn_arg) {
+    if let Some(ty) = param_overrides::param_type_override(name, kind, fn_arg) {
         v.push_str(ty);
     } else {
         match kind {
@@ -230,7 +230,7 @@ fn typekind_to_ty(name: &str, kind: &TypeKind, required: bool, fn_arg: bool) -> 
             TypeKind::Time => v.push_str(str_type),
             TypeKind::Union(u) => panic!(
                 "unsupported union type for `{}`: {:?}. Add a handwritten type and an entry \
-                 to code_gen/overrides.rs",
+                 to code_gen/param_overrides.rs",
                 name, u
             ),
         }

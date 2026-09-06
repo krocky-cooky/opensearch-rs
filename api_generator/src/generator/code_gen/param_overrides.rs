@@ -43,6 +43,9 @@ struct ParamTypeOverride {
     field_ty: &'static str,
     /// Builder method argument type, when it differs from `field_ty`
     fn_arg_ty: Option<&'static str>,
+    /// Whether the field is a collection serialized as a comma-separated
+    /// query string value
+    comma_separated: bool,
 }
 
 const PARAM_TYPE_OVERRIDES: &[ParamTypeOverride] = &[
@@ -52,6 +55,7 @@ const PARAM_TYPE_OVERRIDES: &[ParamTypeOverride] = &[
         applies_to: TypeKindMatch::Boolean,
         field_ty: "TrackTotalHits",
         fn_arg_ty: Some("Into<TrackTotalHits>"),
+        comma_separated: false,
     },
     // comma-separated multi-value enum, generated as a slice
     // (https://github.com/elastic/elasticsearch/issues/53212)
@@ -60,6 +64,7 @@ const PARAM_TYPE_OVERRIDES: &[ParamTypeOverride] = &[
         applies_to: TypeKindMatch::Enum,
         field_ty: "&'b [ExpandWildcards]",
         fn_arg_ty: None,
+        comma_separated: true,
     },
     // "auto"-or-integer union (_common___Slices)
     ParamTypeOverride {
@@ -67,19 +72,30 @@ const PARAM_TYPE_OVERRIDES: &[ParamTypeOverride] = &[
         applies_to: TypeKindMatch::Union,
         field_ty: "Slices",
         fn_arg_ty: None,
+        comma_separated: false,
     },
 ];
+
+fn lookup(name: &str, kind: &TypeKind) -> Option<&'static ParamTypeOverride> {
+    PARAM_TYPE_OVERRIDES
+        .iter()
+        .find(|o| o.name == name && o.applies_to.matches(kind))
+}
 
 /// Returns the overridden type for a parameter, or `None` to use the
 /// general mapping
 pub fn param_type_override(name: &str, kind: &TypeKind, fn_arg: bool) -> Option<&'static str> {
-    let o = PARAM_TYPE_OVERRIDES
-        .iter()
-        .find(|o| o.name == name && o.applies_to.matches(kind))?;
+    let o = lookup(name, kind)?;
     match (fn_arg, o.fn_arg_ty) {
         (true, Some(fn_arg_ty)) => Some(fn_arg_ty),
         _ => Some(o.field_ty),
     }
+}
+
+/// Whether an override turns the parameter into a collection serialized as
+/// a comma-separated query string value
+pub fn param_is_comma_separated(name: &str, kind: &TypeKind) -> bool {
+    lookup(name, kind).is_some_and(|o| o.comma_separated)
 }
 
 #[cfg(test)]
@@ -134,5 +150,22 @@ mod tests {
             param_type_override("track_total_hits", &TypeKind::String, false),
             None
         );
+    }
+
+    #[test]
+    fn only_expand_wildcards_is_comma_separated() {
+        assert!(param_is_comma_separated(
+            "expand_wildcards",
+            &TypeKind::Enum
+        ));
+        assert!(!param_is_comma_separated(
+            "expand_wildcards",
+            &TypeKind::String
+        ));
+        assert!(!param_is_comma_separated(
+            "track_total_hits",
+            &TypeKind::Boolean
+        ));
+        assert!(!param_is_comma_separated("pretty", &TypeKind::Boolean));
     }
 }
