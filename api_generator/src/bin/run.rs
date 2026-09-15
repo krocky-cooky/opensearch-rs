@@ -150,6 +150,12 @@ fn generate_from_openapi(file: Option<&str>) -> anyhow::Result<()> {
 
     let api = openapi::read_api("opensearch-api-specification/main", &spec_file)?;
 
+    // typed response models: limited to the core APIs while response
+    // schema quality and compile-time impact are validated
+    let spec: serde_json::Value = serde_yaml::from_reader(fs::File::open(&spec_file)?)?;
+    let response_ir =
+        openapi::responses::read_response_ir(&spec, &["search", "index", "bulk", "get"])?;
+
     // Delete previously generated files
     let mut generated = generated_dir.clone();
     generated.push(generator::GENERATED_TOML);
@@ -162,5 +168,5 @@ fn generate_from_openapi(file: Option<&str>) -> anyhow::Result<()> {
         }
     }
 
-    generator::generate_from_api(&api, &docs_dir, &generated_dir)
+    generator::generate_from_api(&api, Some(&response_ir), &docs_dir, &generated_dir)
 }

@@ -26,6 +26,8 @@
 //! through the existing serde model, guaranteeing that both ingestion
 //! paths produce identical structures.
 
+pub mod responses;
+
 use crate::generator::{build_api, endpoint_from_file, Api, Type};
 use anyhow::{anyhow, bail};
 use log::{info, warn};

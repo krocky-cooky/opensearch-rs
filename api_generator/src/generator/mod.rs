@@ -543,13 +543,17 @@ pub fn generate(
 
     let docs_dir = download_dir.parent().unwrap().join("docs");
 
-    generate_from_api(&api, &docs_dir, generated_dir)
+    // the legacy REST specs carry no response schemas
+    generate_from_api(&api, None, &docs_dir, generated_dir)
 }
 
 /// Generates all client source code from an [Api], regardless of which
-/// specification format it was read from
+/// specification format it was read from. Typed response models are
+/// generated when a [ResponseIr](crate::openapi::responses::ResponseIr)
+/// is given (only the OpenAPI specification carries response schemas).
 pub fn generate_from_api(
     api: &Api,
+    responses: Option<&crate::openapi::responses::ResponseIr>,
     docs_dir: &std::path::Path,
     generated_dir: &std::path::Path,
 ) -> anyhow::Result<()> {
@@ -614,6 +618,28 @@ pub use bulk::*;
         "lib.rs",
         &mut tracker,
     )?;
+
+    // generate typed response models
+    if let Some(ir) = responses {
+        let (files, section) = code_gen::response_types::generate(ir)?;
+        for (module, source) in files {
+            write_file(
+                source,
+                None,
+                generated_dir,
+                format!("types/{}.rs", module).as_str(),
+                &mut tracker,
+            )?;
+        }
+        let mut sections = HashMap::new();
+        sections.insert("response-modules", section);
+        merge_file(
+            |section| sections.remove(section),
+            generated_dir,
+            "types/mod.rs",
+            &mut tracker,
+        )?;
+    }
 
     let mut generated = generated_dir.to_path_buf();
     generated.push(GENERATED_TOML);
