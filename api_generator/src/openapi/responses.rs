@@ -36,6 +36,35 @@ use inflector::Inflector;
 use serde_json::{Map, Value};
 use std::collections::{BTreeMap, BTreeSet, VecDeque};
 
+/// The Rust path, relative to the `opensearch` crate root, of the typed
+/// response model of an operation group in the given IR: e.g.
+/// `types::search::SearchResponse` for `search`. Returns `None` for groups
+/// without a response model (see [ResponseIr::untyped_groups]).
+///
+/// The path follows the per-endpoint alias rule of the `response_types`
+/// code generation backend: module `<group with '.' replaced by '_'>`,
+/// type `<PascalCase of the last group segment>Response`. The backend
+/// guarantees a type with this exact path exists for every generated
+/// group, either as the root type itself or as an emitted alias.
+pub fn typed_response_path(ir: &ResponseIr, operation_group: &str) -> Option<String> {
+    if !ir.endpoints.contains_key(operation_group) {
+        return None;
+    }
+    let (module, name) = endpoint_response_alias(operation_group);
+    Some(format!("types::{}::{}", module, name))
+}
+
+/// The `(module, type name)` under which the response of an operation
+/// group is reachable in the generated `types` tree, e.g.
+/// `("search", "SearchResponse")`. Shared by the code generation backend
+/// (which emits an alias when the root type lives elsewhere) and by
+/// [typed_response_path].
+pub fn endpoint_response_alias(operation_group: &str) -> (String, String) {
+    let module = operation_group.replace('.', "_");
+    let name = operation_group.split('.').next_back().unwrap();
+    (module, format!("{}Response", name.to_pascal_case()))
+}
+
 /// The intermediate representation of the typed response models for a set
 /// of operation groups
 #[derive(Debug, Default)]
@@ -44,6 +73,50 @@ pub struct ResponseIr {
     pub endpoints: BTreeMap<String, String>,
     /// IR name (`namespace___TypeName`) -> type definition
     pub types: BTreeMap<String, IrType>,
+    /// Operation groups requested but left without a response model, with
+    /// the reason: no success response is declared, or the success response
+    /// carries no JSON body (HEAD endpoints, text-only `cat` output, ...)
+    pub untyped_groups: BTreeMap<String, String>,
+}
+
+/// The success status codes whose response schema is taken as the response
+/// model of an operation group, in order of preference. `create` for
+/// instance only declares `201`, the dangling-indices APIs only `202`.
+const SUCCESS_STATUS_CODES: &[&str] = &["200", "201", "202"];
+
+/// Whether every operation of a group uses the HEAD method
+fn is_head_only(spec: &Value, group: &str) -> bool {
+    let mut methods = BTreeSet::new();
+    if let Some(paths) = spec["paths"].as_object() {
+        for operations in paths.values() {
+            if let Some(operations) = operations.as_object() {
+                for (method, op) in operations {
+                    if op["x-operation-group"].as_str() == Some(group) {
+                        methods.insert(method.to_lowercase());
+                    }
+                }
+            }
+        }
+    }
+    !methods.is_empty() && methods.iter().all(|m| m == "head")
+}
+
+/// All operation groups declared in an OpenAPI document (`x-operation-group`
+/// of every operation), sorted
+pub fn all_operation_groups(spec: &Value) -> Vec<String> {
+    let mut groups = BTreeSet::new();
+    if let Some(paths) = spec["paths"].as_object() {
+        for operations in paths.values() {
+            if let Some(operations) = operations.as_object() {
+                for op in operations.values() {
+                    if let Some(g) = op["x-operation-group"].as_str() {
+                        groups.insert(g.to_string());
+                    }
+                }
+            }
+        }
+    }
+    groups.into_iter().collect()
 }
 
 /// A type in the response IR, keyed by its IR name
@@ -121,8 +194,40 @@ pub enum IrRef {
     /// An object with arbitrary keys and typed values
     Map(Box<IrRef>),
     /// Untyped JSON: the escape hatch for shapes decided at runtime
-    /// (documents, generic type parameters, untyped `additionalProperties`)
-    Raw,
+    /// (documents, generic type parameters, untyped `additionalProperties`),
+    /// with the schema construct that caused it
+    Raw(RawCause),
+}
+
+/// Why the generator fell back to raw JSON: recorded in the untyped-field
+/// ledger so each degradation can be reviewed by its cause
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+pub enum RawCause {
+    /// The schema declares no type at all (`{}` or description only)
+    NoType,
+    /// A generic type parameter (`x-is-generic-type-parameter`, e.g.
+    /// `TDocument`): the caller decides the type
+    GenericParameter,
+    /// An object without fixed fields whose values are untyped
+    /// (`type: object` alone, or `additionalProperties: true`)
+    OpenObject,
+    /// An array without an `items` schema
+    UntypedItems,
+    /// The schema only allows `null`
+    NullOnly,
+}
+
+impl RawCause {
+    /// The ledger label of the cause
+    pub fn label(self) -> &'static str {
+        match self {
+            RawCause::NoType => "no-type",
+            RawCause::GenericParameter => "generic",
+            RawCause::OpenObject => "open-object",
+            RawCause::UntypedItems => "untyped-items",
+            RawCause::NullOnly => "null-only",
+        }
+    }
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -153,9 +258,12 @@ pub fn read_response_ir(spec: &Value, operation_groups: &[&str]) -> anyhow::Resu
     let schemas = spec["components"]["schemas"]
         .as_object()
         .ok_or_else(|| anyhow!("OpenAPI document has no components/schemas"))?;
+    // a document without response components (minimal fixtures) simply has
+    // no response models: every requested group is untyped
+    let empty = Map::new();
     let responses = spec["components"]["responses"]
         .as_object()
-        .ok_or_else(|| anyhow!("OpenAPI document has no components/responses"))?;
+        .unwrap_or(&empty);
 
     let mut builder = IrBuilder {
         schemas,
@@ -165,13 +273,48 @@ pub fn read_response_ir(spec: &Value, operation_groups: &[&str]) -> anyhow::Resu
     };
 
     for group in operation_groups {
-        let response = responses
-            .get(&format!("{}___200", group))
-            .ok_or_else(|| anyhow!("no 200 response found for operation group {}", group))?;
-        let schema = &response["content"]["application/json"]["schema"];
-        if schema.is_null() {
-            bail!("200 response of {} has no application/json schema", group);
+        // HEAD responses carry no body by definition (RFC 9110 §9.3.2), even
+        // where the specification declares one (e.g. ism.exists_policy)
+        if is_head_only(spec, group) {
+            builder.ir.untyped_groups.insert(
+                group.to_string(),
+                "HEAD-only endpoint: responses have no body".to_string(),
+            );
+            continue;
         }
+        // the first declared success response with a JSON body is the model
+        let declared: Vec<&str> = SUCCESS_STATUS_CODES
+            .iter()
+            .copied()
+            .filter(|code| responses.contains_key(&format!("{}___{}", group, code)))
+            .collect();
+        if declared.is_empty() {
+            builder.ir.untyped_groups.insert(
+                group.to_string(),
+                "no success response declared".to_string(),
+            );
+            continue;
+        }
+        let schema = declared
+            .iter()
+            .map(|code| {
+                &responses[&format!("{}___{}", group, code)]["content"]["application/json"]
+                    ["schema"]
+            })
+            .find(|schema| !schema.is_null());
+        let schema = match schema {
+            Some(s) => s,
+            None => {
+                builder.ir.untyped_groups.insert(
+                    group.to_string(),
+                    format!(
+                        "success response ({}) has no application/json body",
+                        declared.join(", ")
+                    ),
+                );
+                continue;
+            }
+        };
 
         let root = match schema["$ref"].as_str() {
             // a plain reference: the referenced schema is the root type
@@ -347,6 +490,18 @@ impl IrBuilder<'_> {
     fn convert_schema(&mut self, schema: &Value, name: &str) -> anyhow::Result<IrType> {
         let description = schema_description(schema);
 
+        // a generic type parameter reached as a named type itself (e.g. the
+        // whole get_source response is a TDocument): the caller decides
+        if schema["x-is-generic-type-parameter"]
+            .as_bool()
+            .unwrap_or(false)
+        {
+            return Ok(IrType::Alias(IrAlias {
+                description,
+                ty: IrRef::Raw(RawCause::GenericParameter),
+            }));
+        }
+
         // unions of fixed string values become open string enums
         if let Some(values) = collect_const_values(schema, self.schemas)? {
             return Ok(IrType::StrEnum(IrStrEnum {
@@ -379,7 +534,7 @@ impl IrBuilder<'_> {
         name: &str,
         description: Option<String>,
     ) -> anyhow::Result<IrUnion> {
-        let mut ir_variants = Vec::new();
+        let mut ir_variants: Vec<IrVariant> = Vec::new();
         let mut nullable = false;
 
         for variant in variants {
@@ -387,13 +542,24 @@ impl IrBuilder<'_> {
                 nullable = true;
                 continue;
             }
-            let variant_name = match variant["title"].as_str() {
+            let mut variant_name = match variant["title"].as_str() {
                 Some(t) => t.to_snake_case(),
                 None => match variant["$ref"].as_str() {
                     Some(r) => type_name(schema_ref_name(r)?).to_snake_case(),
                     None => variant_kind_name(variant),
                 },
             };
+            // a title shared by a variant and an inline object variant
+            // (e.g. `value: string` next to an object with a `value` field)
+            // yields the same name: disambiguate by JSON kind, then by index
+            if ir_variants.iter().any(|v| v.name == variant_name) {
+                let by_kind = format!("{}_{}", variant_name, variant_kind_name(variant));
+                variant_name = if ir_variants.iter().any(|v| v.name == by_kind) {
+                    format!("{}_{}", variant_name, ir_variants.len())
+                } else {
+                    by_kind
+                };
+            }
             let ctx = format!("{}{}", name, variant_name.to_pascal_case());
             let (ty, _) = self.convert_ref(variant, &ctx)?;
             ir_variants.push(IrVariant {
@@ -436,7 +602,9 @@ impl IrBuilder<'_> {
 
         let residual = match residual {
             None => None,
-            Some(Value::Bool(true)) => Some(("additional".to_string(), IrRef::Raw)),
+            Some(Value::Bool(true)) => {
+                Some(("additional".to_string(), IrRef::Raw(RawCause::OpenObject)))
+            }
             Some(ap) => {
                 let ctx = format!("{}Additional", name);
                 let (ty, _) = self.convert_ref(&ap, &ctx)?;
@@ -591,8 +759,11 @@ impl IrBuilder<'_> {
                 .ok_or_else(|| anyhow!("unresolved schema $ref: {}", r))?;
             // generic type parameters (e.g. TDocument) have no schema; the
             // caller decides the type, so hold raw JSON
-            if target["x-is-generic-type-parameter"].as_bool().unwrap_or(false) {
-                return Ok((IrRef::Raw, false));
+            if target["x-is-generic-type-parameter"]
+                .as_bool()
+                .unwrap_or(false)
+            {
+                return Ok((IrRef::Raw(RawCause::GenericParameter), false));
             }
             self.enqueue(name);
             return Ok((IrRef::Named(name.to_string()), false));
@@ -657,7 +828,10 @@ impl IrBuilder<'_> {
             }
             // pure map: additionalProperties without fixed fields
             return match &schema["additionalProperties"] {
-                Value::Null | Value::Bool(_) => Ok((IrRef::Map(Box::new(IrRef::Raw)), false)),
+                Value::Null | Value::Bool(_) => Ok((
+                    IrRef::Map(Box::new(IrRef::Raw(RawCause::OpenObject))),
+                    false,
+                )),
                 ap => {
                     let (value, _) = self.convert_ref(ap, &format!("{}Value", ctx))?;
                     Ok((IrRef::Map(Box::new(value)), false))
@@ -677,25 +851,58 @@ impl IrBuilder<'_> {
             Some("array") => {
                 let items = &schema["items"];
                 if items.is_null() {
-                    (IrRef::List(Box::new(IrRef::Raw)), false)
+                    (
+                        IrRef::List(Box::new(IrRef::Raw(RawCause::UntypedItems))),
+                        false,
+                    )
                 } else {
                     let (item, _) = self.convert_ref(items, &format!("{}Item", ctx))?;
                     (IrRef::List(Box::new(item)), false)
                 }
             }
-            Some("null") => (IrRef::Raw, true),
+            Some("null") => (IrRef::Raw(RawCause::NullOnly), true),
             // no type at all: untyped JSON
-            _ => (IrRef::Raw, false),
+            _ => (IrRef::Raw(RawCause::NoType), false),
         })
     }
 }
 
 /// The `oneOf`/`anyOf` variant list of a schema, if it is a union
 fn union_variants(schema: &Value) -> Option<Vec<Value>> {
-    schema["oneOf"]
+    if let Some(v) = schema["oneOf"]
         .as_array()
         .or_else(|| schema["anyOf"].as_array())
-        .cloned()
+    {
+        return Some(v.clone());
+    }
+    type_array_variants(schema)
+}
+
+/// Expands an OpenAPI 3.1 type array (`type: [null, string]`) into the
+/// equivalent `oneOf` variant list, one variant per type, so that it takes
+/// the regular union path: `[null, X]` collapses to a nullable `X`, and
+/// several non-null types (`[number, string]`) become a kind-dispatched
+/// union. Every keyword other than `type` (`items`, `properties`, ...) is
+/// kept on each non-null variant, where it applies to its own type only.
+/// Returns `None` when `type` is not an array.
+fn type_array_variants(schema: &Value) -> Option<Vec<Value>> {
+    let types = schema["type"].as_array()?;
+    let mut variants = Vec::with_capacity(types.len());
+    for t in types {
+        let t = t.as_str()?;
+        if t == "null" {
+            variants.push(serde_json::json!({ "type": "null" }));
+            continue;
+        }
+        let mut variant = schema.clone();
+        let obj = variant.as_object_mut()?;
+        obj.insert("type".to_string(), Value::String(t.to_string()));
+        // documentation stays on the enclosing schema
+        obj.remove("description");
+        obj.remove("title");
+        variants.push(variant);
+    }
+    Some(variants)
 }
 
 /// Whether a schema describes an object (fixed fields, an allOf
@@ -716,6 +923,7 @@ fn schema_description(schema: &Value) -> Option<String> {
 fn variant_kind_name(schema: &Value) -> String {
     match schema["type"].as_str() {
         Some(t) => t.to_string(),
+        None if is_object_like(schema) => "object".to_string(),
         None => "value".to_string(),
     }
 }
@@ -877,7 +1085,7 @@ fn kind_of_shallow(ty: &IrRef) -> Option<JsonKind> {
         IrRef::Scalar(_) => Some(JsonKind::Number),
         IrRef::List(_) => Some(JsonKind::Array),
         IrRef::Map(_) => Some(JsonKind::Object),
-        IrRef::Raw => None,
+        IrRef::Raw(_) => None,
         IrRef::Named(_) => None,
     }
 }
@@ -894,12 +1102,84 @@ fn kind_of_ref(ty: &IrRef, kinds: &BTreeMap<String, Option<JsonKind>>) -> Option
 mod tests {
     use super::*;
 
-    /// Reads the IR of the four core APIs from the vendored specification
-    fn core_ir() -> ResponseIr {
+    fn spec() -> Value {
         let path = concat!(env!("CARGO_MANIFEST_DIR"), "/opensearch-openapi.yaml");
         let file = std::fs::File::open(path).unwrap();
-        let spec: Value = serde_yaml::from_reader(file).unwrap();
-        read_response_ir(&spec, &["search", "index", "bulk", "get"]).unwrap()
+        serde_yaml::from_reader(file).unwrap()
+    }
+
+    /// Reads the IR of the four core APIs from the vendored specification
+    fn core_ir() -> ResponseIr {
+        read_response_ir(&spec(), &["search", "index", "bulk", "get"]).unwrap()
+    }
+
+    #[test]
+    fn typed_response_path_follows_the_ir_endpoints() {
+        let ir = core_ir();
+        assert_eq!(
+            typed_response_path(&ir, "search").as_deref(),
+            Some("types::search::SearchResponse")
+        );
+        assert_eq!(
+            typed_response_path(&ir, "index").as_deref(),
+            Some("types::index::IndexResponse")
+        );
+        assert_eq!(
+            typed_response_path(&ir, "bulk").as_deref(),
+            Some("types::bulk::BulkResponse")
+        );
+        assert_eq!(
+            typed_response_path(&ir, "get").as_deref(),
+            Some("types::get::GetResponse")
+        );
+        // groups not in this IR have no path
+        assert_eq!(typed_response_path(&ir, "indices.create"), None);
+    }
+
+    #[test]
+    fn every_operation_group_is_typed_or_explained() {
+        // the whole specification reads without error: each group either
+        // gets a root type or is recorded as untyped with a reason
+        let spec = spec();
+        let groups = all_operation_groups(&spec);
+        assert!(
+            groups.len() > 400,
+            "unexpectedly few groups: {}",
+            groups.len()
+        );
+        let refs: Vec<&str> = groups.iter().map(String::as_str).collect();
+        let ir = read_response_ir(&spec, &refs).unwrap();
+        for g in &groups {
+            assert!(
+                ir.endpoints.contains_key(g) || ir.untyped_groups.contains_key(g),
+                "{} neither typed nor explained",
+                g
+            );
+        }
+        // `create` only declares a 201: it is typed through it
+        assert!(ir.endpoints.contains_key("create"));
+        // HEAD endpoints have no body: explained, not failed
+        assert!(ir.untyped_groups.contains_key("exists"));
+        assert!(ir.untyped_groups["exists"].contains("HEAD-only"));
+        // typed groups vastly outnumber untyped ones
+        assert!(ir.endpoints.len() > 400, "{} typed", ir.endpoints.len());
+        assert!(
+            ir.untyped_groups.len() < 40,
+            "{} untyped",
+            ir.untyped_groups.len()
+        );
+    }
+
+    #[test]
+    fn endpoint_alias_rule_handles_namespaced_groups() {
+        assert_eq!(
+            endpoint_response_alias("indices.create"),
+            ("indices_create".to_string(), "CreateResponse".to_string())
+        );
+        assert_eq!(
+            endpoint_response_alias("search"),
+            ("search".to_string(), "SearchResponse".to_string())
+        );
     }
 
     #[test]
@@ -923,14 +1203,22 @@ mod tests {
         };
         let names: Vec<&str> = bucket.fields.iter().map(|f| f.json_name.as_str()).collect();
         assert!(names.contains(&"key"), "own field: {:?}", names);
-        assert!(names.contains(&"doc_count"), "from MultiBucketBase: {:?}", names);
+        assert!(
+            names.contains(&"doc_count"),
+            "from MultiBucketBase: {:?}",
+            names
+        );
         assert!(
             names.contains(&"doc_count_error_upper_bound"),
             "from TermsBucketBase: {:?}",
             names
         );
         // doc_count is required through the base
-        let doc_count = bucket.fields.iter().find(|f| f.json_name == "doc_count").unwrap();
+        let doc_count = bucket
+            .fields
+            .iter()
+            .find(|f| f.json_name == "doc_count")
+            .unwrap();
         assert!(doc_count.required);
         // sub-aggregations: residual keys from MultiBucketBase
         let (residual_name, residual_ty) = bucket.residual.as_ref().unwrap();
@@ -1008,7 +1296,11 @@ mod tests {
             IrType::Struct(s) => s,
             other => panic!("expected struct, got {:?}", other),
         };
-        let hits = hits_metadata.fields.iter().find(|f| f.json_name == "hits").unwrap();
+        let hits = hits_metadata
+            .fields
+            .iter()
+            .find(|f| f.json_name == "hits")
+            .unwrap();
         let item = match &hits.ty {
             IrRef::List(item) => item.as_ref(),
             other => panic!("expected list, got {:?}", other),
@@ -1021,10 +1313,141 @@ mod tests {
             IrType::Struct(s) => s,
             other => panic!("expected struct, got {:?}", other),
         };
-        let source = hit.fields.iter().find(|f| f.json_name == "_source").unwrap();
-        assert_eq!(source.ty, IrRef::Raw);
+        let source = hit
+            .fields
+            .iter()
+            .find(|f| f.json_name == "_source")
+            .unwrap();
+        assert_eq!(source.ty, IrRef::Raw(RawCause::GenericParameter));
         // fields from Hit itself were merged in
         assert!(hit.fields.iter().any(|f| f.json_name == "_index"));
+    }
+
+    /// The IR of a single `t` operation group whose 200 response is the
+    /// `t___Root` schema, with the given schemas
+    fn fixture_ir(schemas: Value) -> ResponseIr {
+        let spec = serde_json::json!({
+            "components": {
+                "schemas": schemas,
+                "responses": {
+                    "t___200": { "content": { "application/json": { "schema": {
+                        "$ref": "#/components/schemas/t___Root"
+                    } } } }
+                }
+            }
+        });
+        read_response_ir(&spec, &["t"]).unwrap()
+    }
+
+    fn field<'a>(ir: &'a ResponseIr, ty: &str, name: &str) -> &'a IrField {
+        match &ir.types[ty] {
+            IrType::Struct(s) => s.fields.iter().find(|f| f.json_name == name).unwrap(),
+            other => panic!("expected struct, got {:?}", other),
+        }
+    }
+
+    #[test]
+    fn head_only_groups_and_generic_roots() {
+        let spec = spec();
+        // ism.exists_policy declares a JSON 200 body, but is HEAD-only
+        let ir = read_response_ir(&spec, &["ism.exists_policy", "get_source"]).unwrap();
+        assert!(ir.untyped_groups["ism.exists_policy"].contains("HEAD-only"));
+        // get_source's whole response is the generic TDocument
+        let root = &ir.endpoints["get_source"];
+        match &ir.types[root] {
+            IrType::Alias(a) => assert_eq!(a.ty, IrRef::Raw(RawCause::GenericParameter)),
+            other => panic!("expected a raw alias, got {:?}", other),
+        }
+    }
+
+    #[test]
+    fn type_arrays_become_typed_fields() {
+        let ir = fixture_ir(serde_json::json!({
+            "t___Root": {
+                "type": "object",
+                "properties": {
+                    "nullable_string": { "type": ["null", "string"] },
+                    "nullable_number": { "type": ["null", "number"] },
+                    "nullable_bool": { "type": ["boolean", "null"] },
+                    "nullable_list": { "type": ["array", "null"], "items": { "type": "string" } },
+                    "nullable_object": {
+                        "type": ["null", "object"],
+                        "properties": { "a": { "type": "integer" } }
+                    },
+                    "number_or_string": { "type": ["number", "string"] }
+                }
+            }
+        }));
+        let root = "t___Root";
+        let f = field(&ir, root, "nullable_string");
+        assert_eq!(
+            (f.ty.clone(), f.nullable),
+            (IrRef::Scalar(Scalar::String), true)
+        );
+        let f = field(&ir, root, "nullable_number");
+        assert_eq!(
+            (f.ty.clone(), f.nullable),
+            (IrRef::Scalar(Scalar::F64), true)
+        );
+        let f = field(&ir, root, "nullable_bool");
+        assert_eq!(
+            (f.ty.clone(), f.nullable),
+            (IrRef::Scalar(Scalar::Bool), true)
+        );
+        let f = field(&ir, root, "nullable_list");
+        assert_eq!(
+            (f.ty.clone(), f.nullable),
+            (IrRef::List(Box::new(IrRef::Scalar(Scalar::String))), true)
+        );
+        // the object variant keeps its properties
+        let f = field(&ir, root, "nullable_object");
+        assert!(f.nullable);
+        match &f.ty {
+            IrRef::Named(n) => assert!(matches!(&ir.types[n], IrType::Struct(_))),
+            other => panic!("expected a struct, got {:?}", other),
+        }
+        // several non-null types: a union dispatching on the JSON kind
+        let f = field(&ir, root, "number_or_string");
+        match &f.ty {
+            IrRef::Named(n) => match &ir.types[n] {
+                IrType::DispatchUnion(u) => {
+                    let names: Vec<&str> = u.variants.iter().map(|v| v.name.as_str()).collect();
+                    assert_eq!(names, vec!["number", "string"]);
+                }
+                other => panic!("expected a dispatch union, got {:?}", other),
+            },
+            other => panic!("expected a named union, got {:?}", other),
+        }
+    }
+
+    #[test]
+    fn no_type_array_falls_back_to_raw_in_the_vendored_spec() {
+        // regression guard: every type array of the specification is typed
+        let spec = spec();
+        let groups = all_operation_groups(&spec);
+        let refs: Vec<&str> = groups.iter().map(String::as_str).collect();
+        let ir = read_response_ir(&spec, &refs).unwrap();
+        let schemas = spec["components"]["schemas"].as_object().unwrap();
+        for (name, ty) in &ir.types {
+            let s = match ty {
+                IrType::Struct(s) => s,
+                _ => continue,
+            };
+            let props = match schemas.get(name) {
+                Some(schema) => &schema["properties"],
+                None => continue,
+            };
+            for f in &s.fields {
+                if props[&f.json_name]["type"].is_array() {
+                    assert!(
+                        !matches!(f.ty, IrRef::Raw(_)),
+                        "{}.{} is a type array left raw",
+                        name,
+                        f.json_name
+                    );
+                }
+            }
+        }
     }
 
     #[test]
@@ -1043,7 +1466,11 @@ mod tests {
         assert!(max_score.nullable);
         assert_eq!(max_score.ty, IrRef::Scalar(Scalar::F64));
         // total: oneOf [TotalHits, i64] synthesized as a union
-        let total = hits_metadata.fields.iter().find(|f| f.json_name == "total").unwrap();
+        let total = hits_metadata
+            .fields
+            .iter()
+            .find(|f| f.json_name == "total")
+            .unwrap();
         match &total.ty {
             IrRef::Named(n) => {
                 assert!(

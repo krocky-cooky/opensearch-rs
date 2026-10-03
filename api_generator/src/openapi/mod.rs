@@ -26,18 +26,14 @@
 //! through the existing serde model, guaranteeing that both ingestion
 //! paths produce identical structures.
 
+pub mod raw_allowlist;
 pub mod responses;
 
 use crate::generator::{build_api, endpoint_from_file, Api, Type};
 use anyhow::{anyhow, bail};
 use log::{info, warn};
 use serde_json::{json, Map, Value};
-use std::{
-    collections::BTreeMap,
-    fs::File,
-    io::Write,
-    path::Path,
-};
+use std::{collections::BTreeMap, fs::File, io::Write, path::Path};
 
 /// The release artifact of the OpenSearch API specification
 pub const SPEC_URL: &str = "https://api-spec.opensearch.org/opensearch-openapi.yaml";
@@ -126,12 +122,20 @@ pub fn read_api(commit: &str, openapi_file: &Path) -> anyhow::Result<Api> {
         }
     }
 
+    // the response models generated for the specification: every endpoint
+    // records the Rust path of its model so consumers (the yaml test
+    // runner's typed verification) need no second source of truth
+    let all_groups = responses::all_operation_groups(&spec);
+    let group_refs: Vec<&str> = all_groups.iter().map(String::as_str).collect();
+    let response_ir = responses::read_response_ir(&spec, &group_refs)?;
+
     let mut endpoints = Vec::with_capacity(groups.len());
     for (name, operations) in groups {
         let legacy = to_legacy_endpoint(&name, &operations, &resolver)?;
         let json = serde_json::to_string(&json!({ &name: legacy }))?;
-        let (name, endpoint) =
+        let (name, mut endpoint) =
             endpoint_from_file(format!("openapi:{}", name), &mut json.as_bytes())?;
+        endpoint.typed_response = responses::typed_response_path(&response_ir, &name);
         endpoints.push((name, endpoint));
     }
 
@@ -598,9 +602,7 @@ fn valid_enum_values(values: Vec<Value>) -> Option<Vec<Value>> {
 fn common_params(resolver: &Resolver) -> anyhow::Result<BTreeMap<String, Type>> {
     let mut common = Map::new();
     for param in resolver.parameters.values() {
-        if param["x-global"].as_bool().unwrap_or(false)
-            && param["in"].as_str() == Some("query")
-        {
+        if param["x-global"].as_bool().unwrap_or(false) && param["in"].as_str() == Some("query") {
             if let Some(name) = param["name"].as_str() {
                 if !common.contains_key(name) {
                     common.insert(name.to_string(), to_legacy_type(param, resolver)?);
@@ -826,6 +828,38 @@ components:
         assert!(api.namespaces.contains_key("cat"));
         assert!(api.root.endpoints().contains_key("search"));
         assert!(api.root.endpoints().contains_key("bulk"));
+        // the fixture has no response components: nothing is typed
+        assert_eq!(
+            api.endpoint_for_api_call("search").unwrap().typed_response,
+            None
+        );
+    }
+
+    #[test]
+    fn endpoints_record_their_typed_response_from_the_vendored_spec() {
+        let path = concat!(env!("CARGO_MANIFEST_DIR"), "/opensearch-openapi.yaml");
+        let api = read_api("test", Path::new(path)).unwrap();
+        assert_eq!(
+            api.endpoint_for_api_call("search")
+                .unwrap()
+                .typed_response
+                .as_deref(),
+            Some("types::search::SearchResponse")
+        );
+        assert_eq!(
+            api.endpoint_for_api_call("indices.create")
+                .unwrap()
+                .typed_response
+                .as_deref(),
+            Some("types::indices_create::CreateResponse")
+        );
+        // HEAD-only endpoints have no JSON body and thus no model
+        assert_eq!(
+            api.endpoint_for_api_call("indices.exists")
+                .unwrap()
+                .typed_response,
+            None
+        );
     }
 
     #[test]
@@ -977,7 +1011,8 @@ components:
         let err = read_fixture_err(&spec);
         assert!(
             err.contains("unresolved schema $ref: #/components/schemas/Missing"),
-            "unexpected error: {}", err
+            "unexpected error: {}",
+            err
         );
     }
 
@@ -992,7 +1027,8 @@ components:
         let err = read_fixture_err(&spec);
         assert!(
             err.contains("unsupported schema $ref"),
-            "unexpected error: {}", err
+            "unexpected error: {}",
+            err
         );
     }
 
@@ -1009,7 +1045,8 @@ components:
         let err = read_fixture_err(&spec);
         assert!(
             err.contains("too deep or cyclic"),
-            "unexpected error: {}", err
+            "unexpected error: {}",
+            err
         );
     }
 
@@ -1029,7 +1066,8 @@ components:
         let err = read_fixture_err(&spec);
         assert!(
             err.contains("unresolved schema $ref: #/components/schemas/Missing"),
-            "unexpected error: {}", err
+            "unexpected error: {}",
+            err
         );
     }
 

@@ -1,0 +1,249 @@
+# Untyped-field ledger of the generated response models.
+# Regenerate with `cargo run -p api_generator -- --openapi <spec> --update-raw-allowlist`.
+#
+# Each line is a permitted raw JSON (Box<RawValue>) use in opensearch::types:
+#
+#   namespace:TypeName/field # <form> <cause> -- <review reason>
+#
+# A member "-" is a whole-type alias, "[additional]" the residual map of a
+# struct. Form and cause are computed by the generator. The review reason
+# after " -- " is written by hand and kept across updates: an entry whose reason
+# is UNREVIEWED fails generation until someone confirms the degradation is
+# intended (or fixes the generator / the specification instead).
+#
+# Causes: no-type (schema declares no type), generic (generic type parameter),
+# open-object (object without fixed fields or with untyped additionalProperties),
+# untyped-items (array without items), null-only (schema only allows null).
+
+# --- _common ---
+_common:ErrorCause/[additional] # bare no-type -- error-specific extra properties: each exception type adds its own keys
+_common:InlineGet/[additional] # bare open-object -- unknown metadata fields: plugins and future versions add `_`-prefixed hit/document metadata
+_common:InlineGet/_source # bare generic -- document body: its shape is user-defined (decode with serde_json or a caller type)
+_common:InlineGet/fields # map<bare> open-object -- stored/docvalue fields requested per query: names and value types depend on the mapping
+_common:InlineGetDictUserDefined/[additional] # map<bare> open-object -- unknown metadata fields: plugins and future versions add `_`-prefixed hit/document metadata
+_common:InlineGetDictUserDefined/_source # map<bare> open-object -- document body: its shape is user-defined (decode with serde_json or a caller type)
+_common:InlineGetDictUserDefined/fields # map<map<bare>> open-object -- stored/docvalue fields requested per query: names and value types depend on the mapping
+_common:InlineScriptObject/params # map<bare> open-object -- script parameters: user-defined names and values
+_common:Metadata/[additional] # bare open-object -- user-defined `_meta`: arbitrary JSON by design
+_common:StoredScriptId/params # map<bare> open-object -- script parameters: user-defined names and values
+_common:TDocument/- # bare generic -- generic type parameter TDocument: the whole get_source response is the document body
+
+# --- _common.aggregations ---
+_common.aggregations:ScriptedMetricAggregate/value # bare no-type -- scripted_metric: the reduce script decides the result type
+
+# --- _common.mapping ---
+_common.mapping:ConstantKeywordProperty/value # bare no-type -- constant_keyword value as set in the mapping: user-supplied
+_common.mapping:KnnVectorMethod/parameters # map<bare> no-type -- engine/method-specific parameters: the set depends on the chosen method
+_common.mapping:SemanticChunkingStrategy/parameters # map<bare> no-type -- engine/method-specific parameters: the set depends on the chosen method
+
+# --- _common.query_dsl ---
+_common.query_dsl:GeoShape/coordinates # list<bare> untyped-items -- GeoJSON coordinates: nesting depth depends on the geometry type (point, polygon, ...)
+_common.query_dsl:KnnQuery/method_parameters # map<bare> open-object -- engine/method-specific query parameters: the set depends on the chosen method
+_common.query_dsl:LikeDocument/doc # bare no-type -- query input document: user-defined shape
+_common.query_dsl:PercolateQuery/document # bare no-type -- query input document: user-defined shape
+_common.query_dsl:PercolateQuery/documents # list<bare> no-type -- query input document: user-defined shape
+_common.query_dsl:QueryContainer/template # map<bare> open-object -- template query: placeholders resolved by search request processors, arbitrary query DSL
+_common.query_dsl:XyShape/coordinates # list<bare> untyped-items -- GeoJSON coordinates: nesting depth depends on the geometry type (point, polygon, ...)
+
+# --- _core.explain ---
+_core.explain:ExplainResponseGet/[additional] # bare open-object -- unknown metadata fields: plugins and future versions add `_`-prefixed hit/document metadata
+_core.explain:ExplainResponseGet/_source # bare generic -- document body: its shape is user-defined (decode with serde_json or a caller type)
+_core.explain:ExplainResponseGet/fields # map<bare> open-object -- stored/docvalue fields requested per query: names and value types depend on the mapping
+
+# --- _core.get ---
+_core.get:GetResponse/_source # bare generic -- document body: its shape is user-defined (decode with serde_json or a caller type)
+_core.get:GetResponse/fields # map<bare> open-object -- stored/docvalue fields requested per query: names and value types depend on the mapping
+_core.get:GetResult/_source # bare generic -- document body: its shape is user-defined (decode with serde_json or a caller type)
+_core.get:GetResult/fields # map<bare> open-object -- stored/docvalue fields requested per query: names and value types depend on the mapping
+
+# --- _core.msearch ---
+_core.msearch:MultiSearchItemHitsHitsItem/[additional] # bare no-type -- unknown metadata fields: plugins and future versions add `_`-prefixed hit/document metadata
+_core.msearch:MultiSearchItemHitsHitsItem/_source # bare generic -- document body: its shape is user-defined (decode with serde_json or a caller type)
+_core.msearch:MultiSearchItemHitsHitsItem/fields # map<bare> open-object -- stored/docvalue fields requested per query: names and value types depend on the mapping
+
+# --- _core.rank_eval ---
+_core.rank_eval:RankEvalMetricDetail/metric_details # map<map<bare>> open-object -- metric-specific details: content varies for each rank_eval metric (per spec description)
+_core.rank_eval:RankEvalResponse/failures # map<bare> open-object -- SPEC GAP: failures keyed by request id, values are error causes and could reference _common___ErrorCause
+
+# --- _core.render_search_template ---
+_core.render_search_template:RenderSearchTemplateResponse/template_output # map<bare> open-object -- rendered search template: arbitrary search request body
+
+# --- _core.scripts_painless_execute ---
+_core.scripts_painless_execute:ScriptsPainlessExecuteResponse/result # bare generic -- generic type parameter TResult: the script decides the result type
+
+# --- _core.search ---
+_core.search:Highlight/options # map<map<bare>> open-object -- highlighter-specific options: open set per highlighter implementation
+_core.search:HighlightField/options # map<map<bare>> open-object -- highlighter-specific options: open set per highlighter implementation
+_core.search:HitsMetadataHitsItem/[additional] # bare no-type -- unknown metadata fields: plugins and future versions add `_`-prefixed hit/document metadata
+_core.search:HitsMetadataHitsItem/_source # bare generic -- document body: its shape is user-defined (decode with serde_json or a caller type)
+_core.search:HitsMetadataHitsItem/fields # map<bare> open-object -- stored/docvalue fields requested per query: names and value types depend on the mapping
+_core.search:HitsMetadataJsonValueHitsItem/[additional] # bare no-type -- unknown metadata fields: plugins and future versions add `_`-prefixed hit/document metadata
+_core.search:HitsMetadataJsonValueHitsItem/_source # bare no-type -- document body: its shape is user-defined (decode with serde_json or a caller type)
+_core.search:HitsMetadataJsonValueHitsItem/fields # map<bare> open-object -- stored/docvalue fields requested per query: names and value types depend on the mapping
+_core.search:PhraseSuggestCollate/params # map<bare> open-object -- script parameters: user-defined names and values
+_core.search:ProcessorExecutionDetail/input_data # bare no-type -- search pipeline processor input/output: request, response or document fragments depending on the processor
+_core.search:ProcessorExecutionDetail/output_data # bare no-type -- search pipeline processor input/output: request, response or document fragments depending on the processor
+_core.search:SearchResponseHitsHitsItem/[additional] # bare no-type -- unknown metadata fields: plugins and future versions add `_`-prefixed hit/document metadata
+_core.search:SearchResponseHitsHitsItem/_source # bare generic -- document body: its shape is user-defined (decode with serde_json or a caller type)
+_core.search:SearchResponseHitsHitsItem/fields # map<bare> open-object -- stored/docvalue fields requested per query: names and value types depend on the mapping
+_core.search:SearchResultHitsHitsItem/[additional] # bare no-type -- unknown metadata fields: plugins and future versions add `_`-prefixed hit/document metadata
+_core.search:SearchResultHitsHitsItem/_source # bare generic -- document body: its shape is user-defined (decode with serde_json or a caller type)
+_core.search:SearchResultHitsHitsItem/fields # map<bare> open-object -- stored/docvalue fields requested per query: names and value types depend on the mapping
+_core.search:SuggestCompletionOptionsArrayItem/_source # bare generic -- document body: its shape is user-defined (decode with serde_json or a caller type)
+_core.search:SuggestCompletionOptionsArrayItem/fields # map<bare> open-object -- stored/docvalue fields requested per query: names and value types depend on the mapping
+_core.search:SuggestCompletionOptionsObject/_source # bare generic -- document body: its shape is user-defined (decode with serde_json or a caller type)
+_core.search:SuggestCompletionOptionsObject/fields # map<bare> open-object -- stored/docvalue fields requested per query: names and value types depend on the mapping
+
+# --- _core.search_template ---
+_core.search_template:SearchTemplateResponseHitsHitsItem/[additional] # bare no-type -- unknown metadata fields: plugins and future versions add `_`-prefixed hit/document metadata
+_core.search_template:SearchTemplateResponseHitsHitsItem/_source # bare generic -- document body: its shape is user-defined (decode with serde_json or a caller type)
+_core.search_template:SearchTemplateResponseHitsHitsItem/fields # map<bare> open-object -- stored/docvalue fields requested per query: names and value types depend on the mapping
+
+# --- cluster ---
+cluster:GetSettingsResponse/defaults # map<bare> open-object -- settings: open key space (flat or nested setting names, plugin settings), values of any JSON type
+cluster:GetSettingsResponse/persistent # map<bare> open-object -- settings: open key space (flat or nested setting names, plugin settings), values of any JSON type
+cluster:GetSettingsResponse/transient # map<bare> open-object -- settings: open key space (flat or nested setting names, plugin settings), values of any JSON type
+cluster:PutSettingsResponse/persistent # map<bare> no-type -- settings: open key space (flat or nested setting names, plugin settings), values of any JSON type
+cluster:PutSettingsResponse/transient # map<bare> no-type -- settings: open key space (flat or nested setting names, plugin settings), values of any JSON type
+cluster:RerouteResponse/state # bare no-type -- cluster state: internal, version- and plugin-dependent structure (spec: may differ from the external representation)
+cluster:StateResponse/- # bare no-type -- SPEC GAP: cluster.state response is declared as `{}`; its top-level sections (metadata, routing_table, nodes, ...) could be typed
+
+# --- flow_framework.common ---
+flow_framework.common:FlowFrameworkGetResponse/workflows # map<bare> open-object -- SPEC GAP: workflow name -> workflow definition, value schema missing
+
+# --- indices._common ---
+indices._common:IndexSettings/[additional] # bare no-type -- custom index settings (plugin and user-defined `index.*` keys)
+indices._common:IngestionSource/param # map<bare> open-object -- ingestion-source-specific parameters (kafka, kinesis, ...)
+indices._common:TemplateMapping/settings # map<bare> open-object -- settings: open key space (flat or nested setting names, plugin settings), values of any JSON type
+
+# --- ingest._common ---
+ingest._common:AppendProcessor/value # list<bare> no-type -- user-supplied value of any JSON type (supports template snippets)
+ingest._common:CsvProcessor/empty_value # bare no-type -- user-supplied value of any JSON type
+ingest._common:SetProcessor/value # bare no-type -- user-supplied value of any JSON type (supports template snippets)
+
+# --- ingest.simulate ---
+ingest.simulate:DocumentSimulation/_source # map<bare> open-object -- document body: its shape is user-defined (decode with serde_json or a caller type)
+
+# --- insights._common ---
+insights._common:Source/aggregations # map<bare> open-object -- recorded search request source: aggregation DSL as sent by the client
+insights._common:Source/ext # map<map<bare>> open-object -- search extensions defined by plugins: open set
+insights._common:TopQuery/labels # map<bare> open-object -- user-defined query labels
+insights._common:TopQuery/phase_latency_map # map<bare> open-object -- SPEC GAP: phase name -> latency map, values are numbers (additionalProperties should be number)
+
+# --- ism._common ---
+ism._common:ActionAlias/actions # map<bare> open-object -- alias actions as in the indices.update_aliases request: action-specific objects
+ism._common:ActionAllocation/exclude # map<bare> open-object -- SPEC GAP: node attribute -> value map, values are strings (additionalProperties should be string)
+ism._common:ActionAllocation/include # map<bare> open-object -- SPEC GAP: node attribute -> value map, values are strings (additionalProperties should be string)
+ism._common:ActionAllocation/require # map<bare> open-object -- SPEC GAP: node attribute -> value map, values are strings (additionalProperties should be string)
+ism._common:ActionCustom/[additional] # bare open-object -- ISM action configuration: plugin- and version-specific extra options
+ism._common:ActionNotification/[additional] # bare open-object -- ISM action configuration: plugin- and version-specific extra options
+ism._common:ActionRollup/[additional] # bare open-object -- ISM action configuration: plugin- and version-specific extra options
+ism._common:ActionShrink/[additional] # bare open-object -- ISM action configuration: plugin- and version-specific extra options
+ism._common:ActionTimeout/timeout # map<bare> open-object -- SPEC GAP: action timeout is declared as an untyped object (OpenSearch documents it as a time value string)
+ism._common:ActionTransform/[additional] # bare open-object -- ISM action configuration: plugin- and version-specific extra options
+ism._common:ErrorNotification/message_template # map<bare> open-object -- SPEC GAP: mustache template object with a known `source` field
+ism._common:SlackCustomWebhook/header_params # map<bare> open-object -- SPEC GAP: name -> value maps, values are strings (additionalProperties should be string)
+ism._common:SlackCustomWebhook/query_params # map<bare> open-object -- SPEC GAP: name -> value maps, values are strings (additionalProperties should be string)
+ism._common:Transition/conditions # map<bare> open-object -- SPEC GAP: known condition keys (min_index_age, min_doc_count, min_size, min_rollover_age, cron) could be typed
+
+# --- knn ---
+knn:SearchModelsResponseHitsHitsItem/[additional] # bare no-type -- unknown metadata fields: plugins and future versions add `_`-prefixed hit/document metadata
+knn:SearchModelsResponseHitsHitsItem/_source # bare no-type -- document body: its shape is user-defined (decode with serde_json or a caller type)
+knn:SearchModelsResponseHitsHitsItem/fields # map<bare> open-object -- stored/docvalue fields requested per query: names and value types depend on the mapping
+knn:SearchModelsResponseSuggestValueItemCompletionOptionsArrayItem/_source # bare no-type -- document body: its shape is user-defined (decode with serde_json or a caller type)
+knn:SearchModelsResponseSuggestValueItemCompletionOptionsObject/_source # bare no-type -- document body: its shape is user-defined (decode with serde_json or a caller type)
+
+# --- knn._common ---
+knn._common:NodeStats/indices_in_cache # map<bare> open-object -- SPEC GAP: index name -> per-index cache stats, value schema missing
+
+# --- ltr ---
+ltr:GetFeatureResponse/[additional] # bare open-object -- SPEC GAP: LTR get responses are declared as untyped objects (they are document-get shaped)
+ltr:GetFeaturesetResponse/[additional] # bare open-object -- SPEC GAP: LTR get responses are declared as untyped objects (they are document-get shaped)
+ltr:GetModelResponse/[additional] # bare open-object -- SPEC GAP: LTR get responses are declared as untyped objects (they are document-get shaped)
+ltr:SearchFeaturesResponseHitsHitsItem/[additional] # bare no-type -- unknown metadata fields: plugins and future versions add `_`-prefixed hit/document metadata
+ltr:SearchFeaturesResponseHitsHitsItem/_source # bare no-type -- document body: its shape is user-defined (decode with serde_json or a caller type)
+ltr:SearchFeaturesResponseHitsHitsItem/fields # map<bare> open-object -- stored/docvalue fields requested per query: names and value types depend on the mapping
+ltr:SearchFeaturesResponseSuggestValueItemCompletionOptionsArrayItem/_source # bare no-type -- document body: its shape is user-defined (decode with serde_json or a caller type)
+ltr:SearchFeaturesResponseSuggestValueItemCompletionOptionsObject/_source # bare no-type -- document body: its shape is user-defined (decode with serde_json or a caller type)
+ltr:SearchFeaturesetsResponseHitsHitsItem/[additional] # bare no-type -- unknown metadata fields: plugins and future versions add `_`-prefixed hit/document metadata
+ltr:SearchFeaturesetsResponseHitsHitsItem/_source # bare no-type -- document body: its shape is user-defined (decode with serde_json or a caller type)
+ltr:SearchFeaturesetsResponseHitsHitsItem/fields # map<bare> open-object -- stored/docvalue fields requested per query: names and value types depend on the mapping
+ltr:SearchFeaturesetsResponseSuggestValueItemCompletionOptionsArrayItem/_source # bare no-type -- document body: its shape is user-defined (decode with serde_json or a caller type)
+ltr:SearchFeaturesetsResponseSuggestValueItemCompletionOptionsObject/_source # bare no-type -- document body: its shape is user-defined (decode with serde_json or a caller type)
+ltr:SearchModelsResponseHitsHitsItem/[additional] # bare no-type -- unknown metadata fields: plugins and future versions add `_`-prefixed hit/document metadata
+ltr:SearchModelsResponseHitsHitsItem/_source # bare no-type -- document body: its shape is user-defined (decode with serde_json or a caller type)
+ltr:SearchModelsResponseHitsHitsItem/fields # map<bare> open-object -- stored/docvalue fields requested per query: names and value types depend on the mapping
+ltr:SearchModelsResponseSuggestValueItemCompletionOptionsArrayItem/_source # bare no-type -- document body: its shape is user-defined (decode with serde_json or a caller type)
+ltr:SearchModelsResponseSuggestValueItemCompletionOptionsObject/_source # bare no-type -- document body: its shape is user-defined (decode with serde_json or a caller type)
+
+# --- ltr._common ---
+ltr._common:CacheStatsResponse/stores # map<bare> open-object -- SPEC GAP: store name -> cache stats, value schema missing
+ltr._common:StoreDetails/counts # map<bare> open-object -- SPEC GAP: count statistics declared as an untyped object
+
+# --- ml._common ---
+ml._common:AdditionalInfo/[additional] # bare open-object -- ML connector/model/agent configuration: provider-specific open set of keys
+ml._common:Content/[additional] # bare open-object -- ML connector/model/agent configuration: provider-specific open set of keys
+ml._common:GetAgenticMemoryResponse/after # map<bare> open-object -- agentic memory content: user-defined
+ml._common:GetAgenticMemoryResponse/before # map<bare> open-object -- agentic memory content: user-defined
+ml._common:GetAgenticMemoryResponse/tags # map<bare> open-object -- agentic memory content: user-defined
+ml._common:Headers/[additional] # bare open-object -- ML connector/model/agent configuration: provider-specific open set of keys
+ml._common:Index/[additional] # bare open-object -- ML connector/model/agent configuration: provider-specific open set of keys
+ml._common:IndexSettings/[additional] # bare open-object -- ML connector/model/agent configuration: provider-specific open set of keys
+ml._common:Metadata/[additional] # bare open-object -- user-defined `_meta`: arbitrary JSON by design
+ml._common:Namespace/[additional] # bare open-object -- ML connector/model/agent configuration: provider-specific open set of keys
+ml._common:Parameters/[additional] # bare open-object -- ML connector/model/agent configuration: provider-specific open set of keys
+ml._common:Source/[additional] # bare open-object -- ML connector/model/agent configuration: provider-specific open set of keys
+ml._common:ToolAttributes/[additional] # bare no-type -- ML tool attributes: tool-specific open set of keys
+ml._common:ToolItems/[additional] # bare open-object -- ML connector/model/agent configuration: provider-specific open set of keys
+ml._common:UndeployModelNodeStats/[additional] # bare open-object -- SPEC GAP: model id -> per-node status map, value schema missing
+ml._common:UnloadModelNodeStats/[additional] # bare open-object -- SPEC GAP: model id -> per-node status map, value schema missing
+
+# --- nodes.info ---
+nodes.info:NodeInfoSettingsNode/attr # map<bare> open-object -- custom node attributes: user-defined names (values are strings in practice)
+nodes.info:NodeInfoSettingsPlugins/[additional] # bare open-object -- plugin settings: open key space
+
+# --- nodes.usage ---
+nodes.usage:NodeUsage/aggregations # map<bare> open-object -- aggregation usage counters keyed by aggregation and value-source type: open set
+
+# --- query._common ---
+query._common:DataSource/properties # map<bare> open-object -- data-source-connector-specific configuration (s3glue, prometheus, ...)
+query._common:DataSourceRetrieve/properties # map<bare> open-object -- data-source-connector-specific configuration (s3glue, prometheus, ...)
+
+# --- rollups._common ---
+rollups._common:Explain/rollup_metadata # map<bare> open-object -- SPEC GAP: rollup execution metadata declared as an untyped object
+rollups._common:MetricsConfigMetrics/avg # map<bare> open-object -- rollup metric marker: an empty object (`"avg": {}`) by design
+rollups._common:MetricsConfigMetrics/max # map<bare> open-object -- rollup metric marker: an empty object (`"avg": {}`) by design
+rollups._common:MetricsConfigMetrics/min # map<bare> open-object -- rollup metric marker: an empty object (`"avg": {}`) by design
+rollups._common:MetricsConfigMetrics/sum # map<bare> open-object -- rollup metric marker: an empty object (`"avg": {}`) by design
+rollups._common:MetricsConfigMetrics/value_count # map<bare> open-object -- rollup metric marker: an empty object (`"avg": {}`) by design
+
+# --- search_relevance ---
+search_relevance:GetNodeStatsResponse/all_nodes # map<bare> open-object -- SPEC GAP: search relevance stats sections declared as untyped objects
+search_relevance:GetNodeStatsResponse/info # map<bare> open-object -- SPEC GAP: search relevance stats sections declared as untyped objects
+search_relevance:GetNodeStatsResponse/nodes # map<bare> open-object -- SPEC GAP: search relevance stats sections declared as untyped objects
+search_relevance:GetStatsResponse/all_nodes # map<bare> open-object -- SPEC GAP: search relevance stats sections declared as untyped objects
+search_relevance:GetStatsResponse/info # map<bare> open-object -- SPEC GAP: search relevance stats sections declared as untyped objects
+search_relevance:GetStatsResponse/nodes # map<bare> open-object -- SPEC GAP: search relevance stats sections declared as untyped objects
+
+# --- security._common ---
+security._common:ComplianceConfig/read_watched_fields # bare no-type -- SPEC GAP: index pattern -> list of field names, declared as `{}`
+security._common:DynamicOptions/auth_failure_listeners # map<bare> open-object -- SPEC GAP: security config sections declared as `type: object` without properties
+security._common:DynamicOptions/authc # map<bare> open-object -- SPEC GAP: security config sections declared as `type: object` without properties
+security._common:DynamicOptions/authz # map<bare> open-object -- SPEC GAP: security config sections declared as `type: object` without properties
+security._common:DynamicOptions/http # map<bare> open-object -- SPEC GAP: security config sections declared as `type: object` without properties
+security._common:DynamicOptions/kibana # map<bare> open-object -- SPEC GAP: security config sections declared as `type: object` without properties
+security._common:DynamicOptions/on_behalf_of # map<bare> open-object -- SPEC GAP: security config sections declared as `type: object` without properties
+security._common:DynamicOptions/opensearch-dashboards # map<bare> open-object -- SPEC GAP: security config sections declared as `type: object` without properties
+security._common:HealthInfo/settings # map<bare> open-object -- settings: open key space (flat or nested setting names, plugin settings), values of any JSON type
+
+# --- sql._common ---
+sql._common:ExplainBody/description # map<bare> open-object -- query plan step details: engine- and step-specific
+sql._common:QueryResponse/datarows # list<list<bare>> untyped-items -- result rows: each value is typed by its column at runtime (see `schema`)
+sql._common:QueryResponse/schema # list<map<bare>> open-object -- SPEC GAP: column descriptors with known `name`/`alias`/`type` fields, declared as untyped objects
+sql._common:SqlSettingsResponse/persistent # map<bare> open-object -- settings: open key space (flat or nested setting names, plugin settings), values of any JSON type
+
+# --- tasks._common ---
+tasks._common:RawTaskStatus/[additional] # bare no-type -- task status is defined by each task type (reindex, update_by_query, plugin tasks)
+
+# --- transforms._common ---
+transforms._common:Preview/documents # list<map<bare>> open-object -- transform preview: target index documents, shape defined by the transform

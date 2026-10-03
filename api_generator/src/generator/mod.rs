@@ -241,7 +241,10 @@ impl Deprecated {
                 let message = if d.version.is_empty() {
                     d.description.clone()
                 } else {
-                    format!("Deprecated since OpenSearch {}: {}", d.version, d.description)
+                    format!(
+                        "Deprecated since OpenSearch {}: {}",
+                        d.version, d.description
+                    )
                 };
                 (
                     Some(quote!(#[deprecated = #message])),
@@ -443,6 +446,13 @@ pub struct ApiEndpoint {
     #[serde(default = "BTreeMap::new")]
     pub params: BTreeMap<String, Type>,
     pub body: Option<Body>,
+    /// The Rust path, relative to the `opensearch` crate root, of the
+    /// generated typed response model of this endpoint (e.g.
+    /// `types::search::SearchResponse`), when one exists. Filled in from
+    /// the response IR when reading an OpenAPI specification; `None` for
+    /// the legacy REST specs and for endpoints without a JSON success body.
+    #[serde(skip)]
+    pub typed_response: Option<String>,
 }
 
 impl ApiEndpoint {

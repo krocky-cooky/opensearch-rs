@@ -46,20 +46,14 @@ pub fn generate(ir: &ResponseIr) -> anyhow::Result<(Vec<(String, String)>, Strin
                 out
             }
         };
-        modules
-            .entry(module)
-            .or_default()
-            .push((rust_name, source));
+        modules.entry(module).or_default().push((rust_name, source));
     }
 
     // per-endpoint response aliases, e.g. `IndexResponse` for the `index`
     // operation group whose root schema is the shared WriteResponseBase
     for (group, root) in &ir.endpoints {
-        let desired_module = group.replace('.', "_");
-        let desired_name = format!(
-            "{}Response",
-            group.split('.').next_back().unwrap().to_pascal_case()
-        );
+        let (desired_module, desired_name) =
+            crate::openapi::responses::endpoint_response_alias(group);
         let root_module = module_name(namespace(root));
         let root_name = rust_type_name(root);
         if root_module == desired_module && root_name == desired_name {
@@ -108,7 +102,8 @@ pub fn module_name(ns: &str) -> String {
     let ns = ns.strip_prefix("_core.").unwrap_or(ns);
     let ns = ns.strip_prefix('_').unwrap_or(ns);
     let ns = if ns.is_empty() { "common" } else { ns };
-    ns.replace('.', "_")
+    // `cluster._common` -> `cluster_common`, not `cluster__common`
+    ns.replace("._", "_").replace('.', "_")
 }
 
 /// The Rust type name of an IR name
@@ -132,7 +127,7 @@ fn render_ref(ty: &IrRef) -> String {
         IrRef::Scalar(s) => scalar_type(*s).to_string(),
         IrRef::List(t) => format!("Vec<{}>", render_ref(t)),
         IrRef::Map(t) => format!("std::collections::BTreeMap<String, {}>", render_ref(t)),
-        IrRef::Raw => "Box<serde_json::value::RawValue>".to_string(),
+        IrRef::Raw(_) => "Box<serde_json::value::RawValue>".to_string(),
     }
 }
 
@@ -150,18 +145,21 @@ fn scalar_type(s: Scalar) -> &'static str {
 /// Appends a `#[doc = "..."]` attribute
 fn doc(out: &mut String, description: Option<&str>) {
     if let Some(d) = description {
-        let escaped = d.replace('\\', "\\\\").replace('"', "\\\"").replace('\n', " ");
+        let escaped = d
+            .replace('\\', "\\\\")
+            .replace('"', "\\\"")
+            .replace('\n', " ");
         let _ = writeln!(out, "#[doc = \"{}\"]", escaped);
     }
 }
 
 /// Rust keywords that require a raw identifier
 const KEYWORDS: &[&str] = &[
-    "abstract", "as", "async", "await", "become", "box", "break", "const", "continue", "do",
-    "dyn", "else", "enum", "extern", "false", "final", "fn", "for", "if", "impl", "in", "let",
-    "loop", "macro", "match", "mod", "move", "mut", "override", "priv", "pub", "ref", "return",
-    "static", "struct", "trait", "true", "try", "type", "typeof", "unsafe", "unsized", "use",
-    "virtual", "where", "while", "yield",
+    "abstract", "as", "async", "await", "become", "box", "break", "const", "continue", "do", "dyn",
+    "else", "enum", "extern", "false", "final", "fn", "for", "if", "impl", "in", "let", "loop",
+    "macro", "match", "mod", "move", "mut", "override", "priv", "pub", "ref", "return", "static",
+    "struct", "trait", "true", "try", "type", "typeof", "unsafe", "unsized", "use", "virtual",
+    "where", "while", "yield",
 ];
 
 /// Converts a JSON property name into a Rust field identifier
@@ -261,9 +259,7 @@ fn render_struct(
                 let _ = writeln!(out, "    #[serde(rename = \"{}\")]", f.ir.json_name);
             }
             if f.optional {
-                out.push_str(
-                    "    #[serde(default, skip_serializing_if = \"Option::is_none\")]\n",
-                );
+                out.push_str("    #[serde(default, skip_serializing_if = \"Option::is_none\")]\n");
             }
         }
         if f.optional {
@@ -416,7 +412,8 @@ fn render_str_enum(rust_name: &str, e: &IrStrEnum) -> String {
         "#[derive(Debug, Clone, Copy, PartialEq, Eq, serde::Serialize, serde::Deserialize)]\n",
     );
     let _ = writeln!(out, "pub enum {} {{", rust_name);
-    let mut taken = BTreeSet::new();
+    // `Unknown` is reserved for the catch-all variant below
+    let mut taken: BTreeSet<String> = ["Unknown".to_string()].iter().cloned().collect();
     for value in &e.values {
         let mut variant = value.to_pascal_case();
         if variant.is_empty() || !taken.insert(variant.clone()) {
@@ -694,11 +691,7 @@ fn boxed_edges(ir: &ResponseIr) -> BTreeSet<(String, String)> {
         }
         edges
             .get(from)
-            .map(|targets| {
-                targets
-                    .iter()
-                    .any(|t| reaches(t, to, edges, visited))
-            })
+            .map(|targets| targets.iter().any(|t| reaches(t, to, edges, visited)))
             .unwrap_or(false)
     }
 

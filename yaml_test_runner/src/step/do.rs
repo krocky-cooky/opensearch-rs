@@ -161,6 +161,23 @@ impl Do {
                 tokens.append_all(quote! {
                     crate::assert_response_success!(response);
                 });
+                // shadow typing: for endpoints with a generated response
+                // model, verify that the successful response deserializes
+                // into it and round-trips without data loss. Only emitted
+                // on this branch: with `catch` or `ignore` the response
+                // may be an error, which the models do not describe.
+                if !read_response {
+                    if let Some(check) = typed_response_check(
+                        &self.api_call.full_name,
+                        &self.api_call.typed_response,
+                    ) {
+                        read_response = true;
+                        tokens.append_all(quote! {
+                            let (method, status_code, text, json) = client::read_response(response).await?;
+                        });
+                        tokens.append_all(check);
+                    }
+                }
             }
         }
 
@@ -249,6 +266,12 @@ impl Do {
 /// The components of an API call
 pub struct ApiCall {
     pub namespace: Option<String>,
+    /// The full name of the called operation group, e.g. `search` or
+    /// `indices.create`
+    full_name: String,
+    /// The Rust path of the generated response model of the endpoint, when
+    /// one exists (see [ApiEndpoint::typed_response])
+    typed_response: Option<String>,
     function: syn::Expr,
     parts: Option<TokenStream>,
     params: Option<TokenStream>,
@@ -350,6 +373,8 @@ impl ApiCall {
 
         Ok(ApiCall {
             namespace,
+            full_name: api_call.clone(),
+            typed_response: endpoint.typed_response.clone(),
             function,
             parts,
             params,
@@ -961,5 +986,51 @@ impl ApiCall {
             Value::Sequence(values) if endpoint.supports_nd_body() => Ok(Some(nd_body(values))),
             _ => panic!("Unsupported body: {:?}", v),
         }
+    }
+}
+
+/// The tokens verifying that the successful response of an operation
+/// group deserializes into its generated response model — or `None` when
+/// the group has no typed response model.
+///
+/// The emitted call expects the `text` binding produced by
+/// `client::read_response` to be in scope.
+fn typed_response_check(full_name: &str, typed_response: &Option<String>) -> Option<TokenStream> {
+    let path = typed_response.as_deref()?;
+    let ty: syn::Path = syn::parse_str(&format!("opensearch::{}", path)).unwrap();
+    Some(quote! {
+        client::check_typed_response::<#ty>(&text, #full_name);
+    })
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn typed_check_is_emitted_for_typed_endpoints() {
+        let tokens =
+            typed_response_check("search", &Some("types::search::SearchResponse".to_string()))
+                .unwrap();
+        assert_eq!(
+            tokens.to_string(),
+            quote! {
+                client::check_typed_response::<opensearch::types::search::SearchResponse>(&text, "search");
+            }
+            .to_string()
+        );
+        let tokens = typed_response_check(
+            "indices.create",
+            &Some("types::indices_create::CreateResponse".to_string()),
+        )
+        .unwrap();
+        assert!(tokens
+            .to_string()
+            .contains("opensearch :: types :: indices_create :: CreateResponse"));
+    }
+
+    #[test]
+    fn typed_check_is_not_emitted_without_a_model() {
+        assert!(typed_response_check("exists", &None).is_none());
     }
 }

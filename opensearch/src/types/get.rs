@@ -56,3 +56,32 @@ pub struct GetResponse {
     pub fields: Option<std::collections::BTreeMap<String, Box<serde_json::value::RawValue>>>,
     pub found: bool,
 }
+
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+pub struct GetResult {
+    #[serde(rename = "_id")]
+    pub id: crate::types::common::Id,
+    #[serde(rename = "_index")]
+    pub index: crate::types::common::IndexName,
+    #[serde(rename = "_primary_term")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub primary_term: Option<i64>,
+    #[serde(rename = "_routing")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub routing: Option<String>,
+    #[serde(rename = "_seq_no")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub seq_no: Option<crate::types::common::SequenceNumber>,
+    #[serde(rename = "_source")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub source: Option<Box<serde_json::value::RawValue>>,
+    #[serde(rename = "_type")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub r#type: Option<crate::types::common::Type>,
+    #[serde(rename = "_version")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub version: Option<crate::types::common::VersionNumber>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub fields: Option<std::collections::BTreeMap<String, Box<serde_json::value::RawValue>>>,
+    pub found: bool,
+}

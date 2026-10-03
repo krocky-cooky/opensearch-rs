@@ -283,6 +283,7 @@ mod tests {
             "search".to_string(),
             ApiEndpoint {
                 full_name: Some("search".to_string()),
+                typed_response: None,
                 documentation: Documentation {
                     description: None,
                     url: None,
