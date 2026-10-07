@@ -136,6 +136,13 @@ pub fn read_api(commit: &str, openapi_file: &Path) -> anyhow::Result<Api> {
         let (name, mut endpoint) =
             endpoint_from_file(format!("openapi:{}", name), &mut json.as_bytes())?;
         endpoint.typed_response = responses::typed_response_path(&response_ir, &name);
+        if endpoint.typed_response.is_some() {
+            endpoint.typed_model_statuses = response_ir
+                .model_statuses
+                .get(&name)
+                .cloned()
+                .unwrap_or_default();
+        }
         endpoints.push((name, endpoint));
     }
 
@@ -860,6 +867,18 @@ components:
                 .typed_response,
             None
         );
+        // the statuses a typed call decodes as the model besides 2xx
+        assert_eq!(
+            api.endpoint_for_api_call("get")
+                .unwrap()
+                .typed_model_statuses,
+            vec![404]
+        );
+        assert!(api
+            .endpoint_for_api_call("indices.delete")
+            .unwrap()
+            .typed_model_statuses
+            .is_empty());
     }
 
     #[test]

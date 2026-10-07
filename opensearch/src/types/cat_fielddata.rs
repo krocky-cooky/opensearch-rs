@@ -28,26 +28,151 @@
 
 #![allow(missing_docs)]
 
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, Clone)]
 pub struct FielddataRecord {
     #[doc = "field name"]
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub field: Option<String>,
     #[doc = "hostname"]
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub host: Option<String>,
     #[doc = "node id"]
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
     #[doc = "IP address"]
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub ip: Option<String>,
     #[doc = "node name"]
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub node: Option<String>,
     #[doc = "field data usage"]
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub size: Option<String>,
+    #[doc = "Keys of the JSON object that the specification does not define, kept as raw JSON so that nothing the server sends is lost: fields added by plugins or newer OpenSearch versions, or missing from the specification. Serialized back unchanged."]
+    pub unknown_fields: std::collections::BTreeMap<String, Box<serde_json::value::RawValue>>,
+}
+impl<'de> serde::Deserialize<'de> for FielddataRecord {
+    fn deserialize<D>(deserializer: D) -> std::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        struct ResidualVisitor;
+        impl<'de> serde::de::Visitor<'de> for ResidualVisitor {
+            type Value = FielddataRecord;
+            fn expecting(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+                f.write_str("a FielddataRecord object")
+            }
+            // locals are named after the field identifiers, which keep a
+            // leading underscore when two JSON names would otherwise clash
+            // (`_nodes` -> `f__nodes`)
+            #[allow(non_snake_case)]
+            fn visit_map<A>(self, mut map: A) -> std::result::Result<Self::Value, A::Error>
+            where
+                A: serde::de::MapAccess<'de>,
+            {
+                let mut f_field: Option<String> = None;
+                let mut seen_field = false;
+                let mut f_host: Option<String> = None;
+                let mut seen_host = false;
+                let mut f_id: Option<String> = None;
+                let mut seen_id = false;
+                let mut f_ip: Option<String> = None;
+                let mut seen_ip = false;
+                let mut f_node: Option<String> = None;
+                let mut seen_node = false;
+                let mut f_size: Option<String> = None;
+                let mut seen_size = false;
+                let mut residual: std::collections::BTreeMap<
+                    String,
+                    Box<serde_json::value::RawValue>,
+                > = Default::default();
+                while let Some(k) = map.next_key::<String>()? {
+                    match k.as_str() {
+                        "field" => {
+                            if seen_field {
+                                return Err(serde::de::Error::duplicate_field("field"));
+                            }
+                            seen_field = true;
+                            f_field = map.next_value::<Option<String>>()?;
+                        }
+                        "host" => {
+                            if seen_host {
+                                return Err(serde::de::Error::duplicate_field("host"));
+                            }
+                            seen_host = true;
+                            f_host = map.next_value::<Option<String>>()?;
+                        }
+                        "id" => {
+                            if seen_id {
+                                return Err(serde::de::Error::duplicate_field("id"));
+                            }
+                            seen_id = true;
+                            f_id = map.next_value::<Option<String>>()?;
+                        }
+                        "ip" => {
+                            if seen_ip {
+                                return Err(serde::de::Error::duplicate_field("ip"));
+                            }
+                            seen_ip = true;
+                            f_ip = map.next_value::<Option<String>>()?;
+                        }
+                        "node" => {
+                            if seen_node {
+                                return Err(serde::de::Error::duplicate_field("node"));
+                            }
+                            seen_node = true;
+                            f_node = map.next_value::<Option<String>>()?;
+                        }
+                        "size" => {
+                            if seen_size {
+                                return Err(serde::de::Error::duplicate_field("size"));
+                            }
+                            seen_size = true;
+                            f_size = map.next_value::<Option<String>>()?;
+                        }
+                        _ => {
+                            residual.insert(k, map.next_value()?);
+                        }
+                    }
+                }
+                Ok(FielddataRecord {
+                    field: f_field,
+                    host: f_host,
+                    id: f_id,
+                    ip: f_ip,
+                    node: f_node,
+                    size: f_size,
+                    unknown_fields: residual,
+                })
+            }
+        }
+        deserializer.deserialize_map(ResidualVisitor)
+    }
+}
+impl serde::Serialize for FielddataRecord {
+    fn serialize<S>(&self, serializer: S) -> std::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeMap;
+        let mut map = serializer.serialize_map(None)?;
+        if let Some(v) = &self.field {
+            map.serialize_entry("field", v)?;
+        }
+        if let Some(v) = &self.host {
+            map.serialize_entry("host", v)?;
+        }
+        if let Some(v) = &self.id {
+            map.serialize_entry("id", v)?;
+        }
+        if let Some(v) = &self.ip {
+            map.serialize_entry("ip", v)?;
+        }
+        if let Some(v) = &self.node {
+            map.serialize_entry("node", v)?;
+        }
+        if let Some(v) = &self.size {
+            map.serialize_entry("size", v)?;
+        }
+        for (k, v) in &self.unknown_fields {
+            map.serialize_entry(k, v)?;
+        }
+        map.end()
+    }
 }
 
 #[doc = "The response of the `cat.fielddata` API"]

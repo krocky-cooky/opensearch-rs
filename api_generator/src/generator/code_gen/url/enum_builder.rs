@@ -284,6 +284,7 @@ mod tests {
             ApiEndpoint {
                 full_name: Some("search".to_string()),
                 typed_response: None,
+                typed_model_statuses: Vec::new(),
                 documentation: Documentation {
                     description: None,
                     url: None,

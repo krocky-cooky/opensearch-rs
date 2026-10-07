@@ -202,6 +202,21 @@ where
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::cluster_allocation_explain::AllocationExplainResponse`](crate::types::cluster_allocation_explain::AllocationExplainResponse), the typed response of the Cluster Allocation Explain API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::cluster_allocation_explain::AllocationExplainResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::cluster_allocation_explain::AllocationExplainResponse",
+                &[],
+            )
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Cluster Delete Component Template API"]
@@ -346,6 +361,24 @@ impl<'a, 'b> ClusterDeleteComponentTemplate<'a, 'b> {
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::cluster_delete_component_template::DeleteComponentTemplateResponse`](crate::types::cluster_delete_component_template::DeleteComponentTemplateResponse), the typed response of the Cluster Delete Component Template API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<
+        crate::types::cluster_delete_component_template::DeleteComponentTemplateResponse,
+        Error,
+    > {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::cluster_delete_component_template::DeleteComponentTemplateResponse",
+                &[],
+            )
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Cluster Delete Decommission Awareness API"]
@@ -459,6 +492,24 @@ impl<'a, 'b> ClusterDeleteDecommissionAwareness<'a, 'b> {
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::cluster_delete_decommission_awareness::DeleteDecommissionAwarenessResponse`](crate::types::cluster_delete_decommission_awareness::DeleteDecommissionAwarenessResponse), the typed response of the Cluster Delete Decommission Awareness API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<
+        crate::types::cluster_delete_decommission_awareness::DeleteDecommissionAwarenessResponse,
+        Error,
+    > {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::cluster_delete_decommission_awareness::DeleteDecommissionAwarenessResponse",
+                &[],
+            )
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -717,6 +768,22 @@ where
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::cluster_delete_weighted_routing::DeleteWeightedRoutingResponse`](crate::types::cluster_delete_weighted_routing::DeleteWeightedRoutingResponse), the typed response of the Cluster Delete Weighted Routing API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::cluster_delete_weighted_routing::DeleteWeightedRoutingResponse, Error>
+    {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::cluster_delete_weighted_routing::DeleteWeightedRoutingResponse",
+                &[],
+            )
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -1020,6 +1087,22 @@ impl<'a, 'b> ClusterGetComponentTemplate<'a, 'b> {
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::cluster_get_component_template::GetComponentTemplateResponse`](crate::types::cluster_get_component_template::GetComponentTemplateResponse), the typed response of the Cluster Get Component Template API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::cluster_get_component_template::GetComponentTemplateResponse, Error>
+    {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::cluster_get_component_template::GetComponentTemplateResponse",
+                &[],
+            )
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Cluster Get Decommission Awareness API"]
@@ -1141,6 +1224,24 @@ impl<'a, 'b> ClusterGetDecommissionAwareness<'a, 'b> {
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::cluster_get_decommission_awareness::GetDecommissionAwarenessResponse`](crate::types::cluster_get_decommission_awareness::GetDecommissionAwarenessResponse), the typed response of the Cluster Get Decommission Awareness API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<
+        crate::types::cluster_get_decommission_awareness::GetDecommissionAwarenessResponse,
+        Error,
+    > {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::cluster_get_decommission_awareness::GetDecommissionAwarenessResponse",
+                &[],
+            )
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -1298,6 +1399,18 @@ impl<'a, 'b> ClusterGetSettings<'a, 'b> {
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::cluster_get_settings::GetSettingsResponse`](crate::types::cluster_get_settings::GetSettingsResponse), the typed response of the Cluster Get Settings API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::cluster_get_settings::GetSettingsResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::cluster_get_settings::GetSettingsResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Cluster Get Weighted Routing API"]
@@ -1417,6 +1530,21 @@ impl<'a, 'b> ClusterGetWeightedRouting<'a, 'b> {
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::cluster_get_weighted_routing::GetWeightedRoutingResponse`](crate::types::cluster_get_weighted_routing::GetWeightedRoutingResponse), the typed response of the Cluster Get Weighted Routing API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::cluster_get_weighted_routing::GetWeightedRoutingResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::cluster_get_weighted_routing::GetWeightedRoutingResponse",
+                &[],
+            )
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -1658,6 +1786,16 @@ impl<'a, 'b> ClusterHealth<'a, 'b> {
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::cluster_health::HealthResponse`](crate::types::cluster_health::HealthResponse), the typed response of the Cluster Health API.\n\nThe body is decoded for a success status, and for `408`, for which the API answers with the same body (e.g. a document that is not found). Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(self) -> Result<crate::types::cluster_health::HealthResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::cluster_health::HealthResponse", &[408u16])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Cluster Pending Tasks API"]
@@ -1796,6 +1934,18 @@ impl<'a, 'b> ClusterPendingTasks<'a, 'b> {
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::cluster_pending_tasks::PendingTasksResponse`](crate::types::cluster_pending_tasks::PendingTasksResponse), the typed response of the Cluster Pending Tasks API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::cluster_pending_tasks::PendingTasksResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::cluster_pending_tasks::PendingTasksResponse", &[])
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -2146,6 +2296,22 @@ where
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::cluster_put_component_template::PutComponentTemplateResponse`](crate::types::cluster_put_component_template::PutComponentTemplateResponse), the typed response of the Cluster Put Component Template API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::cluster_put_component_template::PutComponentTemplateResponse, Error>
+    {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::cluster_put_component_template::PutComponentTemplateResponse",
+                &[],
+            )
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Cluster Put Decommission Awareness API"]
@@ -2298,6 +2464,24 @@ where
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::cluster_put_decommission_awareness::PutDecommissionAwarenessResponse`](crate::types::cluster_put_decommission_awareness::PutDecommissionAwarenessResponse), the typed response of the Cluster Put Decommission Awareness API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<
+        crate::types::cluster_put_decommission_awareness::PutDecommissionAwarenessResponse,
+        Error,
+    > {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::cluster_put_decommission_awareness::PutDecommissionAwarenessResponse",
+                &[],
+            )
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -2473,6 +2657,18 @@ where
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::cluster_put_settings::PutSettingsResponse`](crate::types::cluster_put_settings::PutSettingsResponse), the typed response of the Cluster Put Settings API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::cluster_put_settings::PutSettingsResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::cluster_put_settings::PutSettingsResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Cluster Put Weighted Routing API"]
@@ -2616,6 +2812,21 @@ where
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::cluster_put_weighted_routing::PutWeightedRoutingResponse`](crate::types::cluster_put_weighted_routing::PutWeightedRoutingResponse), the typed response of the Cluster Put Weighted Routing API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::cluster_put_weighted_routing::PutWeightedRoutingResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::cluster_put_weighted_routing::PutWeightedRoutingResponse",
+                &[],
+            )
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Cluster Remote Info API"]
@@ -2727,6 +2938,18 @@ impl<'a, 'b> ClusterRemoteInfo<'a, 'b> {
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::cluster_remote_info::RemoteInfoResponse`](crate::types::cluster_remote_info::RemoteInfoResponse), the typed response of the Cluster Remote Info API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::cluster_remote_info::RemoteInfoResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::cluster_remote_info::RemoteInfoResponse", &[])
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -2931,6 +3154,16 @@ where
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::cluster_reroute::RerouteResponse`](crate::types::cluster_reroute::RerouteResponse), the typed response of the Cluster Reroute API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(self) -> Result<crate::types::cluster_reroute::RerouteResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::cluster_reroute::RerouteResponse", &[])
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -3153,6 +3386,16 @@ impl<'a, 'b> ClusterState<'a, 'b> {
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::cluster_state::StateResponse`](crate::types::cluster_state::StateResponse), the typed response of the Cluster State API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(self) -> Result<crate::types::cluster_state::StateResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::cluster_state::StateResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Cluster Stats API"]
@@ -3336,6 +3579,16 @@ impl<'a, 'b> ClusterStats<'a, 'b> {
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::cluster_stats::StatsResponse`](crate::types::cluster_stats::StatsResponse), the typed response of the Cluster Stats API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(self) -> Result<crate::types::cluster_stats::StatsResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::cluster_stats::StatsResponse", &[])
+            .await
     }
 }
 #[doc = "Namespace client for Cluster APIs"]

@@ -182,6 +182,21 @@ where
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_add_agentic_memory::AddAgenticMemoryResponse`](crate::types::ml_add_agentic_memory::AddAgenticMemoryResponse), the typed response of the Ml Add Agentic Memory API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_add_agentic_memory::AddAgenticMemoryResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::ml_add_agentic_memory::AddAgenticMemoryResponse",
+                &[],
+            )
+            .await
+    }
 }
 #[deprecated = "Deprecated since OpenSearch 2.7: Use `upload_chunk` instead."]
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -336,6 +351,18 @@ where
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_chunk_model::ChunkModelResponse`](crate::types::ml_chunk_model::ChunkModelResponse), the typed response of the Ml Chunk Model API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_chunk_model::ChunkModelResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_chunk_model::ChunkModelResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Ml Create Connector API"]
@@ -470,6 +497,18 @@ where
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_create_connector::CreateConnectorResponse`](crate::types::ml_create_connector::CreateConnectorResponse), the typed response of the Ml Create Connector API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_create_connector::CreateConnectorResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_create_connector::CreateConnectorResponse", &[])
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -613,6 +652,18 @@ where
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_create_controller::CreateControllerResponse`](crate::types::ml_create_controller::CreateControllerResponse), the typed response of the Ml Create Controller API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_create_controller::CreateControllerResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_create_controller::CreateControllerResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Ml Create Memory API"]
@@ -748,6 +799,18 @@ where
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_create_memory::CreateMemoryResponse`](crate::types::ml_create_memory::CreateMemoryResponse), the typed response of the Ml Create Memory API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_create_memory::CreateMemoryResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_create_memory::CreateMemoryResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Ml Create Memory Container API"]
@@ -882,6 +945,22 @@ where
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_create_memory_container::CreateMemoryContainerResponse`](crate::types::ml_create_memory_container::CreateMemoryContainerResponse), the typed response of the Ml Create Memory Container API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_create_memory_container::CreateMemoryContainerResponse, Error>
+    {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::ml_create_memory_container::CreateMemoryContainerResponse",
+                &[],
+            )
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -1026,6 +1105,24 @@ where
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_create_memory_container_session::CreateMemoryContainerSessionResponse`](crate::types::ml_create_memory_container_session::CreateMemoryContainerSessionResponse), the typed response of the Ml Create Memory Container Session API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<
+        crate::types::ml_create_memory_container_session::CreateMemoryContainerSessionResponse,
+        Error,
+    > {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::ml_create_memory_container_session::CreateMemoryContainerSessionResponse",
+                &[],
+            )
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Ml Create Message API"]
@@ -1169,6 +1266,18 @@ where
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_create_message::CreateMessageResponse`](crate::types::ml_create_message::CreateMessageResponse), the typed response of the Ml Create Message API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_create_message::CreateMessageResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_create_message::CreateMessageResponse", &[])
+            .await
+    }
 }
 #[deprecated = "Deprecated since OpenSearch 2.7: Use `_register_meta` instead."]
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -1309,6 +1418,18 @@ where
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_create_model_meta::CreateModelMetaResponse`](crate::types::ml_create_model_meta::CreateModelMetaResponse), the typed response of the Ml Create Model Meta API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_create_model_meta::CreateModelMetaResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_create_model_meta::CreateModelMetaResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Ml Delete Agent API"]
@@ -1427,6 +1548,18 @@ impl<'a, 'b> MlDeleteAgent<'a, 'b> {
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_delete_agent::DeleteAgentResponse`](crate::types::ml_delete_agent::DeleteAgentResponse), the typed response of the Ml Delete Agent API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_delete_agent::DeleteAgentResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_delete_agent::DeleteAgentResponse", &[])
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -1557,6 +1690,21 @@ impl<'a, 'b> MlDeleteAgenticMemory<'a, 'b> {
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_delete_agentic_memory::DeleteAgenticMemoryResponse`](crate::types::ml_delete_agentic_memory::DeleteAgenticMemoryResponse), the typed response of the Ml Delete Agentic Memory API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_delete_agentic_memory::DeleteAgenticMemoryResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::ml_delete_agentic_memory::DeleteAgenticMemoryResponse",
+                &[],
+            )
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -1706,6 +1854,22 @@ where
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_delete_agentic_memory_query::DeleteAgenticMemoryQueryResponse`](crate::types::ml_delete_agentic_memory_query::DeleteAgenticMemoryQueryResponse), the typed response of the Ml Delete Agentic Memory Query API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_delete_agentic_memory_query::DeleteAgenticMemoryQueryResponse, Error>
+    {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::ml_delete_agentic_memory_query::DeleteAgenticMemoryQueryResponse",
+                &[],
+            )
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Ml Delete Connector API"]
@@ -1824,6 +1988,18 @@ impl<'a, 'b> MlDeleteConnector<'a, 'b> {
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_delete_connector::DeleteConnectorResponse`](crate::types::ml_delete_connector::DeleteConnectorResponse), the typed response of the Ml Delete Connector API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_delete_connector::DeleteConnectorResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_delete_connector::DeleteConnectorResponse", &[])
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -1944,6 +2120,18 @@ impl<'a, 'b> MlDeleteController<'a, 'b> {
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_delete_controller::DeleteControllerResponse`](crate::types::ml_delete_controller::DeleteControllerResponse), the typed response of the Ml Delete Controller API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_delete_controller::DeleteControllerResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_delete_controller::DeleteControllerResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Ml Delete Memory API"]
@@ -2062,6 +2250,18 @@ impl<'a, 'b> MlDeleteMemory<'a, 'b> {
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_delete_memory::DeleteMemoryResponse`](crate::types::ml_delete_memory::DeleteMemoryResponse), the typed response of the Ml Delete Memory API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_delete_memory::DeleteMemoryResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_delete_memory::DeleteMemoryResponse", &[])
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -2199,6 +2399,22 @@ impl<'a, 'b> MlDeleteMemoryContainer<'a, 'b> {
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_delete_memory_container::DeleteMemoryContainerResponse`](crate::types::ml_delete_memory_container::DeleteMemoryContainerResponse), the typed response of the Ml Delete Memory Container API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_delete_memory_container::DeleteMemoryContainerResponse, Error>
+    {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::ml_delete_memory_container::DeleteMemoryContainerResponse",
+                &[],
+            )
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Ml Delete Model API"]
@@ -2317,6 +2533,18 @@ impl<'a, 'b> MlDeleteModel<'a, 'b> {
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_delete_model::DeleteModelResponse`](crate::types::ml_delete_model::DeleteModelResponse), the typed response of the Ml Delete Model API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_delete_model::DeleteModelResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_delete_model::DeleteModelResponse", &[])
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -2437,6 +2665,21 @@ impl<'a, 'b> MlDeleteModelGroup<'a, 'b> {
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_delete_model_group::DeleteModelGroupResponse`](crate::types::ml_delete_model_group::DeleteModelGroupResponse), the typed response of the Ml Delete Model Group API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_delete_model_group::DeleteModelGroupResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::ml_delete_model_group::DeleteModelGroupResponse",
+                &[],
+            )
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Ml Delete Task API"]
@@ -2555,6 +2798,18 @@ impl<'a, 'b> MlDeleteTask<'a, 'b> {
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_delete_task::DeleteTaskResponse`](crate::types::ml_delete_task::DeleteTaskResponse), the typed response of the Ml Delete Task API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_delete_task::DeleteTaskResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_delete_task::DeleteTaskResponse", &[])
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -2699,6 +2954,18 @@ where
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_deploy_model::DeployModelResponse`](crate::types::ml_deploy_model::DeployModelResponse), the typed response of the Ml Deploy Model API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_deploy_model::DeployModelResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_deploy_model::DeployModelResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Ml Execute Agent API"]
@@ -2841,6 +3108,18 @@ where
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_execute_agent::ExecuteAgentResponse`](crate::types::ml_execute_agent::ExecuteAgentResponse), the typed response of the Ml Execute Agent API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_execute_agent::ExecuteAgentResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_execute_agent::ExecuteAgentResponse", &[])
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -3127,6 +3406,18 @@ where
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_execute_algorithm::ExecuteAlgorithmResponse`](crate::types::ml_execute_algorithm::ExecuteAlgorithmResponse), the typed response of the Ml Execute Algorithm API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_execute_algorithm::ExecuteAlgorithmResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_execute_algorithm::ExecuteAlgorithmResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Ml Execute Tool API"]
@@ -3269,6 +3560,18 @@ where
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_execute_tool::ExecuteToolResponse`](crate::types::ml_execute_tool::ExecuteToolResponse), the typed response of the Ml Execute Tool API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_execute_tool::ExecuteToolResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_execute_tool::ExecuteToolResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Ml Get Agent API"]
@@ -3387,6 +3690,16 @@ impl<'a, 'b> MlGetAgent<'a, 'b> {
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_get_agent::GetAgentResponse`](crate::types::ml_get_agent::GetAgentResponse), the typed response of the Ml Get Agent API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(self) -> Result<crate::types::ml_get_agent::GetAgentResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_get_agent::GetAgentResponse", &[])
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -3518,6 +3831,21 @@ impl<'a, 'b> MlGetAgenticMemory<'a, 'b> {
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_get_agentic_memory::GetAgenticMemoryResponse`](crate::types::ml_get_agentic_memory::GetAgenticMemoryResponse), the typed response of the Ml Get Agentic Memory API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_get_agentic_memory::GetAgenticMemoryResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::ml_get_agentic_memory::GetAgenticMemoryResponse",
+                &[],
+            )
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Ml Get All Memories API"]
@@ -3645,6 +3973,18 @@ impl<'a, 'b> MlGetAllMemories<'a, 'b> {
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_get_all_memories::GetAllMemoriesResponse`](crate::types::ml_get_all_memories::GetAllMemoriesResponse), the typed response of the Ml Get All Memories API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_get_all_memories::GetAllMemoriesResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_get_all_memories::GetAllMemoriesResponse", &[])
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -3782,6 +4122,18 @@ impl<'a, 'b> MlGetAllMessages<'a, 'b> {
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_get_all_messages::GetAllMessagesResponse`](crate::types::ml_get_all_messages::GetAllMessagesResponse), the typed response of the Ml Get All Messages API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_get_all_messages::GetAllMessagesResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_get_all_messages::GetAllMessagesResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Ml Get All Tools API"]
@@ -3893,6 +4245,18 @@ impl<'a, 'b> MlGetAllTools<'a, 'b> {
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_get_all_tools::GetAllToolsResponse`](crate::types::ml_get_all_tools::GetAllToolsResponse), the typed response of the Ml Get All Tools API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_get_all_tools::GetAllToolsResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_get_all_tools::GetAllToolsResponse", &[])
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -4013,6 +4377,18 @@ impl<'a, 'b> MlGetConnector<'a, 'b> {
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_get_connector::GetConnectorResponse`](crate::types::ml_get_connector::GetConnectorResponse), the typed response of the Ml Get Connector API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_get_connector::GetConnectorResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_get_connector::GetConnectorResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Ml Get Controller API"]
@@ -4131,6 +4507,18 @@ impl<'a, 'b> MlGetController<'a, 'b> {
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_get_controller::GetControllerResponse`](crate::types::ml_get_controller::GetControllerResponse), the typed response of the Ml Get Controller API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_get_controller::GetControllerResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_get_controller::GetControllerResponse", &[])
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -4251,6 +4639,16 @@ impl<'a, 'b> MlGetMemory<'a, 'b> {
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_get_memory::GetMemoryResponse`](crate::types::ml_get_memory::GetMemoryResponse), the typed response of the Ml Get Memory API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(self) -> Result<crate::types::ml_get_memory::GetMemoryResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_get_memory::GetMemoryResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Ml Get Memory Container API"]
@@ -4370,6 +4768,21 @@ impl<'a, 'b> MlGetMemoryContainer<'a, 'b> {
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_get_memory_container::GetMemoryContainerResponse`](crate::types::ml_get_memory_container::GetMemoryContainerResponse), the typed response of the Ml Get Memory Container API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_get_memory_container::GetMemoryContainerResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::ml_get_memory_container::GetMemoryContainerResponse",
+                &[],
+            )
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Ml Get Message API"]
@@ -4488,6 +4901,18 @@ impl<'a, 'b> MlGetMessage<'a, 'b> {
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_get_message::GetMessageResponse`](crate::types::ml_get_message::GetMessageResponse), the typed response of the Ml Get Message API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_get_message::GetMessageResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_get_message::GetMessageResponse", &[])
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -4625,6 +5050,21 @@ impl<'a, 'b> MlGetMessageTraces<'a, 'b> {
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_get_message_traces::GetMessageTracesResponse`](crate::types::ml_get_message_traces::GetMessageTracesResponse), the typed response of the Ml Get Message Traces API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_get_message_traces::GetMessageTracesResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::ml_get_message_traces::GetMessageTracesResponse",
+                &[],
+            )
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Ml Get Model API"]
@@ -4744,6 +5184,16 @@ impl<'a, 'b> MlGetModel<'a, 'b> {
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_get_model::GetModelResponse`](crate::types::ml_get_model::GetModelResponse), the typed response of the Ml Get Model API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(self) -> Result<crate::types::ml_get_model::GetModelResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_get_model::GetModelResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Ml Get Model Group API"]
@@ -4862,6 +5312,18 @@ impl<'a, 'b> MlGetModelGroup<'a, 'b> {
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_get_model_group::GetModelGroupResponse`](crate::types::ml_get_model_group::GetModelGroupResponse), the typed response of the Ml Get Model Group API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_get_model_group::GetModelGroupResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_get_model_group::GetModelGroupResponse", &[])
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -4997,6 +5459,18 @@ where
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_get_profile::GetProfileResponse`](crate::types::ml_get_profile::GetProfileResponse), the typed response of the Ml Get Profile API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_get_profile::GetProfileResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_get_profile::GetProfileResponse", &[])
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -5143,6 +5617,21 @@ where
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_get_profile_models::GetProfileModelsResponse`](crate::types::ml_get_profile_models::GetProfileModelsResponse), the typed response of the Ml Get Profile Models API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_get_profile_models::GetProfileModelsResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::ml_get_profile_models::GetProfileModelsResponse",
+                &[],
+            )
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Ml Get Profile Tasks API"]
@@ -5287,6 +5776,18 @@ where
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_get_profile_tasks::GetProfileTasksResponse`](crate::types::ml_get_profile_tasks::GetProfileTasksResponse), the typed response of the Ml Get Profile Tasks API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_get_profile_tasks::GetProfileTasksResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_get_profile_tasks::GetProfileTasksResponse", &[])
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -5434,6 +5935,16 @@ impl<'a, 'b> MlGetStats<'a, 'b> {
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_get_stats::GetStatsResponse`](crate::types::ml_get_stats::GetStatsResponse), the typed response of the Ml Get Stats API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(self) -> Result<crate::types::ml_get_stats::GetStatsResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_get_stats::GetStatsResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Ml Get Task API"]
@@ -5553,6 +6064,16 @@ impl<'a, 'b> MlGetTask<'a, 'b> {
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_get_task::GetTaskResponse`](crate::types::ml_get_task::GetTaskResponse), the typed response of the Ml Get Task API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(self) -> Result<crate::types::ml_get_task::GetTaskResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_get_task::GetTaskResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Ml Get Tool API"]
@@ -5671,6 +6192,16 @@ impl<'a, 'b> MlGetTool<'a, 'b> {
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_get_tool::GetToolResponse`](crate::types::ml_get_tool::GetToolResponse), the typed response of the Ml Get Tool API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(self) -> Result<crate::types::ml_get_tool::GetToolResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_get_tool::GetToolResponse", &[])
+            .await
     }
 }
 #[deprecated = "Deprecated since OpenSearch 2.7: Use `deploy_model` instead."]
@@ -5820,6 +6351,16 @@ where
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_load_model::LoadModelResponse`](crate::types::ml_load_model::LoadModelResponse), the typed response of the Ml Load Model API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(self) -> Result<crate::types::ml_load_model::LoadModelResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_load_model::LoadModelResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Ml Predict API"]
@@ -5968,6 +6509,16 @@ where
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_predict::PredictResponse`](crate::types::ml_predict::PredictResponse), the typed response of the Ml Predict API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(self) -> Result<crate::types::ml_predict::PredictResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_predict::PredictResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Ml Predict Model API"]
@@ -6110,6 +6661,18 @@ where
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_predict_model::PredictModelResponse`](crate::types::ml_predict_model::PredictModelResponse), the typed response of the Ml Predict Model API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_predict_model::PredictModelResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_predict_model::PredictModelResponse", &[])
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -6389,6 +6952,18 @@ where
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_register_agents::RegisterAgentsResponse`](crate::types::ml_register_agents::RegisterAgentsResponse), the typed response of the Ml Register Agents API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_register_agents::RegisterAgentsResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_register_agents::RegisterAgentsResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Ml Register Model API"]
@@ -6523,6 +7098,18 @@ where
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_register_model::RegisterModelResponse`](crate::types::ml_register_model::RegisterModelResponse), the typed response of the Ml Register Model API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_register_model::RegisterModelResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_register_model::RegisterModelResponse", &[])
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -6659,6 +7246,21 @@ where
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_register_model_group::RegisterModelGroupResponse`](crate::types::ml_register_model_group::RegisterModelGroupResponse), the typed response of the Ml Register Model Group API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_register_model_group::RegisterModelGroupResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::ml_register_model_group::RegisterModelGroupResponse",
+                &[],
+            )
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Ml Register Model Meta API"]
@@ -6793,6 +7395,21 @@ where
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_register_model_meta::RegisterModelMetaResponse`](crate::types::ml_register_model_meta::RegisterModelMetaResponse), the typed response of the Ml Register Model Meta API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_register_model_meta::RegisterModelMetaResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::ml_register_model_meta::RegisterModelMetaResponse",
+                &[],
+            )
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -6942,6 +7559,21 @@ where
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_search_agentic_memory::SearchAgenticMemoryResponse`](crate::types::ml_search_agentic_memory::SearchAgenticMemoryResponse), the typed response of the Ml Search Agentic Memory API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_search_agentic_memory::SearchAgenticMemoryResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::ml_search_agentic_memory::SearchAgenticMemoryResponse",
+                &[],
+            )
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Ml Search Agents API"]
@@ -7079,6 +7711,18 @@ where
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_search_agents::SearchAgentsResponse`](crate::types::ml_search_agents::SearchAgentsResponse), the typed response of the Ml Search Agents API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_search_agents::SearchAgentsResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_search_agents::SearchAgentsResponse", &[])
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -7218,6 +7862,18 @@ where
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_search_connectors::SearchConnectorsResponse`](crate::types::ml_search_connectors::SearchConnectorsResponse), the typed response of the Ml Search Connectors API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_search_connectors::SearchConnectorsResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_search_connectors::SearchConnectorsResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Ml Search Memory API"]
@@ -7356,6 +8012,18 @@ where
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_search_memory::SearchMemoryResponse`](crate::types::ml_search_memory::SearchMemoryResponse), the typed response of the Ml Search Memory API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_search_memory::SearchMemoryResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_search_memory::SearchMemoryResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Ml Search Memory Container API"]
@@ -7493,6 +8161,22 @@ where
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_search_memory_container::SearchMemoryContainerResponse`](crate::types::ml_search_memory_container::SearchMemoryContainerResponse), the typed response of the Ml Search Memory Container API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_search_memory_container::SearchMemoryContainerResponse, Error>
+    {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::ml_search_memory_container::SearchMemoryContainerResponse",
+                &[],
+            )
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -7640,6 +8324,18 @@ where
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_search_message::SearchMessageResponse`](crate::types::ml_search_message::SearchMessageResponse), the typed response of the Ml Search Message API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_search_message::SearchMessageResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_search_message::SearchMessageResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Ml Search Model Group API"]
@@ -7777,6 +8473,21 @@ where
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_search_model_group::SearchModelGroupResponse`](crate::types::ml_search_model_group::SearchModelGroupResponse), the typed response of the Ml Search Model Group API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_search_model_group::SearchModelGroupResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::ml_search_model_group::SearchModelGroupResponse",
+                &[],
+            )
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -7916,6 +8627,18 @@ where
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_search_models::SearchModelsResponse`](crate::types::ml_search_models::SearchModelsResponse), the typed response of the Ml Search Models API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_search_models::SearchModelsResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_search_models::SearchModelsResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Ml Search Tasks API"]
@@ -8053,6 +8776,18 @@ where
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_search_tasks::SearchTasksResponse`](crate::types::ml_search_tasks::SearchTasksResponse), the typed response of the Ml Search Tasks API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_search_tasks::SearchTasksResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_search_tasks::SearchTasksResponse", &[])
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -8196,6 +8931,16 @@ where
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_train::TrainResponse`](crate::types::ml_train::TrainResponse), the typed response of the Ml Train API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(self) -> Result<crate::types::ml_train::TrainResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_train::TrainResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Ml Train Predict API"]
@@ -8337,6 +9082,18 @@ where
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_train_predict::TrainPredictResponse`](crate::types::ml_train_predict::TrainPredictResponse), the typed response of the Ml Train Predict API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_train_predict::TrainPredictResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_train_predict::TrainPredictResponse", &[])
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -8483,6 +9240,18 @@ where
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_undeploy_model::UndeployModelResponse`](crate::types::ml_undeploy_model::UndeployModelResponse), the typed response of the Ml Undeploy Model API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_undeploy_model::UndeployModelResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_undeploy_model::UndeployModelResponse", &[])
+            .await
     }
 }
 #[deprecated = "Deprecated since OpenSearch 2.7: Use `undeploy_model` instead."]
@@ -8634,6 +9403,18 @@ where
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_unload_model::UnloadModelResponse`](crate::types::ml_unload_model::UnloadModelResponse), the typed response of the Ml Unload Model API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_unload_model::UnloadModelResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_unload_model::UnloadModelResponse", &[])
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -8788,6 +9569,21 @@ where
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_update_agentic_memory::UpdateAgenticMemoryResponse`](crate::types::ml_update_agentic_memory::UpdateAgenticMemoryResponse), the typed response of the Ml Update Agentic Memory API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_update_agentic_memory::UpdateAgenticMemoryResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::ml_update_agentic_memory::UpdateAgenticMemoryResponse",
+                &[],
+            )
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Ml Update Connector API"]
@@ -8929,6 +9725,18 @@ where
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_update_connector::UpdateConnectorResponse`](crate::types::ml_update_connector::UpdateConnectorResponse), the typed response of the Ml Update Connector API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_update_connector::UpdateConnectorResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_update_connector::UpdateConnectorResponse", &[])
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -9072,6 +9880,18 @@ where
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_update_controller::UpdateControllerResponse`](crate::types::ml_update_controller::UpdateControllerResponse), the typed response of the Ml Update Controller API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_update_controller::UpdateControllerResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_update_controller::UpdateControllerResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Ml Update Memory API"]
@@ -9213,6 +10033,18 @@ where
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_update_memory::UpdateMemoryResponse`](crate::types::ml_update_memory::UpdateMemoryResponse), the typed response of the Ml Update Memory API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_update_memory::UpdateMemoryResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_update_memory::UpdateMemoryResponse", &[])
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -9356,6 +10188,22 @@ where
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_update_memory_container::UpdateMemoryContainerResponse`](crate::types::ml_update_memory_container::UpdateMemoryContainerResponse), the typed response of the Ml Update Memory Container API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_update_memory_container::UpdateMemoryContainerResponse, Error>
+    {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::ml_update_memory_container::UpdateMemoryContainerResponse",
+                &[],
+            )
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Ml Update Message API"]
@@ -9497,6 +10345,18 @@ where
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_update_message::UpdateMessageResponse`](crate::types::ml_update_message::UpdateMessageResponse), the typed response of the Ml Update Message API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_update_message::UpdateMessageResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_update_message::UpdateMessageResponse", &[])
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -9640,6 +10500,18 @@ where
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_update_model::UpdateModelResponse`](crate::types::ml_update_model::UpdateModelResponse), the typed response of the Ml Update Model API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_update_model::UpdateModelResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_update_model::UpdateModelResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Ml Update Model Group API"]
@@ -9781,6 +10653,21 @@ where
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_update_model_group::UpdateModelGroupResponse`](crate::types::ml_update_model_group::UpdateModelGroupResponse), the typed response of the Ml Update Model Group API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_update_model_group::UpdateModelGroupResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::ml_update_model_group::UpdateModelGroupResponse",
+                &[],
+            )
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -9931,6 +10818,18 @@ where
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_upload_chunk::UploadChunkResponse`](crate::types::ml_upload_chunk::UploadChunkResponse), the typed response of the Ml Upload Chunk API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_upload_chunk::UploadChunkResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_upload_chunk::UploadChunkResponse", &[])
+            .await
+    }
 }
 #[deprecated = "Deprecated since OpenSearch 2.7: Use `register_model` instead."]
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -10070,6 +10969,18 @@ where
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::ml_upload_model::UploadModelResponse`](crate::types::ml_upload_model::UploadModelResponse), the typed response of the Ml Upload Model API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ml_upload_model::UploadModelResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ml_upload_model::UploadModelResponse", &[])
+            .await
     }
 }
 #[doc = "Namespace client for Machine Learning APIs"]

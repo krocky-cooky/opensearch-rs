@@ -158,6 +158,18 @@ impl<'a, 'b> KnnDeleteModel<'a, 'b> {
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::knn_delete_model::DeleteModelResponse`](crate::types::knn_delete_model::DeleteModelResponse), the typed response of the Knn Delete Model API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::knn_delete_model::DeleteModelResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::knn_delete_model::DeleteModelResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Knn Get Model API"]
@@ -276,6 +288,16 @@ impl<'a, 'b> KnnGetModel<'a, 'b> {
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::knn_get_model::GetModelResponse`](crate::types::knn_get_model::GetModelResponse), the typed response of the Knn Get Model API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(self) -> Result<crate::types::knn_get_model::GetModelResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::knn_get_model::GetModelResponse", &[])
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -844,6 +866,18 @@ where
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::knn_search_models::SearchModelsResponse`](crate::types::knn_search_models::SearchModelsResponse), the typed response of the Knn Search Models API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::knn_search_models::SearchModelsResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::knn_search_models::SearchModelsResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Knn Stats API"]
@@ -1001,6 +1035,16 @@ impl<'a, 'b> KnnStats<'a, 'b> {
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::knn_stats::StatsResponse`](crate::types::knn_stats::StatsResponse), the typed response of the Knn Stats API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(self) -> Result<crate::types::knn_stats::StatsResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::knn_stats::StatsResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Knn Train Model API"]
@@ -1157,6 +1201,18 @@ where
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::knn_train_model::TrainModelResponse`](crate::types::knn_train_model::TrainModelResponse), the typed response of the Knn Train Model API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::knn_train_model::TrainModelResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::knn_train_model::TrainModelResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Knn Warmup API"]
@@ -1276,6 +1332,16 @@ impl<'a, 'b> KnnWarmup<'a, 'b> {
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::knn_warmup::WarmupResponse`](crate::types::knn_warmup::WarmupResponse), the typed response of the Knn Warmup API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(self) -> Result<crate::types::knn_warmup::WarmupResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::knn_warmup::WarmupResponse", &[])
+            .await
     }
 }
 #[doc = "Namespace client for Knn APIs"]

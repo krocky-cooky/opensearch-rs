@@ -73,6 +73,22 @@ where
     serde_json::from_str(raw.get()).map_err(|e| UnionBranchError::new(branch, e))
 }
 
+/// The JSON kind a value starting with the given byte has, in the wording
+/// of serde's "invalid type" errors. Used by generated dispatch unions,
+/// which route on the first byte of the raw JSON text.
+#[doc(hidden)]
+pub fn json_kind_name(first: Option<u8>) -> &'static str {
+    match first {
+        Some(b'{') => "map",
+        Some(b'[') => "sequence",
+        Some(b'"') => "string",
+        Some(b't') | Some(b'f') => "boolean",
+        Some(b'n') => "null",
+        Some(b'-') | Some(b'0'..=b'9') => "number",
+        _ => "empty value",
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -87,6 +103,18 @@ mod tests {
         let raw: Box<RawValue> = serde_json::from_str(r#"{"buckets": []}"#).unwrap();
         let terms: Terms = parse_branch(&raw, "terms").unwrap();
         assert!(terms.buckets.is_empty());
+    }
+
+    #[test]
+    fn json_kind_names_follow_the_first_byte() {
+        assert_eq!(json_kind_name(Some(b'{')), "map");
+        assert_eq!(json_kind_name(Some(b'[')), "sequence");
+        assert_eq!(json_kind_name(Some(b'"')), "string");
+        assert_eq!(json_kind_name(Some(b't')), "boolean");
+        assert_eq!(json_kind_name(Some(b'n')), "null");
+        assert_eq!(json_kind_name(Some(b'-')), "number");
+        assert_eq!(json_kind_name(Some(b'7')), "number");
+        assert_eq!(json_kind_name(None), "empty value");
     }
 
     #[test]

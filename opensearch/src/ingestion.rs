@@ -186,6 +186,18 @@ impl<'a, 'b> IngestionGetState<'a, 'b> {
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::ingestion_get_state::GetStateResponse`](crate::types::ingestion_get_state::GetStateResponse), the typed response of the Ingestion Get State API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::ingestion_get_state::GetStateResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ingestion_get_state::GetStateResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Ingestion Pause API"]
@@ -349,6 +361,16 @@ where
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::ingestion_pause::PauseResponse`](crate::types::ingestion_pause::PauseResponse), the typed response of the Ingestion Pause API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(self) -> Result<crate::types::ingestion_pause::PauseResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ingestion_pause::PauseResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Ingestion Resume API"]
@@ -511,6 +533,16 @@ where
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::ingestion_resume::ResumeResponse`](crate::types::ingestion_resume::ResumeResponse), the typed response of the Ingestion Resume API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(self) -> Result<crate::types::ingestion_resume::ResumeResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::ingestion_resume::ResumeResponse", &[])
+            .await
     }
 }
 #[doc = "Namespace client for Ingestion APIs"]

@@ -230,6 +230,16 @@ impl<'a, 'b> NeuralStats<'a, 'b> {
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::neural_stats::StatsResponse`](crate::types::neural_stats::StatsResponse), the typed response of the Neural Stats API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(self) -> Result<crate::types::neural_stats::StatsResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::neural_stats::StatsResponse", &[])
+            .await
+    }
 }
 #[doc = "Namespace client for Neural APIs"]
 pub struct Neural<'a> {

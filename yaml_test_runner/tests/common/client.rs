@@ -409,10 +409,29 @@ mod typed_response_tests {
 /// general setup step for an OSS yaml test
 pub async fn general_cluster_setup() -> Result<(), Error> {
     let client = get();
+    reset_cluster_settings(client).await?;
     delete_indices(client).await?;
     delete_snapshots(client).await?;
     delete_templates(client).await?;
 
+    Ok(())
+}
+
+/// Clears the persistent and transient cluster settings a previous test may
+/// have left behind: a test disabling shard allocation would otherwise make
+/// every later test fail with unassigned shards
+async fn reset_cluster_settings(client: &OpenSearch) -> Result<(), Error> {
+    let response = client
+        .cluster()
+        .put_settings()
+        .body(serde_json::json!({
+            "persistent": { "*": null },
+            "transient": { "*": null }
+        }))
+        .send()
+        .await?;
+
+    assert_response_success!(response);
     Ok(())
 }
 

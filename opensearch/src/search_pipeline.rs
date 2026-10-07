@@ -175,6 +175,18 @@ impl<'a, 'b> SearchPipelineDelete<'a, 'b> {
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::search_pipeline_delete::DeleteResponse`](crate::types::search_pipeline_delete::DeleteResponse), the typed response of the Search Pipeline Delete API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::search_pipeline_delete::DeleteResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::search_pipeline_delete::DeleteResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Search Pipeline Get API"]
@@ -304,6 +316,16 @@ impl<'a, 'b> SearchPipelineGet<'a, 'b> {
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::search_pipeline_get::GetResponse`](crate::types::search_pipeline_get::GetResponse), the typed response of the Search Pipeline Get API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(self) -> Result<crate::types::search_pipeline_get::GetResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::search_pipeline_get::GetResponse", &[])
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -465,6 +487,16 @@ where
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::search_pipeline_put::PutResponse`](crate::types::search_pipeline_put::PutResponse), the typed response of the Search Pipeline Put API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(self) -> Result<crate::types::search_pipeline_put::PutResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::search_pipeline_put::PutResponse", &[])
+            .await
     }
 }
 #[doc = "Namespace client for SearchPipeline APIs"]

@@ -277,6 +277,21 @@ impl<'a, 'b> QueryDatasourceRetrieve<'a, 'b> {
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::query_datasource_retrieve::DatasourceRetrieveResponse`](crate::types::query_datasource_retrieve::DatasourceRetrieveResponse), the typed response of the Query Datasource Retrieve API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::query_datasource_retrieve::DatasourceRetrieveResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::query_datasource_retrieve::DatasourceRetrieveResponse",
+                &[],
+            )
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Query Datasources Create API"]
@@ -412,6 +427,21 @@ where
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::query_datasources_create::DatasourcesCreateResponse`](crate::types::query_datasources_create::DatasourcesCreateResponse), the typed response of the Query Datasources Create API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::query_datasources_create::DatasourcesCreateResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::query_datasources_create::DatasourcesCreateResponse",
+                &[],
+            )
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Query Datasources List API"]
@@ -523,6 +553,21 @@ impl<'a, 'b> QueryDatasourcesList<'a, 'b> {
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::query_datasources_list::DatasourcesListResponse`](crate::types::query_datasources_list::DatasourcesListResponse), the typed response of the Query Datasources List API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::query_datasources_list::DatasourcesListResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::query_datasources_list::DatasourcesListResponse",
+                &[],
+            )
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -658,6 +703,21 @@ where
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::query_datasources_update::DatasourcesUpdateResponse`](crate::types::query_datasources_update::DatasourcesUpdateResponse), the typed response of the Query Datasources Update API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::query_datasources_update::DatasourcesUpdateResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::query_datasources_update::DatasourcesUpdateResponse",
+                &[],
+            )
+            .await
     }
 }
 #[doc = "Namespace client for Query APIs"]

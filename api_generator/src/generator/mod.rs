@@ -453,6 +453,10 @@ pub struct ApiEndpoint {
     /// the legacy REST specs and for endpoints without a JSON success body.
     #[serde(skip)]
     pub typed_response: Option<String>,
+    /// The non-2xx status codes whose body is the typed response model
+    /// (e.g. `404` of `get`); see `ResponseIr::model_statuses`
+    #[serde(skip)]
+    pub typed_model_statuses: Vec<u16>,
 }
 
 impl ApiEndpoint {

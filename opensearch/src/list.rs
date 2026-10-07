@@ -431,6 +431,25 @@ impl<'a, 'b> ListIndices<'a, 'b> {
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::list_indices::IndicesResponse`](crate::types::list_indices::IndicesResponse), the typed response of the List Indices API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model. The response is requested as JSON (`format=json`) unless another `format` is set, which is refused."]
+    pub async fn send_typed(
+        mut self,
+    ) -> Result<crate::types::list_indices::IndicesResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        match self.format {
+            None => self.format = Some("json"),
+            Some(format) if format.eq_ignore_ascii_case("json") => {}
+            Some(_) => {
+                return Err (Error :: typed_response_unavailable ("only `format=json` matches the typed response model; use `send()` for other formats")) ;
+            }
+        }
+        self.send()
+            .await?
+            .typed("types::list_indices::IndicesResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the List Shards API"]
@@ -673,6 +692,23 @@ impl<'a, 'b> ListShards<'a, 'b> {
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::list_shards::ShardsResponse`](crate::types::list_shards::ShardsResponse), the typed response of the List Shards API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model. The response is requested as JSON (`format=json`) unless another `format` is set, which is refused."]
+    pub async fn send_typed(mut self) -> Result<crate::types::list_shards::ShardsResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        match self.format {
+            None => self.format = Some("json"),
+            Some(format) if format.eq_ignore_ascii_case("json") => {}
+            Some(_) => {
+                return Err (Error :: typed_response_unavailable ("only `format=json` matches the typed response model; use `send()` for other formats")) ;
+            }
+        }
+        self.send()
+            .await?
+            .typed("types::list_shards::ShardsResponse", &[])
+            .await
     }
 }
 #[doc = "Namespace client for List APIs"]

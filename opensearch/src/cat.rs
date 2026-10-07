@@ -324,6 +324,23 @@ impl<'a, 'b> CatAliases<'a, 'b> {
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::cat_aliases::AliasesResponse`](crate::types::cat_aliases::AliasesResponse), the typed response of the Cat Aliases API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model. The response is requested as JSON (`format=json`) unless another `format` is set, which is refused."]
+    pub async fn send_typed(mut self) -> Result<crate::types::cat_aliases::AliasesResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        match self.format {
+            None => self.format = Some("json"),
+            Some(format) if format.eq_ignore_ascii_case("json") => {}
+            Some(_) => {
+                return Err (Error :: typed_response_unavailable ("only `format=json` matches the typed response model; use `send()` for other formats")) ;
+            }
+        }
+        self.send()
+            .await?
+            .typed("types::cat_aliases::AliasesResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Cat All Pit Segments API"]
@@ -493,6 +510,25 @@ impl<'a, 'b> CatAllPitSegments<'a, 'b> {
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::cat_all_pit_segments::AllPitSegmentsResponse`](crate::types::cat_all_pit_segments::AllPitSegmentsResponse), the typed response of the Cat All Pit Segments API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model. The response is requested as JSON (`format=json`) unless another `format` is set, which is refused."]
+    pub async fn send_typed(
+        mut self,
+    ) -> Result<crate::types::cat_all_pit_segments::AllPitSegmentsResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        match self.format {
+            None => self.format = Some("json"),
+            Some(format) if format.eq_ignore_ascii_case("json") => {}
+            Some(_) => {
+                return Err (Error :: typed_response_unavailable ("only `format=json` matches the typed response model; use `send()` for other formats")) ;
+            }
+        }
+        self.send()
+            .await?
+            .typed("types::cat_all_pit_segments::AllPitSegmentsResponse", &[])
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -703,6 +739,25 @@ impl<'a, 'b> CatAllocation<'a, 'b> {
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::cat_allocation::AllocationResponse`](crate::types::cat_allocation::AllocationResponse), the typed response of the Cat Allocation API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model. The response is requested as JSON (`format=json`) unless another `format` is set, which is refused."]
+    pub async fn send_typed(
+        mut self,
+    ) -> Result<crate::types::cat_allocation::AllocationResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        match self.format {
+            None => self.format = Some("json"),
+            Some(format) if format.eq_ignore_ascii_case("json") => {}
+            Some(_) => {
+                return Err (Error :: typed_response_unavailable ("only `format=json` matches the typed response model; use `send()` for other formats")) ;
+            }
+        }
+        self.send()
+            .await?
+            .typed("types::cat_allocation::AllocationResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Cat Cluster Manager API"]
@@ -892,6 +947,25 @@ impl<'a, 'b> CatClusterManager<'a, 'b> {
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::cat_cluster_manager::ClusterManagerResponse`](crate::types::cat_cluster_manager::ClusterManagerResponse), the typed response of the Cat Cluster Manager API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model. The response is requested as JSON (`format=json`) unless another `format` is set, which is refused."]
+    pub async fn send_typed(
+        mut self,
+    ) -> Result<crate::types::cat_cluster_manager::ClusterManagerResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        match self.format {
+            None => self.format = Some("json"),
+            Some(format) if format.eq_ignore_ascii_case("json") => {}
+            Some(_) => {
+                return Err (Error :: typed_response_unavailable ("only `format=json` matches the typed response model; use `send()` for other formats")) ;
+            }
+        }
+        self.send()
+            .await?
+            .typed("types::cat_cluster_manager::ClusterManagerResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Cat Count API"]
@@ -1063,6 +1137,23 @@ impl<'a, 'b> CatCount<'a, 'b> {
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::cat_count::CountResponse`](crate::types::cat_count::CountResponse), the typed response of the Cat Count API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model. The response is requested as JSON (`format=json`) unless another `format` is set, which is refused."]
+    pub async fn send_typed(mut self) -> Result<crate::types::cat_count::CountResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        match self.format {
+            None => self.format = Some("json"),
+            Some(format) if format.eq_ignore_ascii_case("json") => {}
+            Some(_) => {
+                return Err (Error :: typed_response_unavailable ("only `format=json` matches the typed response model; use `send()` for other formats")) ;
+            }
+        }
+        self.send()
+            .await?
+            .typed("types::cat_count::CountResponse", &[])
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -1255,6 +1346,25 @@ impl<'a, 'b> CatFielddata<'a, 'b> {
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::cat_fielddata::FielddataResponse`](crate::types::cat_fielddata::FielddataResponse), the typed response of the Cat Fielddata API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model. The response is requested as JSON (`format=json`) unless another `format` is set, which is refused."]
+    pub async fn send_typed(
+        mut self,
+    ) -> Result<crate::types::cat_fielddata::FielddataResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        match self.format {
+            None => self.format = Some("json"),
+            Some(format) if format.eq_ignore_ascii_case("json") => {}
+            Some(_) => {
+                return Err (Error :: typed_response_unavailable ("only `format=json` matches the typed response model; use `send()` for other formats")) ;
+            }
+        }
+        self.send()
+            .await?
+            .typed("types::cat_fielddata::FielddataResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Cat Health API"]
@@ -1433,6 +1543,23 @@ impl<'a, 'b> CatHealth<'a, 'b> {
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::cat_health::HealthResponse`](crate::types::cat_health::HealthResponse), the typed response of the Cat Health API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model. The response is requested as JSON (`format=json`) unless another `format` is set, which is refused."]
+    pub async fn send_typed(mut self) -> Result<crate::types::cat_health::HealthResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        match self.format {
+            None => self.format = Some("json"),
+            Some(format) if format.eq_ignore_ascii_case("json") => {}
+            Some(_) => {
+                return Err (Error :: typed_response_unavailable ("only `format=json` matches the typed response model; use `send()` for other formats")) ;
+            }
+        }
+        self.send()
+            .await?
+            .typed("types::cat_health::HealthResponse", &[])
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -1802,6 +1929,23 @@ impl<'a, 'b> CatIndices<'a, 'b> {
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::cat_indices::IndicesResponse`](crate::types::cat_indices::IndicesResponse), the typed response of the Cat Indices API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model. The response is requested as JSON (`format=json`) unless another `format` is set, which is refused."]
+    pub async fn send_typed(mut self) -> Result<crate::types::cat_indices::IndicesResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        match self.format {
+            None => self.format = Some("json"),
+            Some(format) if format.eq_ignore_ascii_case("json") => {}
+            Some(_) => {
+                return Err (Error :: typed_response_unavailable ("only `format=json` matches the typed response model; use `send()` for other formats")) ;
+            }
+        }
+        self.send()
+            .await?
+            .typed("types::cat_indices::IndicesResponse", &[])
+            .await
+    }
 }
 #[deprecated = "Deprecated since OpenSearch 2.0: To promote inclusive language, use '/_cat/cluster_manager' instead."]
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -1996,6 +2140,23 @@ impl<'a, 'b> CatMaster<'a, 'b> {
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::cat_master::MasterResponse`](crate::types::cat_master::MasterResponse), the typed response of the Cat Master API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model. The response is requested as JSON (`format=json`) unless another `format` is set, which is refused."]
+    pub async fn send_typed(mut self) -> Result<crate::types::cat_master::MasterResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        match self.format {
+            None => self.format = Some("json"),
+            Some(format) if format.eq_ignore_ascii_case("json") => {}
+            Some(_) => {
+                return Err (Error :: typed_response_unavailable ("only `format=json` matches the typed response model; use `send()` for other formats")) ;
+            }
+        }
+        self.send()
+            .await?
+            .typed("types::cat_master::MasterResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Cat Nodeattrs API"]
@@ -2184,6 +2345,25 @@ impl<'a, 'b> CatNodeattrs<'a, 'b> {
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::cat_nodeattrs::NodeattrsResponse`](crate::types::cat_nodeattrs::NodeattrsResponse), the typed response of the Cat Nodeattrs API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model. The response is requested as JSON (`format=json`) unless another `format` is set, which is refused."]
+    pub async fn send_typed(
+        mut self,
+    ) -> Result<crate::types::cat_nodeattrs::NodeattrsResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        match self.format {
+            None => self.format = Some("json"),
+            Some(format) if format.eq_ignore_ascii_case("json") => {}
+            Some(_) => {
+                return Err (Error :: typed_response_unavailable ("only `format=json` matches the typed response model; use `send()` for other formats")) ;
+            }
+        }
+        self.send()
+            .await?
+            .typed("types::cat_nodeattrs::NodeattrsResponse", &[])
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -2402,6 +2582,23 @@ impl<'a, 'b> CatNodes<'a, 'b> {
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::cat_nodes::NodesResponse`](crate::types::cat_nodes::NodesResponse), the typed response of the Cat Nodes API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model. The response is requested as JSON (`format=json`) unless another `format` is set, which is refused."]
+    pub async fn send_typed(mut self) -> Result<crate::types::cat_nodes::NodesResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        match self.format {
+            None => self.format = Some("json"),
+            Some(format) if format.eq_ignore_ascii_case("json") => {}
+            Some(_) => {
+                return Err (Error :: typed_response_unavailable ("only `format=json` matches the typed response model; use `send()` for other formats")) ;
+            }
+        }
+        self.send()
+            .await?
+            .typed("types::cat_nodes::NodesResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Cat Pending Tasks API"]
@@ -2599,6 +2796,25 @@ impl<'a, 'b> CatPendingTasks<'a, 'b> {
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::cat_pending_tasks::PendingTasksResponse`](crate::types::cat_pending_tasks::PendingTasksResponse), the typed response of the Cat Pending Tasks API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model. The response is requested as JSON (`format=json`) unless another `format` is set, which is refused."]
+    pub async fn send_typed(
+        mut self,
+    ) -> Result<crate::types::cat_pending_tasks::PendingTasksResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        match self.format {
+            None => self.format = Some("json"),
+            Some(format) if format.eq_ignore_ascii_case("json") => {}
+            Some(_) => {
+                return Err (Error :: typed_response_unavailable ("only `format=json` matches the typed response model; use `send()` for other formats")) ;
+            }
+        }
+        self.send()
+            .await?
+            .typed("types::cat_pending_tasks::PendingTasksResponse", &[])
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -2799,6 +3015,25 @@ where
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::cat_pit_segments::PitSegmentsResponse`](crate::types::cat_pit_segments::PitSegmentsResponse), the typed response of the Cat Pit Segments API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model. The response is requested as JSON (`format=json`) unless another `format` is set, which is refused."]
+    pub async fn send_typed(
+        mut self,
+    ) -> Result<crate::types::cat_pit_segments::PitSegmentsResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        match self.format {
+            None => self.format = Some("json"),
+            Some(format) if format.eq_ignore_ascii_case("json") => {}
+            Some(_) => {
+                return Err (Error :: typed_response_unavailable ("only `format=json` matches the typed response model; use `send()` for other formats")) ;
+            }
+        }
+        self.send()
+            .await?
+            .typed("types::cat_pit_segments::PitSegmentsResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Cat Plugins API"]
@@ -2987,6 +3222,23 @@ impl<'a, 'b> CatPlugins<'a, 'b> {
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::cat_plugins::PluginsResponse`](crate::types::cat_plugins::PluginsResponse), the typed response of the Cat Plugins API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model. The response is requested as JSON (`format=json`) unless another `format` is set, which is refused."]
+    pub async fn send_typed(mut self) -> Result<crate::types::cat_plugins::PluginsResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        match self.format {
+            None => self.format = Some("json"),
+            Some(format) if format.eq_ignore_ascii_case("json") => {}
+            Some(_) => {
+                return Err (Error :: typed_response_unavailable ("only `format=json` matches the typed response model; use `send()` for other formats")) ;
+            }
+        }
+        self.send()
+            .await?
+            .typed("types::cat_plugins::PluginsResponse", &[])
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -3206,6 +3458,25 @@ impl<'a, 'b> CatRecovery<'a, 'b> {
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::cat_recovery::RecoveryResponse`](crate::types::cat_recovery::RecoveryResponse), the typed response of the Cat Recovery API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model. The response is requested as JSON (`format=json`) unless another `format` is set, which is refused."]
+    pub async fn send_typed(
+        mut self,
+    ) -> Result<crate::types::cat_recovery::RecoveryResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        match self.format {
+            None => self.format = Some("json"),
+            Some(format) if format.eq_ignore_ascii_case("json") => {}
+            Some(_) => {
+                return Err (Error :: typed_response_unavailable ("only `format=json` matches the typed response model; use `send()` for other formats")) ;
+            }
+        }
+        self.send()
+            .await?
+            .typed("types::cat_recovery::RecoveryResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Cat Repositories API"]
@@ -3394,6 +3665,25 @@ impl<'a, 'b> CatRepositories<'a, 'b> {
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::cat_repositories::RepositoriesResponse`](crate::types::cat_repositories::RepositoriesResponse), the typed response of the Cat Repositories API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model. The response is requested as JSON (`format=json`) unless another `format` is set, which is refused."]
+    pub async fn send_typed(
+        mut self,
+    ) -> Result<crate::types::cat_repositories::RepositoriesResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        match self.format {
+            None => self.format = Some("json"),
+            Some(format) if format.eq_ignore_ascii_case("json") => {}
+            Some(_) => {
+                return Err (Error :: typed_response_unavailable ("only `format=json` matches the typed response model; use `send()` for other formats")) ;
+            }
+        }
+        self.send()
+            .await?
+            .typed("types::cat_repositories::RepositoriesResponse", &[])
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -3677,6 +3967,28 @@ impl<'a, 'b> CatSegmentReplication<'a, 'b> {
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::cat_segment_replication::SegmentReplicationResponse`](crate::types::cat_segment_replication::SegmentReplicationResponse), the typed response of the Cat Segment Replication API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model. The response is requested as JSON (`format=json`) unless another `format` is set, which is refused."]
+    pub async fn send_typed(
+        mut self,
+    ) -> Result<crate::types::cat_segment_replication::SegmentReplicationResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        match self.format {
+            None => self.format = Some("json"),
+            Some(format) if format.eq_ignore_ascii_case("json") => {}
+            Some(_) => {
+                return Err (Error :: typed_response_unavailable ("only `format=json` matches the typed response model; use `send()` for other formats")) ;
+            }
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::cat_segment_replication::SegmentReplicationResponse",
+                &[],
+            )
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Cat Segments API"]
@@ -3876,6 +4188,25 @@ impl<'a, 'b> CatSegments<'a, 'b> {
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::cat_segments::SegmentsResponse`](crate::types::cat_segments::SegmentsResponse), the typed response of the Cat Segments API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model. The response is requested as JSON (`format=json`) unless another `format` is set, which is refused."]
+    pub async fn send_typed(
+        mut self,
+    ) -> Result<crate::types::cat_segments::SegmentsResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        match self.format {
+            None => self.format = Some("json"),
+            Some(format) if format.eq_ignore_ascii_case("json") => {}
+            Some(_) => {
+                return Err (Error :: typed_response_unavailable ("only `format=json` matches the typed response model; use `send()` for other formats")) ;
+            }
+        }
+        self.send()
+            .await?
+            .typed("types::cat_segments::SegmentsResponse", &[])
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -4093,6 +4424,23 @@ impl<'a, 'b> CatShards<'a, 'b> {
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::cat_shards::ShardsResponse`](crate::types::cat_shards::ShardsResponse), the typed response of the Cat Shards API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model. The response is requested as JSON (`format=json`) unless another `format` is set, which is refused."]
+    pub async fn send_typed(mut self) -> Result<crate::types::cat_shards::ShardsResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        match self.format {
+            None => self.format = Some("json"),
+            Some(format) if format.eq_ignore_ascii_case("json") => {}
+            Some(_) => {
+                return Err (Error :: typed_response_unavailable ("only `format=json` matches the typed response model; use `send()` for other formats")) ;
+            }
+        }
+        self.send()
+            .await?
+            .typed("types::cat_shards::ShardsResponse", &[])
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -4313,6 +4661,25 @@ impl<'a, 'b> CatSnapshots<'a, 'b> {
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::cat_snapshots::SnapshotsResponse`](crate::types::cat_snapshots::SnapshotsResponse), the typed response of the Cat Snapshots API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model. The response is requested as JSON (`format=json`) unless another `format` is set, which is refused."]
+    pub async fn send_typed(
+        mut self,
+    ) -> Result<crate::types::cat_snapshots::SnapshotsResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        match self.format {
+            None => self.format = Some("json"),
+            Some(format) if format.eq_ignore_ascii_case("json") => {}
+            Some(_) => {
+                return Err (Error :: typed_response_unavailable ("only `format=json` matches the typed response model; use `send()` for other formats")) ;
+            }
+        }
+        self.send()
+            .await?
+            .typed("types::cat_snapshots::SnapshotsResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Cat Tasks API"]
@@ -4521,6 +4888,23 @@ impl<'a, 'b> CatTasks<'a, 'b> {
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::cat_tasks::TasksResponse`](crate::types::cat_tasks::TasksResponse), the typed response of the Cat Tasks API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model. The response is requested as JSON (`format=json`) unless another `format` is set, which is refused."]
+    pub async fn send_typed(mut self) -> Result<crate::types::cat_tasks::TasksResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        match self.format {
+            None => self.format = Some("json"),
+            Some(format) if format.eq_ignore_ascii_case("json") => {}
+            Some(_) => {
+                return Err (Error :: typed_response_unavailable ("only `format=json` matches the typed response model; use `send()` for other formats")) ;
+            }
+        }
+        self.send()
+            .await?
+            .typed("types::cat_tasks::TasksResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Cat Templates API"]
@@ -4718,6 +5102,25 @@ impl<'a, 'b> CatTemplates<'a, 'b> {
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::cat_templates::TemplatesResponse`](crate::types::cat_templates::TemplatesResponse), the typed response of the Cat Templates API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model. The response is requested as JSON (`format=json`) unless another `format` is set, which is refused."]
+    pub async fn send_typed(
+        mut self,
+    ) -> Result<crate::types::cat_templates::TemplatesResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        match self.format {
+            None => self.format = Some("json"),
+            Some(format) if format.eq_ignore_ascii_case("json") => {}
+            Some(_) => {
+                return Err (Error :: typed_response_unavailable ("only `format=json` matches the typed response model; use `send()` for other formats")) ;
+            }
+        }
+        self.send()
+            .await?
+            .typed("types::cat_templates::TemplatesResponse", &[])
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -4927,6 +5330,25 @@ impl<'a, 'b> CatThreadPool<'a, 'b> {
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::cat_thread_pool::ThreadPoolResponse`](crate::types::cat_thread_pool::ThreadPoolResponse), the typed response of the Cat Thread Pool API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model. The response is requested as JSON (`format=json`) unless another `format` is set, which is refused."]
+    pub async fn send_typed(
+        mut self,
+    ) -> Result<crate::types::cat_thread_pool::ThreadPoolResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        match self.format {
+            None => self.format = Some("json"),
+            Some(format) if format.eq_ignore_ascii_case("json") => {}
+            Some(_) => {
+                return Err (Error :: typed_response_unavailable ("only `format=json` matches the typed response model; use `send()` for other formats")) ;
+            }
+        }
+        self.send()
+            .await?
+            .typed("types::cat_thread_pool::ThreadPoolResponse", &[])
+            .await
     }
 }
 #[doc = "Namespace client for Cat APIs"]

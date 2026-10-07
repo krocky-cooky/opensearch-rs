@@ -28,10 +28,72 @@
 
 #![allow(missing_docs)]
 
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, Clone)]
 pub struct CompactNodeInfo {
     #[doc = "The name of the node that verified the repository."]
     pub name: crate::types::common::Name,
+    #[doc = "Keys of the JSON object that the specification does not define, kept as raw JSON so that nothing the server sends is lost: fields added by plugins or newer OpenSearch versions, or missing from the specification. Serialized back unchanged."]
+    pub unknown_fields: std::collections::BTreeMap<String, Box<serde_json::value::RawValue>>,
+}
+impl<'de> serde::Deserialize<'de> for CompactNodeInfo {
+    fn deserialize<D>(deserializer: D) -> std::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        struct ResidualVisitor;
+        impl<'de> serde::de::Visitor<'de> for ResidualVisitor {
+            type Value = CompactNodeInfo;
+            fn expecting(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+                f.write_str("a CompactNodeInfo object")
+            }
+            // locals are named after the field identifiers, which keep a
+            // leading underscore when two JSON names would otherwise clash
+            // (`_nodes` -> `f__nodes`)
+            #[allow(non_snake_case)]
+            fn visit_map<A>(self, mut map: A) -> std::result::Result<Self::Value, A::Error>
+            where
+                A: serde::de::MapAccess<'de>,
+            {
+                let mut f_name: Option<crate::types::common::Name> = None;
+                let mut residual: std::collections::BTreeMap<
+                    String,
+                    Box<serde_json::value::RawValue>,
+                > = Default::default();
+                while let Some(k) = map.next_key::<String>()? {
+                    match k.as_str() {
+                        "name" => {
+                            if f_name.is_some() {
+                                return Err(serde::de::Error::duplicate_field("name"));
+                            }
+                            f_name = Some(map.next_value::<crate::types::common::Name>()?);
+                        }
+                        _ => {
+                            residual.insert(k, map.next_value()?);
+                        }
+                    }
+                }
+                Ok(CompactNodeInfo {
+                    name: f_name.ok_or_else(|| serde::de::Error::missing_field("name"))?,
+                    unknown_fields: residual,
+                })
+            }
+        }
+        deserializer.deserialize_map(ResidualVisitor)
+    }
+}
+impl serde::Serialize for CompactNodeInfo {
+    fn serialize<S>(&self, serializer: S) -> std::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeMap;
+        let mut map = serializer.serialize_map(None)?;
+        map.serialize_entry("name", &self.name)?;
+        for (k, v) in &self.unknown_fields {
+            map.serialize_entry(k, v)?;
+        }
+        map.end()
+    }
 }
 
 #[doc = "The response of the `snapshot.verify_repository` API"]

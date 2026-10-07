@@ -157,6 +157,24 @@ impl<'a, 'b> GeospatialDeleteIp2GeoDatasource<'a, 'b> {
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::geospatial_delete_ip2geo_datasource::DeleteIp2GeoDatasourceResponse`](crate::types::geospatial_delete_ip2geo_datasource::DeleteIp2GeoDatasourceResponse), the typed response of the Geospatial Delete Ip2 Geo Datasource API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<
+        crate::types::geospatial_delete_ip2geo_datasource::DeleteIp2GeoDatasourceResponse,
+        Error,
+    > {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::geospatial_delete_ip2geo_datasource::DeleteIp2GeoDatasourceResponse",
+                &[],
+            )
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Geospatial Geojson Upload Post API"]
@@ -291,6 +309,22 @@ where
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::geospatial_geojson_upload_post::GeojsonUploadPostResponse`](crate::types::geospatial_geojson_upload_post::GeojsonUploadPostResponse), the typed response of the Geospatial Geojson Upload Post API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::geospatial_geojson_upload_post::GeojsonUploadPostResponse, Error>
+    {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::geospatial_geojson_upload_post::GeojsonUploadPostResponse",
+                &[],
+            )
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -427,6 +461,21 @@ where
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::geospatial_geojson_upload_put::GeojsonUploadPutResponse`](crate::types::geospatial_geojson_upload_put::GeojsonUploadPutResponse), the typed response of the Geospatial Geojson Upload Put API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::geospatial_geojson_upload_put::GeojsonUploadPutResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::geospatial_geojson_upload_put::GeojsonUploadPutResponse",
+                &[],
+            )
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Geospatial Get Ip2 Geo Datasource API"]
@@ -552,6 +601,22 @@ impl<'a, 'b> GeospatialGetIp2GeoDatasource<'a, 'b> {
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::geospatial_get_ip2geo_datasource::GetIp2GeoDatasourceResponse`](crate::types::geospatial_get_ip2geo_datasource::GetIp2GeoDatasourceResponse), the typed response of the Geospatial Get Ip2 Geo Datasource API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::geospatial_get_ip2geo_datasource::GetIp2GeoDatasourceResponse, Error>
+    {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::geospatial_get_ip2geo_datasource::GetIp2GeoDatasourceResponse",
+                &[],
+            )
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Geospatial Get Upload Stats API"]
@@ -663,6 +728,21 @@ impl<'a, 'b> GeospatialGetUploadStats<'a, 'b> {
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::geospatial_get_upload_stats::GetUploadStatsResponse`](crate::types::geospatial_get_upload_stats::GetUploadStatsResponse), the typed response of the Geospatial Get Upload Stats API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::geospatial_get_upload_stats::GetUploadStatsResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::geospatial_get_upload_stats::GetUploadStatsResponse",
+                &[],
+            )
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -804,6 +884,22 @@ where
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::geospatial_put_ip2geo_datasource::PutIp2GeoDatasourceResponse`](crate::types::geospatial_put_ip2geo_datasource::PutIp2GeoDatasourceResponse), the typed response of the Geospatial Put Ip2 Geo Datasource API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::geospatial_put_ip2geo_datasource::PutIp2GeoDatasourceResponse, Error>
+    {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::geospatial_put_ip2geo_datasource::PutIp2GeoDatasourceResponse",
+                &[],
+            )
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -949,6 +1045,12 @@ where
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::geospatial_put_ip2geo_datasource_settings::PutIp2GeoDatasourceSettingsResponse`](crate::types::geospatial_put_ip2geo_datasource_settings::PutIp2GeoDatasourceSettingsResponse), the typed response of the Geospatial Put Ip2 Geo Datasource Settings API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]    pub async fn send_typed (self) -> Result < crate :: types :: geospatial_put_ip2geo_datasource_settings :: PutIp2GeoDatasourceSettingsResponse , Error >{
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self . send () . await ? . typed ("types::geospatial_put_ip2geo_datasource_settings::PutIp2GeoDatasourceSettingsResponse" , & []) . await
     }
 }
 #[doc = "Namespace client for Geospatial APIs"]

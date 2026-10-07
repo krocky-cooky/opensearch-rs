@@ -10,15 +10,155 @@
 //! [OpenSearch API specification](https://github.com/opensearch-project/opensearch-api-specification),
 //! together with the hand-written runtime support they rely on.
 //!
+//! # Getting the typed response of an API
+//!
+//! Every request builder of an API with a response model has a
+//! `send_typed()` method returning the model of that API, so neither the
+//! type nor its path needs to be written out:
+//!
+//! ```rust,no_run
+//! # use opensearch::{OpenSearch, GetParts, SearchParts};
+//! # use serde::Deserialize;
+//! # async fn doc() -> Result<(), Box<dyn std::error::Error>> {
+//! # let client = OpenSearch::default();
+//! #[derive(Deserialize)]
+//! struct Movie {
+//!     title: String,
+//! }
+//!
+//! // a `types::search::SearchResponse`
+//! let resp = client
+//!     .search(SearchParts::Index(&["movies"]))
+//!     .send_typed()
+//!     .await?;
+//! // `None` when the request disabled counting; see `TotalHitCount` for
+//! // telling an exact count from a lower bound
+//! println!("{:?} hits", resp.hits.total_value());
+//! for hit in &resp.hits.hits {
+//!     if let Some(movie) = hit.source_as::<Movie>()? {
+//!         println!("{}", movie.title);
+//!     }
+//! }
+//!
+//! // a missing document is not an error: `get` answers it with `found: false`
+//! let doc = client
+//!     .get(GetParts::IndexId("movies", "1"))
+//!     .send_typed()
+//!     .await?;
+//! println!("found: {}", doc.found);
+//! # Ok(())
+//! # }
+//! ```
+//!
+//! A status whose body is not the model (e.g. 404 `index_not_found_exception`,
+//! 400 for an invalid request) is returned as an error, whose status code
+//! and body are available from [`Error::api_error`](crate::Error::api_error):
+//!
+//! ```rust,no_run
+//! # use opensearch::{OpenSearch, indices::IndicesDeleteParts};
+//! # async fn doc() {
+//! # let client = OpenSearch::default();
+//! match client
+//!     .indices()
+//!     .delete(IndicesDeleteParts::Index(&["movies"]))
+//!     .send_typed()
+//!     .await
+//! {
+//!     Ok(resp) => println!("deleted: {}", resp.acknowledged),
+//!     Err(e) => match e.api_error() {
+//!         Some(api) => println!("OpenSearch answered {}: {}", api.status(), api.body()),
+//!         None => println!("request failed: {}", e),
+//!     },
+//! }
+//! # }
+//! ```
+//!
+//! `send_typed()` returns the model alone. To read the status code or the
+//! headers (e.g. deprecation warnings), use `send()`, and decode the body
+//! with [`Response::json`](crate::http::response::Response::json) into the
+//! model or a type of your own. APIs without a model (HEAD-only and
+//! non-JSON endpoints) have no `send_typed()`.
+//!
 //! # Design notes
 //!
 //! 100% typing is a non-goal: fields whose shape is decided at runtime
 //! (documents, aggregation values, ...) intentionally hold raw JSON and
 //! expose it through explicit escape hatches. Additions of such untyped
 //! fields are guarded by an allowlist at generation time.
+//!
+//! Nothing the server sends is dropped. Every struct collects the keys
+//! the specification does not define for it (fields added by plugins or
+//! newer OpenSearch versions, or missing from the specification) into a
+//! `unknown_fields` map of raw JSON, and serializes them back unchanged,
+//! so a response round-trips even when the specification lags behind the
+//! server. Structs whose specification declares `additionalProperties`
+//! keep that typed map (`additional`, or `aggregations` in buckets)
+//! instead. The maps are filled by generated `Deserialize` impls rather
+//! than `#[serde(flatten)]`, which cannot decode the `Box<RawValue>`
+//! fields these structs contain.
+//!
+//! # Filtered responses (`filter_path`)
+//!
+//! The models describe the full response of an API. The `filter_path`
+//! parameter, accepted by almost every API, removes from the response
+//! everything it does not match, including fields the models require:
+//! decoding a filtered search response as
+//! [`SearchResponse`](search::SearchResponse) fails with an error such as
+//! ``missing field `_shards` ``. This is expected, and the models are not
+//! loosened for it, as making every field optional would burden the
+//! unfiltered use. `send_typed()` therefore refuses a request using
+//! `filter_path` before sending it.
+//!
+//! Send a filtered request with `send()` and decode the response into a
+//! type of your own that mirrors what the filter keeps, or into a
+//! [`serde_json::Value`]:
+//!
+//! ```rust,no_run
+//! # use opensearch::{OpenSearch, SearchParts};
+//! # use serde::Deserialize;
+//! # async fn doc() -> Result<(), Box<dyn std::error::Error>> {
+//! # let client = OpenSearch::default();
+//! // only what `hits.hits._source.title` keeps
+//! #[derive(Deserialize)]
+//! struct Titles {
+//!     hits: Hits,
+//! }
+//! #[derive(Deserialize)]
+//! struct Hits {
+//!     hits: Vec<Hit>,
+//! }
+//! #[derive(Deserialize)]
+//! struct Hit {
+//!     _source: Movie,
+//! }
+//! #[derive(Deserialize)]
+//! struct Movie {
+//!     title: String,
+//! }
+//!
+//! let titles: Titles = client
+//!     .search(SearchParts::Index(&["movies"]))
+//!     .filter_path(&["hits.hits._source.title"])
+//!     .send()
+//!     .await?
+//!     .json()
+//!     .await?;
+//! for hit in titles.hits.hits {
+//!     println!("{}", hit._source.title);
+//! }
+//! # Ok(())
+//! # }
+//! ```
+//!
+//! A filter can also remove a whole section: with
+//! `filter_path=hits.hits._id` a search with no match returns `{}`, so
+//! make the fields of such a type optional where the filter may leave
+//! nothing.
 
+mod total_hits;
 pub mod union;
 
+pub use total_hits::TotalHitCount;
 pub use union::UnionBranchError;
 
 // GENERATED-BEGIN:response-modules

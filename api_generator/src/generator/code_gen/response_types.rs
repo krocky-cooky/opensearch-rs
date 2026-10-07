@@ -28,6 +28,7 @@ use std::fmt::Write;
 /// `types/mod.rs`
 pub fn generate(ir: &ResponseIr) -> anyhow::Result<(Vec<(String, String)>, String)> {
     let boxed = boxed_edges(ir);
+    let total_hits_unions = total_hits_unions(ir);
 
     // render each type into its module
     let mut modules: BTreeMap<String, Vec<(String, String)>> = BTreeMap::new();
@@ -35,8 +36,14 @@ pub fn generate(ir: &ResponseIr) -> anyhow::Result<(Vec<(String, String)>, Strin
         let module = module_name(namespace(ir_name));
         let rust_name = rust_type_name(ir_name);
         let source = match ty {
-            IrType::Struct(s) => render_struct(ir_name, &rust_name, s, &boxed),
-            IrType::DispatchUnion(u) => render_dispatch_union(ir_name, &rust_name, u, &boxed),
+            IrType::Struct(s) => render_struct(ir_name, &rust_name, s, &boxed, &total_hits_unions),
+            IrType::DispatchUnion(u) => {
+                let mut out = render_dispatch_union(ir_name, &rust_name, u, &boxed);
+                if total_hits_unions.contains(ir_name) {
+                    render_total_hit_count(&mut out, &rust_name, u);
+                }
+                out
+            }
             IrType::LazyUnion(u) => render_lazy_union(&rust_name, u),
             IrType::StrEnum(e) => render_str_enum(&rust_name, e),
             IrType::Alias(a) => {
@@ -224,6 +231,7 @@ fn render_struct(
     rust_name: &str,
     s: &IrStruct,
     boxed: &BTreeSet<(String, String)>,
+    total_hits_unions: &BTreeSet<String>,
 ) -> String {
     // an object with no fixed fields is just a map
     if s.fields.is_empty() {
@@ -244,59 +252,246 @@ fn render_struct(
     let fields = prepare_fields(ir_name, s, boxed);
     let mut out = String::new();
 
+    // Every struct collects the keys it has no field for. A residual the
+    // specification declares (`additionalProperties`, sub-aggregations)
+    // keeps its name and value type; otherwise the keys the specification
+    // does not know (plugin additions, newer server versions, gaps in the
+    // specification) are kept as raw JSON in `unknown_fields` instead of
+    // being silently dropped, and serialized back unchanged.
+    let (residual_name, residual_value, residual_doc) = match &s.residual {
+        Some((name, ty)) => (name.clone(), render_ref(ty), None),
+        None => (
+            unknown_fields_ident(&fields),
+            "Box<serde_json::value::RawValue>".to_string(),
+            Some(UNKNOWN_FIELDS_DOC),
+        ),
+    };
+
     doc(&mut out, s.description.as_deref());
-    if s.residual.is_some() {
-        out.push_str("#[derive(Debug, Clone)]\n");
-    } else {
-        out.push_str("#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]\n");
-    }
+    out.push_str("#[derive(Debug, Clone)]\n");
     let _ = writeln!(out, "pub struct {} {{", rust_name);
     for f in &fields {
         doc(&mut out, f.ir.description.as_deref());
-        if s.residual.is_none() {
-            let rename = f.ident.trim_start_matches("r#");
-            if rename != f.ir.json_name {
-                let _ = writeln!(out, "    #[serde(rename = \"{}\")]", f.ir.json_name);
-            }
-            if f.optional {
-                out.push_str("    #[serde(default, skip_serializing_if = \"Option::is_none\")]\n");
-            }
-        }
         if f.optional {
             let _ = writeln!(out, "    pub {}: Option<{}>,", f.ident, f.payload);
         } else {
             let _ = writeln!(out, "    pub {}: {},", f.ident, f.payload);
         }
     }
-    if let Some((residual_name, residual_ty)) = &s.residual {
-        let _ = writeln!(
-            out,
-            "    pub {}: std::collections::BTreeMap<String, {}>,",
-            residual_name,
-            render_ref(residual_ty)
-        );
-    }
+    doc(&mut out, residual_doc);
+    let _ = writeln!(
+        out,
+        "    pub {}: std::collections::BTreeMap<String, {}>,",
+        residual_name, residual_value
+    );
     out.push_str("}\n");
 
-    if let Some((residual_name, residual_ty)) = &s.residual {
-        render_residual_impls(&mut out, rust_name, &fields, residual_name, residual_ty);
-    }
+    render_residual_impls(
+        &mut out,
+        rust_name,
+        &fields,
+        &residual_name,
+        &residual_value,
+    );
+    render_source_accessor(&mut out, rust_name, &fields);
+    render_total_value(&mut out, rust_name, &fields, total_hits_unions);
 
     out
 }
 
-/// Renders `Deserialize`/`Serialize` for a struct with residual keys:
-/// known keys go to their fields, all remaining keys are collected into
-/// the residual map (e.g. sub-aggregations inside a bucket)
+/// The IR name of the object form of a search's total hit count
+const TOTAL_HITS: &str = "_core.search___TotalHits";
+
+/// The unions of the shape `TotalHits | integer`: the total hit count of a
+/// search (`hits.total`). The specification declares it inline in each kind
+/// of hits object, so the generator synthesizes one such union per hits
+/// object (search, inner hits, msearch, search_template, plugin searches).
+fn total_hits_unions(ir: &ResponseIr) -> BTreeSet<String> {
+    ir.types
+        .iter()
+        .filter_map(|(name, ty)| match ty {
+            IrType::DispatchUnion(u) if is_total_hits_union(u) => Some(name.clone()),
+            _ => None,
+        })
+        .collect()
+}
+
+fn is_total_hits_union(u: &IrUnion) -> bool {
+    if u.nullable || u.variants.len() != 2 {
+        return false;
+    }
+    let object = u
+        .variants
+        .iter()
+        .any(|v| matches!(&v.ty, IrRef::Named(n) if n == TOTAL_HITS));
+    let integer = u
+        .variants
+        .iter()
+        .any(|v| matches!(v.ty, IrRef::Scalar(Scalar::I64)));
+    object && integer
+}
+
+/// Renders the reading of a total hit count union: the
+/// `opensearch::types::TotalHitCount` implementation, shared by every such
+/// union, and the same methods as inherent methods, callable without
+/// importing the trait
+fn render_total_hit_count(out: &mut String, rust_name: &str, u: &IrUnion) {
+    let variant = |object: bool| {
+        u.variants
+            .iter()
+            .find(|v| matches!(&v.ty, IrRef::Named(_)) == object)
+            .map(|v| v.name.to_pascal_case())
+            .unwrap()
+    };
+    let (object, integer) = (variant(true), variant(false));
+    let _ = writeln!(
+        out,
+        r#"impl crate::types::TotalHitCount for {name} {{
+    fn value(&self) -> i64 {{
+        match self {{
+            Self::{object}(total) => total.value,
+            Self::{integer}(value) => *value,
+        }}
+    }}
+
+    fn relation(&self) -> &crate::types::search::TotalHitsRelation {{
+        match self {{
+            Self::{object}(total) => &total.relation,
+            Self::{integer}(_) => &crate::types::total_hits::ACCURATE,
+        }}
+    }}
+}}
+
+impl {name} {{
+    #[doc = "The number of hits: exact when [`is_accurate`](Self::is_accurate) is true, and otherwise a lower bound. See [`TotalHitCount`](crate::types::TotalHitCount)."]
+    pub fn value(&self) -> i64 {{
+        crate::types::TotalHitCount::value(self)
+    }}
+
+    #[doc = "How [`value`](Self::value) relates to the actual number of hits: `Eq` when exact, `Gte` when a lower bound. The integer form is always `Eq`."]
+    pub fn relation(&self) -> &crate::types::search::TotalHitsRelation {{
+        crate::types::TotalHitCount::relation(self)
+    }}
+
+    #[doc = "Whether [`value`](Self::value) is the exact number of hits (relation `eq`). False for a lower bound, and for a relation this client does not know."]
+    pub fn is_accurate(&self) -> bool {{
+        crate::types::TotalHitCount::is_accurate(self)
+    }}
+}}"#,
+        name = rust_name,
+        object = object,
+        integer = integer
+    );
+}
+
+/// Renders `total_value` for a hits object holding a total hit count: the
+/// number alone, for the common case not needing to know whether it is a
+/// lower bound
+fn render_total_value(
+    out: &mut String,
+    rust_name: &str,
+    fields: &[Field<'_>],
+    total_hits_unions: &BTreeSet<String>,
+) {
+    let total = match fields.iter().find(|f| {
+        f.ir.json_name == "total"
+            && matches!(&f.ir.ty, IrRef::Named(n) if total_hits_unions.contains(n))
+    }) {
+        Some(f) => f,
+        None => return,
+    };
+    let body = if total.optional {
+        format!("self.{}.as_ref().map(|total| total.value())", total.ident)
+    } else {
+        format!("Some(self.{}.value())", total.ident)
+    };
+    let _ = writeln!(
+        out,
+        r#"impl {name} {{
+    #[doc = "The total number of hits (`total`), or `None` when the request disabled counting (`track_total_hits: false`).
+
+The number may be a lower bound: by default the count is only tracked accurately up to 10,000 hits. Use `total` and its [`is_accurate`](crate::types::TotalHitCount::is_accurate) when that matters."]
+    pub fn total_value(&self) -> Option<i64> {{
+        {body}
+    }}
+}}"#,
+        name = rust_name,
+        body = body
+    );
+}
+
+/// Renders `source_as` for a struct holding a document body: a `_source`
+/// field generated as raw JSON (the generic `TDocument` of the
+/// specification, or an untyped `_source`). Documents are user-defined, so
+/// the model keeps them raw; `source_as` decodes one into the caller's type
+/// without `serde_json` plumbing and without panicking when the response
+/// carries no `_source` (`_source: false` in the request, or a mapping that
+/// disables it).
+fn render_source_accessor(out: &mut String, rust_name: &str, fields: &[Field<'_>]) {
+    let source = match fields
+        .iter()
+        .find(|f| f.ir.json_name == "_source" && matches!(f.ir.ty, IrRef::Raw(_)))
+    {
+        Some(f) => f,
+        None => return,
+    };
+    let raw = if source.optional {
+        format!("self.{}.as_deref()", source.ident)
+    } else {
+        format!("Some(&*self.{})", source.ident)
+    };
+    let _ = writeln!(
+        out,
+        r#"impl {name} {{
+    #[doc = "Decodes the document body (`_source`) into `T`.\n\nReturns `Ok(None)` when the response carries no `_source` (`_source: false` in the request, or a mapping that disables it), and an error when the document does not match `T`.\n\n`T` may borrow from the response to avoid copying strings: use `#[serde(borrow)] Cow<'a, str>` fields rather than `&'a str`, which cannot hold a string containing JSON escapes."]
+    pub fn source_as<'a, T>(&'a self) -> std::result::Result<Option<T>, serde_json::Error>
+    where
+        T: serde::Deserialize<'a>,
+    {{
+        {raw}
+            .map(|raw| serde_json::from_str(raw.get()))
+            .transpose()
+    }}
+}}"#,
+        name = rust_name,
+        raw = raw
+    );
+}
+
+/// The documentation of the generated map of keys a struct has no field for
+const UNKNOWN_FIELDS_DOC: &str = "Keys of the JSON object that the specification does not define, kept as raw JSON so that nothing the server sends is lost: fields added by plugins or newer OpenSearch versions, or missing from the specification. Serialized back unchanged.";
+
+/// The identifier of the unknown-fields map: `unknown_fields`, unless a
+/// field of the specification already maps to it
+fn unknown_fields_ident(fields: &[Field<'_>]) -> String {
+    let taken: BTreeSet<&str> = fields
+        .iter()
+        .map(|f| f.ident.trim_start_matches("r#"))
+        .collect();
+    let mut ident = "unknown_fields".to_string();
+    while taken.contains(ident.as_str()) {
+        ident.insert(0, '_');
+    }
+    ident
+}
+
+/// Renders `Deserialize`/`Serialize` for a struct: known keys go to their
+/// fields, all remaining keys are collected into the residual map
+/// (sub-aggregations inside a bucket, declared `additionalProperties`, or
+/// the keys the specification does not define).
+///
+/// A hand-written visitor rather than `#[serde(flatten)]`: flatten buffers
+/// the object into serde's internal `Content`, which cannot deserialize a
+/// `Box<RawValue>` (`_source`, raw unions, the residual itself) and fails
+/// with "invalid type: newtype struct". The visitor reads each value
+/// directly from the input, with no buffering.
 fn render_residual_impls(
     out: &mut String,
     rust_name: &str,
     fields: &[Field<'_>],
     residual_name: &str,
-    residual_ty: &IrRef,
+    residual_value: &str,
 ) {
-    let residual_value = render_ref(residual_ty);
-
     let _ = writeln!(
         out,
         r#"impl<'de> serde::Deserialize<'de> for {name} {{
@@ -310,6 +505,10 @@ fn render_residual_impls(
             fn expecting(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {{
                 f.write_str("a {name} object")
             }}
+            // locals are named after the field identifiers, which keep a
+            // leading underscore when two JSON names would otherwise clash
+            // (`_nodes` -> `f__nodes`)
+            #[allow(non_snake_case)]
             fn visit_map<A>(self, mut map: A) -> std::result::Result<Self::Value, A::Error>
             where
                 A: serde::de::MapAccess<'de>,
@@ -317,12 +516,17 @@ fn render_residual_impls(
         name = rust_name
     );
     for f in fields {
+        let var = f.ident.trim_start_matches("r#");
         let _ = writeln!(
             out,
             "                let mut f_{}: Option<{}> = None;",
-            f.ident.trim_start_matches("r#"),
-            f.payload
+            var, f.payload
         );
+        // optional fields can legitimately decode to None, so presence is
+        // tracked separately to reject a repeated key like derived impls do
+        if f.optional {
+            let _ = writeln!(out, "                let mut seen_{} = false;", var);
+        }
     }
     let _ = writeln!(
         out,
@@ -334,20 +538,30 @@ fn render_residual_impls(
     );
     for f in fields {
         let var = f.ident.trim_start_matches("r#");
-        if f.optional {
-            let _ = writeln!(
-                out,
-                "                        {:?} => f_{} = map.next_value::<Option<{}>>()?,",
-                f.ir.json_name, var, f.payload
-            );
+        let (present, assign) = if f.optional {
+            (
+                format!("seen_{}", var),
+                format!(
+                    "seen_{v} = true;\n                            f_{v} = map.next_value::<Option<{t}>>()?;",
+                    v = var,
+                    t = f.payload
+                ),
+            )
         } else {
-            let _ = writeln!(
-                out,
-                "                        {:?} => f_{} = Some(map.next_value::<{}>()?),",
-                f.ir.json_name, var, f.payload
-            );
-        }
+            (
+                format!("f_{}.is_some()", var),
+                format!("f_{} = Some(map.next_value::<{}>()?);", var, f.payload),
+            )
+        };
+        let _ = writeln!(
+            out,
+            "                        {json:?} => {{\n                            if {present} {{\n                                return Err(serde::de::Error::duplicate_field({json:?}));\n                            }}\n                            {assign}\n                        }}",
+            json = f.ir.json_name,
+            present = present,
+            assign = assign
+        );
     }
+    // a repeated residual key keeps its last value, as a map would
     out.push_str(
         "                        _ => {\n                            residual.insert(k, map.next_value()?);\n                        }\n                    }\n                }\n",
     );
@@ -403,34 +617,134 @@ fn render_residual_impls(
     );
 }
 
-/// Renders an open string enum: unknown values deserialize into the
-/// `Unknown` variant instead of failing the whole response
+/// Renders an open string enum.
+///
+/// Values the specification lists map to unit variants; the other spellings
+/// it lists for the same value (`async` next to `ASYNC`) are accepted as
+/// aliases. Anything else is kept verbatim in `Unknown(String)`, so values
+/// added by newer versions or plugins never fail a response and round-trip
+/// unchanged. `#[serde(other)]` cannot carry the string, hence the
+/// generated `Serialize` / `Deserialize` impls.
 fn render_str_enum(rust_name: &str, e: &IrStrEnum) -> String {
     let mut out = String::new();
     doc(&mut out, e.description.as_deref());
-    out.push_str(
-        "#[derive(Debug, Clone, Copy, PartialEq, Eq, serde::Serialize, serde::Deserialize)]\n",
-    );
+    out.push_str("#[derive(Debug, Clone, PartialEq, Eq, Hash)]\n");
     let _ = writeln!(out, "pub enum {} {{", rust_name);
+
+    // (variant, serialized spelling, accepted spellings)
+    let mut variants: Vec<(String, &str, Vec<&str>)> = Vec::new();
     // `Unknown` is reserved for the catch-all variant below
     let mut taken: BTreeSet<String> = ["Unknown".to_string()].iter().cloned().collect();
-    for value in &e.values {
-        let mut variant = value.to_pascal_case();
+    // a spelling listed twice (in different groups) matches its first variant
+    let mut seen: BTreeSet<&str> = BTreeSet::new();
+    for v in &e.values {
+        let accepted: Vec<&str> = std::iter::once(v.value.as_str())
+            .chain(v.aliases.iter().map(String::as_str))
+            .filter(|s| seen.insert(s))
+            .collect();
+        if accepted.is_empty() {
+            continue;
+        }
+        let mut variant = v.value.to_pascal_case();
         if variant.is_empty() || !taken.insert(variant.clone()) {
             variant = format!("Value{}", taken.len());
             taken.insert(variant.clone());
         }
-        let _ = writeln!(out, "    #[serde(rename = {:?})]", value);
+        let doc_line = if accepted.len() > 1 {
+            format!(
+                "`{}` (also accepted: {})",
+                v.value,
+                accepted[1..]
+                    .iter()
+                    .map(|a| format!("`{}`", a))
+                    .collect::<Vec<_>>()
+                    .join(", ")
+            )
+        } else {
+            format!("`{}`", v.value)
+        };
+        let _ = writeln!(out, "    #[doc = {:?}]", doc_line);
         let _ = writeln!(out, "    {},", variant);
+        variants.push((variant, &v.value, accepted));
     }
-    out.push_str("    #[doc = \"A value not defined by the specification; the original string is not preserved.\"]\n");
-    out.push_str("    #[serde(other)]\n    Unknown,\n}\n");
+    out.push_str(
+        "    #[doc = \"A value not defined by the specification, kept verbatim so that it round-trips.\"]\n",
+    );
+    out.push_str("    Unknown(String),\n}\n");
+
+    // as_str
+    let _ = writeln!(out, "impl {} {{", rust_name);
+    out.push_str("    #[doc = \"The JSON string of the value\"]\n");
+    out.push_str("    pub fn as_str(&self) -> &str {\n        match self {\n");
+    for (variant, value, _) in &variants {
+        let _ = writeln!(
+            out,
+            "            {}::{} => {:?},",
+            rust_name, variant, value
+        );
+    }
+    let _ = writeln!(out, "            {}::Unknown(s) => s.as_str(),", rust_name);
+    out.push_str("        }\n    }\n}\n");
+
+    // Serialize: the canonical spelling, or the original string
+    let _ = writeln!(
+        out,
+        r#"impl serde::Serialize for {name} {{
+    fn serialize<S>(&self, serializer: S) -> std::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {{
+        serializer.serialize_str(self.as_str())
+    }}
+}}"#,
+        name = rust_name
+    );
+
+    // Deserialize: exact match on every listed spelling, else Unknown
+    let mut arms = String::new();
+    for (variant, _, accepted) in &variants {
+        let pattern = accepted
+            .iter()
+            .map(|a| format!("{:?}", a))
+            .collect::<Vec<_>>()
+            .join(" | ");
+        let _ = writeln!(
+            arms,
+            "            {} => {}::{},",
+            pattern, rust_name, variant
+        );
+    }
+    let _ = writeln!(
+        out,
+        r#"impl<'de> serde::Deserialize<'de> for {name} {{
+    fn deserialize<D>(deserializer: D) -> std::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {{
+        let s = <String as serde::Deserialize>::deserialize(deserializer)?;
+        Ok(match s.as_str() {{
+{arms}            _ => {name}::Unknown(s),
+        }})
+    }}
+}}"#,
+        name = rust_name,
+        arms = arms
+    );
     out
 }
 
-/// Renders a dispatch union: an enum whose `Deserialize` visitor routes
-/// on the JSON kind of the incoming value, so no branch is decoded by
-/// trial and error and no intermediate buffering takes place
+/// Renders a dispatch union: an enum whose `Deserialize` impl routes on
+/// the JSON kind of the incoming value, so no branch is decoded by trial
+/// and error.
+///
+/// The kind is read from the first byte of the raw JSON text rather than
+/// from the visitor method `deserialize_any` would call: with serde_json's
+/// `arbitrary_precision` feature, which Cargo feature unification can turn
+/// on from any crate in a user's dependency graph, `deserialize_any`
+/// reports every number as a map (`{"$serde_json::private::Number": ..}`),
+/// which a kind-based visitor rejects. The raw text is captured as a
+/// `RawValue`, unaffected by that feature, and the selected branch is then
+/// decoded from it through its own type-driven `Deserialize`.
 fn render_dispatch_union(
     ir_name: &str,
     rust_name: &str,
@@ -459,6 +773,31 @@ fn render_dispatch_union(
         out.push_str("}\n");
     }
 
+    // one arm per variant kind, plus `null` for nullable unions
+    let mut arms = String::new();
+    for (v, (ident, _)) in u.variants.iter().zip(&variant_idents) {
+        let pattern = match v.kind {
+            Some(JsonKind::Bool) => "Some(b't') | Some(b'f')",
+            Some(JsonKind::Number) => "Some(b'-') | Some(b'0'..=b'9')",
+            Some(JsonKind::String) => "Some(b'\"')",
+            Some(JsonKind::Array) => "Some(b'[')",
+            Some(JsonKind::Object) => "Some(b'{')",
+            None => continue,
+        };
+        let _ = writeln!(
+            arms,
+            "            {} => serde_json::from_str(text).map({}::{}),",
+            pattern, rust_name, ident
+        );
+    }
+    if u.nullable {
+        let _ = writeln!(
+            arms,
+            "            Some(b'n') => return Ok({}::Null),",
+            rust_name
+        );
+    }
+
     let _ = writeln!(
         out,
         r#"impl<'de> serde::Deserialize<'de> for {name} {{
@@ -466,130 +805,24 @@ fn render_dispatch_union(
     where
         D: serde::Deserializer<'de>,
     {{
-        struct KindVisitor;
-        impl<'de> serde::de::Visitor<'de> for KindVisitor {{
-            type Value = {name};
-            fn expecting(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {{
-                f.write_str("a {name} value")
-            }}"#,
-        name = rust_name
-    );
-
-    for (v, (ident, _)) in u.variants.iter().zip(&variant_idents) {
-        match v.kind {
-            Some(JsonKind::Bool) => {
-                let _ = writeln!(
-                    out,
-                    r#"            fn visit_bool<E>(self, v: bool) -> std::result::Result<Self::Value, E>
-            where
-                E: serde::de::Error,
-            {{
-                serde::Deserialize::deserialize(serde::de::value::BoolDeserializer::new(v))
-                    .map({name}::{ident})
-            }}"#,
-                    name = rust_name,
-                    ident = ident
-                );
-            }
-            Some(JsonKind::Number) => {
-                let _ = writeln!(
-                    out,
-                    r#"            fn visit_i64<E>(self, v: i64) -> std::result::Result<Self::Value, E>
-            where
-                E: serde::de::Error,
-            {{
-                serde::Deserialize::deserialize(serde::de::value::I64Deserializer::new(v))
-                    .map({name}::{ident})
+        // dispatch on the first byte of the raw JSON text: unlike the value
+        // kind reported by `deserialize_any`, it does not depend on serde_json's
+        // `arbitrary_precision` feature
+        let raw: Box<serde_json::value::RawValue> = serde::Deserialize::deserialize(deserializer)?;
+        let text = raw.get().trim_start();
+        let parsed = match text.as_bytes().first() {{
+{arms}            other => {{
+                return Err(serde::de::Error::custom(format_args!(
+                    "invalid type: {{}}, expected a {name} value",
+                    crate::types::union::json_kind_name(other.copied())
+                )))
             }}
-            fn visit_u64<E>(self, v: u64) -> std::result::Result<Self::Value, E>
-            where
-                E: serde::de::Error,
-            {{
-                serde::Deserialize::deserialize(serde::de::value::U64Deserializer::new(v))
-                    .map({name}::{ident})
-            }}
-            fn visit_f64<E>(self, v: f64) -> std::result::Result<Self::Value, E>
-            where
-                E: serde::de::Error,
-            {{
-                serde::Deserialize::deserialize(serde::de::value::F64Deserializer::new(v))
-                    .map({name}::{ident})
-            }}"#,
-                    name = rust_name,
-                    ident = ident
-                );
-            }
-            Some(JsonKind::String) => {
-                let _ = writeln!(
-                    out,
-                    r#"            fn visit_str<E>(self, v: &str) -> std::result::Result<Self::Value, E>
-            where
-                E: serde::de::Error,
-            {{
-                serde::Deserialize::deserialize(serde::de::value::StrDeserializer::new(v))
-                    .map({name}::{ident})
-            }}"#,
-                    name = rust_name,
-                    ident = ident
-                );
-            }
-            Some(JsonKind::Array) => {
-                let _ = writeln!(
-                    out,
-                    r#"            fn visit_seq<A>(self, seq: A) -> std::result::Result<Self::Value, A::Error>
-            where
-                A: serde::de::SeqAccess<'de>,
-            {{
-                serde::Deserialize::deserialize(serde::de::value::SeqAccessDeserializer::new(seq))
-                    .map({name}::{ident})
-            }}"#,
-                    name = rust_name,
-                    ident = ident
-                );
-            }
-            Some(JsonKind::Object) => {
-                let _ = writeln!(
-                    out,
-                    r#"            fn visit_map<A>(self, map: A) -> std::result::Result<Self::Value, A::Error>
-            where
-                A: serde::de::MapAccess<'de>,
-            {{
-                serde::Deserialize::deserialize(serde::de::value::MapAccessDeserializer::new(map))
-                    .map({name}::{ident})
-            }}"#,
-                    name = rust_name,
-                    ident = ident
-                );
-            }
-            None => {}
-        }
-    }
-
-    if u.nullable {
-        let _ = writeln!(
-            out,
-            r#"            fn visit_unit<E>(self) -> std::result::Result<Self::Value, E>
-            where
-                E: serde::de::Error,
-            {{
-                Ok({name}::Null)
-            }}
-            fn visit_none<E>(self) -> std::result::Result<Self::Value, E>
-            where
-                E: serde::de::Error,
-            {{
-                Ok({name}::Null)
-            }}"#,
-            name = rust_name
-        );
-    }
-
-    out.push_str(
-        r#"        }
-        deserializer.deserialize_any(KindVisitor)
-    }
-}
-"#,
+        }};
+        parsed.map_err(serde::de::Error::custom)
+    }}
+}}"#,
+        name = rust_name,
+        arms = arms
     );
     out
 }
@@ -705,4 +938,82 @@ fn boxed_edges(ir: &ResponseIr) -> BTreeSet<(String, String)> {
         }
     }
     boxed
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::openapi::responses::{all_operation_groups, read_response_ir};
+
+    fn spec_ir() -> ResponseIr {
+        let path = concat!(env!("CARGO_MANIFEST_DIR"), "/opensearch-openapi.yaml");
+        let spec: serde_json::Value =
+            serde_yaml::from_reader(std::fs::File::open(path).unwrap()).unwrap();
+        let groups = all_operation_groups(&spec);
+        let refs: Vec<&str> = groups.iter().map(String::as_str).collect();
+        read_response_ir(&spec, &refs).unwrap()
+    }
+
+    #[test]
+    fn total_hit_count_unions_are_found_in_every_search_like_response() {
+        let found = total_hits_unions(&spec_ir());
+        // one per kind of hits object: the specification declares
+        // `hits.total` inline in each
+        for name in [
+            "_core.search___HitsMetadataTotal",
+            "_core.search___SearchResponseHitsTotal",
+            "_core.msearch___MultiSearchItemHitsTotal",
+            "_core.search_template___SearchTemplateResponseHitsTotal",
+        ] {
+            assert!(found.contains(name), "{} not found in {:?}", name, found);
+        }
+        assert_eq!(found.len(), 10, "{:?}", found);
+    }
+
+    #[test]
+    fn only_the_total_hits_or_integer_shape_is_a_total_hit_count() {
+        use crate::openapi::responses::IrVariant;
+        let union = |variants: Vec<IrRef>, nullable: bool| IrUnion {
+            description: None,
+            variants: variants
+                .into_iter()
+                .enumerate()
+                .map(|(i, ty)| IrVariant {
+                    name: format!("v{}", i),
+                    ty,
+                    kind: None,
+                })
+                .collect(),
+            nullable,
+        };
+        let object = || IrRef::Named(TOTAL_HITS.to_string());
+        let integer = || IrRef::Scalar(Scalar::I64);
+
+        assert!(is_total_hits_union(&union(
+            vec![object(), integer()],
+            false
+        )));
+        assert!(is_total_hits_union(&union(
+            vec![integer(), object()],
+            false
+        )));
+        // `null` has no count
+        assert!(!is_total_hits_union(&union(
+            vec![object(), integer()],
+            true
+        )));
+        // another object, or another number type
+        assert!(!is_total_hits_union(&union(
+            vec![IrRef::Named("_common___Other".into()), integer()],
+            false
+        )));
+        assert!(!is_total_hits_union(&union(
+            vec![object(), IrRef::Scalar(Scalar::F64)],
+            false
+        )));
+        assert!(!is_total_hits_union(&union(
+            vec![object(), integer(), IrRef::Scalar(Scalar::String)],
+            false
+        )));
+    }
 }

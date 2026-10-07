@@ -28,6 +28,11 @@ rustls-tls = ["reqwest/rustls"]
 # AWS SigV4 Auth support
 aws-auth = ["aws-credential-types", "aws-sigv4", "aws-smithy-runtime-api", "aws-types", "dep:tokio", "dep:fastrand"]
 
+# Test-only: runs the test suite with serde_json's `arbitrary_precision`,
+# which any crate in a user's dependency graph can turn on through feature
+# unification. Not part of the public API.
+_test-arbitrary-precision = ["serde_json/arbitrary_precision"]
+
 [dependencies]
 async-trait = "0.1"
 base64 = "0.23"

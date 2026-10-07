@@ -32,9 +32,88 @@
 pub type GetMappingResponse = crate::types::indices::GetMappingResponse;
 
 #[doc = "The mapping configuration for an index."]
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, Clone)]
 pub struct IndexMappingRecord {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub item: Option<crate::types::common_mapping::TypeMapping>,
     pub mappings: crate::types::common_mapping::TypeMapping,
+    #[doc = "Keys of the JSON object that the specification does not define, kept as raw JSON so that nothing the server sends is lost: fields added by plugins or newer OpenSearch versions, or missing from the specification. Serialized back unchanged."]
+    pub unknown_fields: std::collections::BTreeMap<String, Box<serde_json::value::RawValue>>,
+}
+impl<'de> serde::Deserialize<'de> for IndexMappingRecord {
+    fn deserialize<D>(deserializer: D) -> std::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        struct ResidualVisitor;
+        impl<'de> serde::de::Visitor<'de> for ResidualVisitor {
+            type Value = IndexMappingRecord;
+            fn expecting(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+                f.write_str("a IndexMappingRecord object")
+            }
+            // locals are named after the field identifiers, which keep a
+            // leading underscore when two JSON names would otherwise clash
+            // (`_nodes` -> `f__nodes`)
+            #[allow(non_snake_case)]
+            fn visit_map<A>(self, mut map: A) -> std::result::Result<Self::Value, A::Error>
+            where
+                A: serde::de::MapAccess<'de>,
+            {
+                let mut f_item: Option<crate::types::common_mapping::TypeMapping> = None;
+                let mut seen_item = false;
+                let mut f_mappings: Option<crate::types::common_mapping::TypeMapping> = None;
+                let mut residual: std::collections::BTreeMap<
+                    String,
+                    Box<serde_json::value::RawValue>,
+                > = Default::default();
+                while let Some(k) = map.next_key::<String>()? {
+                    match k.as_str() {
+                        "item" => {
+                            if seen_item {
+                                return Err(serde::de::Error::duplicate_field("item"));
+                            }
+                            seen_item = true;
+                            f_item = map
+                                .next_value::<Option<crate::types::common_mapping::TypeMapping>>(
+                                )?;
+                        }
+                        "mappings" => {
+                            if f_mappings.is_some() {
+                                return Err(serde::de::Error::duplicate_field("mappings"));
+                            }
+                            f_mappings = Some(
+                                map.next_value::<crate::types::common_mapping::TypeMapping>()?,
+                            );
+                        }
+                        _ => {
+                            residual.insert(k, map.next_value()?);
+                        }
+                    }
+                }
+                Ok(IndexMappingRecord {
+                    item: f_item,
+                    mappings: f_mappings
+                        .ok_or_else(|| serde::de::Error::missing_field("mappings"))?,
+                    unknown_fields: residual,
+                })
+            }
+        }
+        deserializer.deserialize_map(ResidualVisitor)
+    }
+}
+impl serde::Serialize for IndexMappingRecord {
+    fn serialize<S>(&self, serializer: S) -> std::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeMap;
+        let mut map = serializer.serialize_map(None)?;
+        if let Some(v) = &self.item {
+            map.serialize_entry("item", v)?;
+        }
+        map.serialize_entry("mappings", &self.mappings)?;
+        for (k, v) in &self.unknown_fields {
+            map.serialize_entry(k, v)?;
+        }
+        map.end()
+    }
 }

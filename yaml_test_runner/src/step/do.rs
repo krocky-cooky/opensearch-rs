@@ -270,7 +270,9 @@ pub struct ApiCall {
     /// `indices.create`
     full_name: String,
     /// The Rust path of the generated response model of the endpoint, when
-    /// one exists (see [ApiEndpoint::typed_response])
+    /// one exists (see [ApiEndpoint::typed_response]) and the response is
+    /// expected to have its shape: `None` when the call passes
+    /// `filter_path`, which removes fields from the response at will
     typed_response: Option<String>,
     function: syn::Expr,
     parts: Option<TokenStream>,
@@ -353,6 +355,11 @@ impl ApiCall {
             }
         }
 
+        // `filter_path` returns an arbitrary subset of the response, which
+        // the response model is not meant to describe (callers decode such
+        // responses into their own types): no typed verification then
+        let filters_response = params.iter().any(|(k, _)| *k == "filter_path");
+
         let api_call = endpoint.full_name.as_ref().unwrap();
         let parts = Self::generate_parts(api_call, endpoint, &parts)?;
         let params = Self::generate_params(api, endpoint, &params)?;
@@ -374,7 +381,11 @@ impl ApiCall {
         Ok(ApiCall {
             namespace,
             full_name: api_call.clone(),
-            typed_response: endpoint.typed_response.clone(),
+            typed_response: if filters_response {
+                None
+            } else {
+                endpoint.typed_response.clone()
+            },
             function,
             parts,
             params,
@@ -1032,5 +1043,39 @@ mod tests {
     #[test]
     fn typed_check_is_not_emitted_without_a_model() {
         assert!(typed_response_check("exists", &None).is_none());
+    }
+
+    /// The API model read from the vendored OpenAPI specification
+    fn spec_api() -> Api {
+        let path = concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/../api_generator/opensearch-openapi.yaml"
+        );
+        api_generator::openapi::read_api("test", std::path::Path::new(path)).unwrap()
+    }
+
+    /// The tokens generated for a `do` step given as yaml
+    fn do_tokens(api: &Api, yaml: &str) -> String {
+        let value: Value = serde_yaml::from_str(yaml).unwrap();
+        let step = Do::try_parse(api, &value).unwrap();
+        let mut tokens = TokenStream::new();
+        step.to_tokens(false, &mut tokens);
+        tokens.to_string()
+    }
+
+    #[test]
+    fn typed_check_is_skipped_for_filter_path() {
+        let api = spec_api();
+        // a plain search is verified against its model
+        let plain = do_tokens(&api, "search:\n  index: test\n");
+        assert!(plain.contains("check_typed_response"), "{}", plain);
+        // filter_path returns an arbitrary subset of the response: not verified
+        let filtered = do_tokens(
+            &api,
+            "search:\n  index: test\n  filter_path: \"hits.hits._source\"\n",
+        );
+        assert!(!filtered.contains("check_typed_response"), "{}", filtered);
+        // the request itself still carries the parameter
+        assert!(filtered.contains("filter_path"), "{}", filtered);
     }
 }

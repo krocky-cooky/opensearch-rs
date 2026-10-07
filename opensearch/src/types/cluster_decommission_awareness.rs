@@ -29,19 +29,55 @@
 #![allow(missing_docs)]
 
 #[doc = "An enumeration of the states during decommissioning."]
-#[derive(Debug, Clone, Copy, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum DecommissionStatus {
-    #[serde(rename = "INIT")]
+    #[doc = "`INIT`"]
     Init,
-    #[serde(rename = "DRAINING")]
+    #[doc = "`DRAINING`"]
     Draining,
-    #[serde(rename = "IN_PROGRESS")]
+    #[doc = "`IN_PROGRESS`"]
     InProgress,
-    #[serde(rename = "SUCCESSFUL")]
+    #[doc = "`SUCCESSFUL`"]
     Successful,
-    #[serde(rename = "FAILED")]
+    #[doc = "`FAILED`"]
     Failed,
-    #[doc = "A value not defined by the specification; the original string is not preserved."]
-    #[serde(other)]
-    Unknown,
+    #[doc = "A value not defined by the specification, kept verbatim so that it round-trips."]
+    Unknown(String),
+}
+impl DecommissionStatus {
+    #[doc = "The JSON string of the value"]
+    pub fn as_str(&self) -> &str {
+        match self {
+            DecommissionStatus::Init => "INIT",
+            DecommissionStatus::Draining => "DRAINING",
+            DecommissionStatus::InProgress => "IN_PROGRESS",
+            DecommissionStatus::Successful => "SUCCESSFUL",
+            DecommissionStatus::Failed => "FAILED",
+            DecommissionStatus::Unknown(s) => s.as_str(),
+        }
+    }
+}
+impl serde::Serialize for DecommissionStatus {
+    fn serialize<S>(&self, serializer: S) -> std::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.as_str())
+    }
+}
+impl<'de> serde::Deserialize<'de> for DecommissionStatus {
+    fn deserialize<D>(deserializer: D) -> std::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let s = <String as serde::Deserialize>::deserialize(deserializer)?;
+        Ok(match s.as_str() {
+            "INIT" => DecommissionStatus::Init,
+            "DRAINING" => DecommissionStatus::Draining,
+            "IN_PROGRESS" => DecommissionStatus::InProgress,
+            "SUCCESSFUL" => DecommissionStatus::Successful,
+            "FAILED" => DecommissionStatus::Failed,
+            _ => DecommissionStatus::Unknown(s),
+        })
+    }
 }

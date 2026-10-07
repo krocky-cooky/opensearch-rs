@@ -268,6 +268,21 @@ impl<'a, 'b> SecurityAnalyticsGetAlerts<'a, 'b> {
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::security_analytics_get_alerts::GetAlertsResponse`](crate::types::security_analytics_get_alerts::GetAlertsResponse), the typed response of the Security Analytics Get Alerts API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::security_analytics_get_alerts::GetAlertsResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::security_analytics_get_alerts::GetAlertsResponse",
+                &[],
+            )
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Security Analytics Get Findings API"]
@@ -508,6 +523,21 @@ impl<'a, 'b> SecurityAnalyticsGetFindings<'a, 'b> {
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::security_analytics_get_findings::GetFindingsResponse`](crate::types::security_analytics_get_findings::GetFindingsResponse), the typed response of the Security Analytics Get Findings API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::security_analytics_get_findings::GetFindingsResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::security_analytics_get_findings::GetFindingsResponse",
+                &[],
+            )
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Security Analytics Search Finding Correlations API"]
@@ -657,6 +687,12 @@ impl<'a, 'b> SecurityAnalyticsSearchFindingCorrelations<'a, 'b> {
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::security_analytics_search_finding_correlations::SearchFindingCorrelationsResponse`](crate::types::security_analytics_search_finding_correlations::SearchFindingCorrelationsResponse), the typed response of the Security Analytics Search Finding Correlations API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]    pub async fn send_typed (self) -> Result < crate :: types :: security_analytics_search_finding_correlations :: SearchFindingCorrelationsResponse , Error >{
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self . send () . await ? . typed ("types::security_analytics_search_finding_correlations::SearchFindingCorrelationsResponse" , & []) . await
     }
 }
 #[doc = "Namespace client for SecurityAnalytics APIs"]

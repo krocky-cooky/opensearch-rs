@@ -77,6 +77,12 @@ pub struct ResponseIr {
     /// the reason: no success response is declared, or the success response
     /// carries no JSON body (HEAD endpoints, text-only `cat` output, ...)
     pub untyped_groups: BTreeMap<String, String>,
+    /// operation group name -> the non-2xx status codes for which the
+    /// specification declares the same body as the response model, e.g.
+    /// `404` of `get` (`{"found": false, ...}`): a typed call decodes these
+    /// as the model rather than reporting an error. Every other non-2xx
+    /// status is an error response.
+    pub model_statuses: BTreeMap<String, Vec<u16>>,
 }
 
 /// The success status codes whose response schema is taken as the response
@@ -175,7 +181,17 @@ pub struct IrVariant {
 #[derive(Debug)]
 pub struct IrStrEnum {
     pub description: Option<String>,
-    pub values: Vec<String>,
+    pub values: Vec<IrStrValue>,
+}
+
+/// One value of a string enum
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct IrStrValue {
+    /// The spelling written back when serializing
+    pub value: String,
+    /// Other spellings the specification lists for the same value, e.g.
+    /// `async` next to `ASYNC`: accepted when deserializing
+    pub aliases: Vec<String>,
 }
 
 #[derive(Debug)]
@@ -335,6 +351,13 @@ pub fn read_response_ir(spec: &Value, operation_groups: &[&str]) -> anyhow::Resu
                 name
             }
         };
+        let statuses = model_statuses(schemas, responses, group, schema);
+        if !statuses.is_empty() {
+            builder
+                .ir
+                .model_statuses
+                .insert(group.to_string(), statuses);
+        }
         builder.ir.endpoints.insert(group.to_string(), root);
     }
 
@@ -353,6 +376,67 @@ pub fn read_response_ir(spec: &Value, operation_groups: &[&str]) -> anyhow::Resu
     prune_unreachable(&mut builder.ir);
 
     Ok(builder.ir)
+}
+
+/// Non-2xx statuses the server answers with the success body although the
+/// specification does not declare them, as `(operation group, status)`.
+/// Each is a gap of the specification to be fixed upstream; listed here so
+/// that a typed call returns the model rather than an error.
+const UNDECLARED_MODEL_STATUSES: &[(&str, u16)] = &[
+    // `wait_for_*` timing out: 408 with the regular health body and
+    // `"timed_out": true`
+    ("cluster.health", 408),
+];
+
+/// The non-2xx status codes of a group whose declared JSON body is the
+/// success schema `model` (after following plain `$ref`s on both sides),
+/// plus its [UNDECLARED_MODEL_STATUSES]
+fn model_statuses(
+    schemas: &Map<String, Value>,
+    responses: &Map<String, Value>,
+    group: &str,
+    model: &Value,
+) -> Vec<u16> {
+    fn resolve<'a>(schemas: &'a Map<String, Value>, mut schema: &'a Value) -> &'a Value {
+        // a cycle of bare references is not a schema; bound the walk
+        for _ in 0..16 {
+            let target = match schema.as_object() {
+                Some(o) if o.len() == 1 => o.get("$ref").and_then(Value::as_str),
+                _ => None,
+            };
+            match target
+                .and_then(|r| r.strip_prefix("#/components/schemas/"))
+                .and_then(|name| schemas.get(name))
+            {
+                Some(next) => schema = next,
+                None => break,
+            }
+        }
+        schema
+    }
+
+    let model = resolve(schemas, model);
+    let prefix = format!("{}___", group);
+    let mut statuses: Vec<u16> = responses
+        .iter()
+        .filter_map(|(key, response)| {
+            let code: u16 = key.strip_prefix(&prefix)?.parse().ok()?;
+            if (200..300).contains(&code) {
+                return None;
+            }
+            let schema = &response["content"]["application/json"]["schema"];
+            (!schema.is_null() && resolve(schemas, schema) == model).then_some(code)
+        })
+        .collect();
+    statuses.extend(
+        UNDECLARED_MODEL_STATUSES
+            .iter()
+            .filter(|(g, _)| *g == group)
+            .map(|(_, code)| *code),
+    );
+    statuses.sort_unstable();
+    statuses.dedup();
+    statuses
 }
 
 /// Drops types not reachable from any endpoint root: merging specialized
@@ -842,9 +926,13 @@ impl IrBuilder<'_> {
         Ok(match schema["type"].as_str() {
             Some("boolean") => (IrRef::Scalar(Scalar::Bool), false),
             Some("integer") => match schema["format"].as_str() {
-                Some("int64") => (IrRef::Scalar(Scalar::I64), false),
+                // only an explicit int32 is narrowed: an integer without a
+                // format is any JSON integer, and real responses carry epoch
+                // milliseconds and byte counts in such fields (e.g. ISM
+                // `last_updated_time`), which overflow i32
+                Some("int32") => (IrRef::Scalar(Scalar::I32), false),
                 Some("uint64") => (IrRef::Scalar(Scalar::U64), false),
-                _ => (IrRef::Scalar(Scalar::I32), false),
+                _ => (IrRef::Scalar(Scalar::I64), false),
             },
             Some("number") => (IrRef::Scalar(Scalar::F64), false),
             Some("string") => (IrRef::Scalar(Scalar::String), false),
@@ -947,27 +1035,32 @@ pub fn namespace(ir_name: &str) -> &str {
 /// Collects the fixed string values of a schema whose variants are all
 /// consts / string enums, following `$ref`s. Returns `None` when any
 /// variant allows other values.
+///
+/// Spellings differing only in letter case (`ASYNC` / `async`) are one
+/// value with aliases, unless the specification puts them in differently
+/// titled `oneOf` variants: case can carry meaning (`1m` is a minute, `1M`
+/// a month, titled `minute` and `month`).
 fn collect_const_values(
     schema: &Value,
     schemas: &Map<String, Value>,
-) -> anyhow::Result<Option<Vec<String>>> {
-    fn collect(
-        schema: &Value,
-        schemas: &Map<String, Value>,
+) -> anyhow::Result<Option<Vec<IrStrValue>>> {
+    /// Collects `(value, enclosing oneOf variant title)` pairs
+    fn collect<'a>(
+        schema: &'a Value,
+        schemas: &'a Map<String, Value>,
+        group: Option<&'a str>,
         depth: usize,
-        out: &mut Vec<String>,
+        out: &mut Vec<(String, Option<&'a str>)>,
     ) -> anyhow::Result<bool> {
         if depth > 4 {
             return Ok(false);
         }
-        let resolved;
         let schema = match schema["$ref"].as_str() {
             Some(r) => {
                 let name = schema_ref_name(r)?;
-                resolved = schemas
+                schemas
                     .get(name)
-                    .ok_or_else(|| anyhow!("unresolved schema $ref: {}", r))?;
-                resolved
+                    .ok_or_else(|| anyhow!("unresolved schema $ref: {}", r))?
             }
             None => schema,
         };
@@ -976,20 +1069,28 @@ fn collect_const_values(
             if values.is_empty() || !values.iter().all(|v| v.is_string()) {
                 return Ok(false);
             }
-            out.extend(values.iter().map(|v| v.as_str().unwrap().to_string()));
+            out.extend(
+                values
+                    .iter()
+                    .map(|v| (v.as_str().unwrap().to_string(), group)),
+            );
             return Ok(true);
         }
         match &schema["const"] {
             Value::String(s) => {
-                out.push(s.clone());
+                out.push((s.clone(), group));
                 return Ok(true);
             }
             Value::Null => {}
             _ => return Ok(false),
         }
-        if let Some(variants) = union_variants(schema) {
-            for variant in &variants {
-                if !collect(variant, schemas, depth + 1, out)? {
+        if let Some(variants) = schema["oneOf"]
+            .as_array()
+            .or_else(|| schema["anyOf"].as_array())
+        {
+            for variant in variants {
+                let variant_group = variant["title"].as_str().or(group);
+                if !collect(variant, schemas, variant_group, depth + 1, out)? {
                     return Ok(false);
                 }
             }
@@ -998,18 +1099,33 @@ fn collect_const_values(
         Ok(false)
     }
 
-    let mut values = Vec::new();
-    Ok(match collect(schema, schemas, 0, &mut values)? {
-        true if !values.is_empty() => {
-            let mut seen = BTreeSet::new();
-            let deduped: Vec<String> = values
-                .into_iter()
-                .filter(|v| seen.insert(v.to_lowercase()))
-                .collect();
-            Some(deduped)
+    let mut raw = Vec::new();
+    if !collect(schema, schemas, None, 0, &mut raw)? || raw.is_empty() {
+        return Ok(None);
+    }
+    let mut values: Vec<(IrStrValue, Option<&str>)> = Vec::new();
+    for (value, group) in raw {
+        let known = values.iter_mut().find(|(v, g)| {
+            *g == group
+                && (v.value.eq_ignore_ascii_case(&value)
+                    || v.aliases.iter().any(|a| a.eq_ignore_ascii_case(&value)))
+        });
+        match known {
+            Some((v, _)) => {
+                if v.value != value && !v.aliases.contains(&value) {
+                    v.aliases.push(value);
+                }
+            }
+            None => values.push((
+                IrStrValue {
+                    value,
+                    aliases: Vec::new(),
+                },
+                group,
+            )),
         }
-        _ => None,
-    })
+    }
+    Ok(Some(values.into_iter().map(|(v, _)| v).collect()))
 }
 
 /// Decides the decoding strategy of every union in the IR: unions whose
@@ -1111,6 +1227,25 @@ mod tests {
     /// Reads the IR of the four core APIs from the vendored specification
     fn core_ir() -> ResponseIr {
         read_response_ir(&spec(), &["search", "index", "bulk", "get"]).unwrap()
+    }
+
+    #[test]
+    fn model_statuses_are_the_error_codes_answering_with_the_model() {
+        let groups = ["get", "delete", "indices.delete", "search", "clear_scroll"];
+        let ir = read_response_ir(&spec(), &groups).unwrap();
+        // a missing document is answered with the regular body
+        assert_eq!(ir.model_statuses.get("get"), Some(&vec![404]));
+        assert_eq!(ir.model_statuses.get("delete"), Some(&vec![404]));
+        assert_eq!(ir.model_statuses.get("clear_scroll"), Some(&vec![404]));
+        // a missing index is an error body (`ErrorResponseBase`)
+        assert_eq!(ir.model_statuses.get("indices.delete"), None);
+        assert_eq!(ir.model_statuses.get("search"), None);
+    }
+
+    #[test]
+    fn undeclared_model_statuses_are_added() {
+        let ir = read_response_ir(&spec(), &["cluster.health"]).unwrap();
+        assert_eq!(ir.model_statuses.get("cluster.health"), Some(&vec![408]));
     }
 
     #[test]
@@ -1279,13 +1414,47 @@ mod tests {
     }
 
     #[test]
+    fn case_variants_become_aliases_unless_titled_apart() {
+        let spec = spec();
+        let schemas = spec["components"]["schemas"].as_object().unwrap();
+        let values = |name: &str| {
+            collect_const_values(&schemas[name], schemas)
+                .unwrap()
+                .unwrap()
+        };
+
+        // ASYNC / async: one value, the lowercase spelling as an alias
+        let durability = values("indices._common___TranslogDurability");
+        assert_eq!(
+            durability,
+            vec![
+                IrStrValue {
+                    value: "ASYNC".into(),
+                    aliases: vec!["async".into()]
+                },
+                IrStrValue {
+                    value: "REQUEST".into(),
+                    aliases: vec!["request".into()]
+                },
+            ]
+        );
+
+        // 1m (titled minute) and 1M (titled month) stay distinct values
+        let interval = values("_common.aggregations___CalendarInterval");
+        let one_m = interval.iter().find(|v| v.value == "1m").unwrap();
+        let one_big_m = interval.iter().find(|v| v.value == "1M").unwrap();
+        assert!(one_m.aliases.is_empty() && one_big_m.aliases.is_empty());
+    }
+
+    #[test]
     fn const_unions_become_open_string_enums() {
         let ir = core_ir();
         let relation = match &ir.types["_core.search___TotalHitsRelation"] {
             IrType::StrEnum(e) => e,
             other => panic!("expected string enum, got {:?}", other),
         };
-        assert_eq!(relation.values, vec!["eq", "gte"]);
+        let values: Vec<&str> = relation.values.iter().map(|v| v.value.as_str()).collect();
+        assert_eq!(values, vec!["eq", "gte"]);
     }
 
     #[test]
@@ -1358,6 +1527,26 @@ mod tests {
             IrType::Alias(a) => assert_eq!(a.ty, IrRef::Raw(RawCause::GenericParameter)),
             other => panic!("expected a raw alias, got {:?}", other),
         }
+    }
+
+    #[test]
+    fn integers_without_format_are_64_bit() {
+        let ir = fixture_ir(serde_json::json!({
+            "t___Root": {
+                "type": "object",
+                "properties": {
+                    "no_format": { "type": "integer" },
+                    "int32": { "type": "integer", "format": "int32" },
+                    "int64": { "type": "integer", "format": "int64" },
+                    "uint64": { "type": "integer", "format": "uint64" }
+                }
+            }
+        }));
+        let ty = |name: &str| field(&ir, "t___Root", name).ty.clone();
+        assert_eq!(ty("no_format"), IrRef::Scalar(Scalar::I64));
+        assert_eq!(ty("int32"), IrRef::Scalar(Scalar::I32));
+        assert_eq!(ty("int64"), IrRef::Scalar(Scalar::I64));
+        assert_eq!(ty("uint64"), IrRef::Scalar(Scalar::U64));
     }
 
     #[test]

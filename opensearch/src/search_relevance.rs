@@ -158,6 +158,22 @@ impl<'a, 'b> SearchRelevanceDeleteExperiments<'a, 'b> {
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::search_relevance_delete_experiments::DeleteExperimentsResponse`](crate::types::search_relevance_delete_experiments::DeleteExperimentsResponse), the typed response of the Search Relevance Delete Experiments API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::search_relevance_delete_experiments::DeleteExperimentsResponse, Error>
+    {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::search_relevance_delete_experiments::DeleteExperimentsResponse",
+                &[],
+            )
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Search Relevance Delete Judgments API"]
@@ -277,6 +293,22 @@ impl<'a, 'b> SearchRelevanceDeleteJudgments<'a, 'b> {
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::search_relevance_delete_judgments::DeleteJudgmentsResponse`](crate::types::search_relevance_delete_judgments::DeleteJudgmentsResponse), the typed response of the Search Relevance Delete Judgments API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::search_relevance_delete_judgments::DeleteJudgmentsResponse, Error>
+    {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::search_relevance_delete_judgments::DeleteJudgmentsResponse",
+                &[],
+            )
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Search Relevance Delete Query Sets API"]
@@ -395,6 +427,22 @@ impl<'a, 'b> SearchRelevanceDeleteQuerySets<'a, 'b> {
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::search_relevance_delete_query_sets::DeleteQuerySetsResponse`](crate::types::search_relevance_delete_query_sets::DeleteQuerySetsResponse), the typed response of the Search Relevance Delete Query Sets API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::search_relevance_delete_query_sets::DeleteQuerySetsResponse, Error>
+    {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::search_relevance_delete_query_sets::DeleteQuerySetsResponse",
+                &[],
+            )
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -517,6 +565,12 @@ impl<'a, 'b> SearchRelevanceDeleteScheduledExperiments<'a, 'b> {
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::search_relevance_delete_scheduled_experiments::DeleteScheduledExperimentsResponse`](crate::types::search_relevance_delete_scheduled_experiments::DeleteScheduledExperimentsResponse), the typed response of the Search Relevance Delete Scheduled Experiments API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]    pub async fn send_typed (self) -> Result < crate :: types :: search_relevance_delete_scheduled_experiments :: DeleteScheduledExperimentsResponse , Error >{
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self . send () . await ? . typed ("types::search_relevance_delete_scheduled_experiments::DeleteScheduledExperimentsResponse" , & []) . await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -642,6 +696,12 @@ impl<'a, 'b> SearchRelevanceDeleteSearchConfigurations<'a, 'b> {
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::search_relevance_delete_search_configurations::DeleteSearchConfigurationsResponse`](crate::types::search_relevance_delete_search_configurations::DeleteSearchConfigurationsResponse), the typed response of the Search Relevance Delete Search Configurations API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]    pub async fn send_typed (self) -> Result < crate :: types :: search_relevance_delete_search_configurations :: DeleteSearchConfigurationsResponse , Error >{
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self . send () . await ? . typed ("types::search_relevance_delete_search_configurations::DeleteSearchConfigurationsResponse" , & []) . await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Search Relevance Get Experiments API"]
@@ -766,6 +826,21 @@ impl<'a, 'b> SearchRelevanceGetExperiments<'a, 'b> {
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::search_relevance_get_experiments::GetExperimentsResponse`](crate::types::search_relevance_get_experiments::GetExperimentsResponse), the typed response of the Search Relevance Get Experiments API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::search_relevance_get_experiments::GetExperimentsResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::search_relevance_get_experiments::GetExperimentsResponse",
+                &[],
+            )
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Search Relevance Get Judgments API"]
@@ -889,6 +964,21 @@ impl<'a, 'b> SearchRelevanceGetJudgments<'a, 'b> {
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::search_relevance_get_judgments::GetJudgmentsResponse`](crate::types::search_relevance_get_judgments::GetJudgmentsResponse), the typed response of the Search Relevance Get Judgments API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::search_relevance_get_judgments::GetJudgmentsResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::search_relevance_get_judgments::GetJudgmentsResponse",
+                &[],
+            )
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -1069,6 +1159,21 @@ impl<'a, 'b> SearchRelevanceGetNodeStats<'a, 'b> {
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::search_relevance_get_node_stats::GetNodeStatsResponse`](crate::types::search_relevance_get_node_stats::GetNodeStatsResponse), the typed response of the Search Relevance Get Node Stats API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::search_relevance_get_node_stats::GetNodeStatsResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::search_relevance_get_node_stats::GetNodeStatsResponse",
+                &[],
+            )
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Search Relevance Get Query Sets API"]
@@ -1192,6 +1297,21 @@ impl<'a, 'b> SearchRelevanceGetQuerySets<'a, 'b> {
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::search_relevance_get_query_sets::GetQuerySetsResponse`](crate::types::search_relevance_get_query_sets::GetQuerySetsResponse), the typed response of the Search Relevance Get Query Sets API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::search_relevance_get_query_sets::GetQuerySetsResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::search_relevance_get_query_sets::GetQuerySetsResponse",
+                &[],
+            )
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -1319,6 +1439,18 @@ impl<'a, 'b> SearchRelevanceGetScheduledExperiments<'a, 'b> {
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::search_relevance_get_scheduled_experiments::GetScheduledExperimentsResponse`](crate::types::search_relevance_get_scheduled_experiments::GetScheduledExperimentsResponse), the typed response of the Search Relevance Get Scheduled Experiments API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<
+        crate::types::search_relevance_get_scheduled_experiments::GetScheduledExperimentsResponse,
+        Error,
+    > {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self . send () . await ? . typed ("types::search_relevance_get_scheduled_experiments::GetScheduledExperimentsResponse" , & []) . await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -1448,6 +1580,18 @@ impl<'a, 'b> SearchRelevanceGetSearchConfigurations<'a, 'b> {
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::search_relevance_get_search_configurations::GetSearchConfigurationsResponse`](crate::types::search_relevance_get_search_configurations::GetSearchConfigurationsResponse), the typed response of the Search Relevance Get Search Configurations API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<
+        crate::types::search_relevance_get_search_configurations::GetSearchConfigurationsResponse,
+        Error,
+    > {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self . send () . await ? . typed ("types::search_relevance_get_search_configurations::GetSearchConfigurationsResponse" , & []) . await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -1615,6 +1759,18 @@ impl<'a, 'b> SearchRelevanceGetStats<'a, 'b> {
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::search_relevance_get_stats::GetStatsResponse`](crate::types::search_relevance_get_stats::GetStatsResponse), the typed response of the Search Relevance Get Stats API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::search_relevance_get_stats::GetStatsResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed("types::search_relevance_get_stats::GetStatsResponse", &[])
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Search Relevance Post Query Sets API"]
@@ -1751,6 +1907,21 @@ where
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::search_relevance_post_query_sets::PostQuerySetsResponse`](crate::types::search_relevance_post_query_sets::PostQuerySetsResponse), the typed response of the Search Relevance Post Query Sets API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::search_relevance_post_query_sets::PostQuerySetsResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::search_relevance_post_query_sets::PostQuerySetsResponse",
+                &[],
+            )
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -1889,6 +2060,18 @@ where
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::search_relevance_post_scheduled_experiments::PostScheduledExperimentsResponse`](crate::types::search_relevance_post_scheduled_experiments::PostScheduledExperimentsResponse), the typed response of the Search Relevance Post Scheduled Experiments API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<
+        crate::types::search_relevance_post_scheduled_experiments::PostScheduledExperimentsResponse,
+        Error,
+    > {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self . send () . await ? . typed ("types::search_relevance_post_scheduled_experiments::PostScheduledExperimentsResponse" , & []) . await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Search Relevance Put Experiments API"]
@@ -2025,6 +2208,21 @@ where
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::search_relevance_put_experiments::PutExperimentsResponse`](crate::types::search_relevance_put_experiments::PutExperimentsResponse), the typed response of the Search Relevance Put Experiments API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::search_relevance_put_experiments::PutExperimentsResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::search_relevance_put_experiments::PutExperimentsResponse",
+                &[],
+            )
+            .await
     }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -2163,6 +2361,21 @@ where
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::search_relevance_put_judgments::PutJudgmentsResponse`](crate::types::search_relevance_put_judgments::PutJudgmentsResponse), the typed response of the Search Relevance Put Judgments API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::search_relevance_put_judgments::PutJudgmentsResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::search_relevance_put_judgments::PutJudgmentsResponse",
+                &[],
+            )
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Search Relevance Put Query Sets API"]
@@ -2300,6 +2513,21 @@ where
             .await?;
         Ok(response)
     }
+    #[doc = "Sends the request and decodes the response body as [`types::search_relevance_put_query_sets::PutQuerySetsResponse`](crate::types::search_relevance_put_query_sets::PutQuerySetsResponse), the typed response of the Search Relevance Put Query Sets API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<crate::types::search_relevance_put_query_sets::PutQuerySetsResponse, Error> {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self.send()
+            .await?
+            .typed(
+                "types::search_relevance_put_query_sets::PutQuerySetsResponse",
+                &[],
+            )
+            .await
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[doc = "API parts for the Search Relevance Put Search Configurations API"]
@@ -2436,6 +2664,18 @@ where
             .send(method, &path, headers, query_string.as_ref(), body, timeout)
             .await?;
         Ok(response)
+    }
+    #[doc = "Sends the request and decodes the response body as [`types::search_relevance_put_search_configurations::PutSearchConfigurationsResponse`](crate::types::search_relevance_put_search_configurations::PutSearchConfigurationsResponse), the typed response of the Search Relevance Put Search Configurations API.\n\nThe body is decoded for a success status. Any other status is an error, whose details are available from [`Error::api_error`](crate::Error::api_error).\n\nUse [`send`](Self::send) instead to read the status code or headers, or to decode the body into a type of your own. `send_typed` refuses a request using `filter_path`, which removes fields of the model."]
+    pub async fn send_typed(
+        self,
+    ) -> Result<
+        crate::types::search_relevance_put_search_configurations::PutSearchConfigurationsResponse,
+        Error,
+    > {
+        if self.filter_path.is_some() {
+            return Err (Error :: typed_response_unavailable ("`filter_path` removes fields of the typed response model; use `send()` and decode the body into a type of your own")) ;
+        }
+        self . send () . await ? . typed ("types::search_relevance_put_search_configurations::PutSearchConfigurationsResponse" , & []) . await
     }
 }
 #[doc = "Namespace client for SearchRelevance APIs"]

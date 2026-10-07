@@ -28,7 +28,75 @@
 
 #![allow(missing_docs)]
 
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, Clone)]
 pub struct RenderSearchTemplateResponse {
     pub template_output: std::collections::BTreeMap<String, Box<serde_json::value::RawValue>>,
+    #[doc = "Keys of the JSON object that the specification does not define, kept as raw JSON so that nothing the server sends is lost: fields added by plugins or newer OpenSearch versions, or missing from the specification. Serialized back unchanged."]
+    pub unknown_fields: std::collections::BTreeMap<String, Box<serde_json::value::RawValue>>,
+}
+impl<'de> serde::Deserialize<'de> for RenderSearchTemplateResponse {
+    fn deserialize<D>(deserializer: D) -> std::result::Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        struct ResidualVisitor;
+        impl<'de> serde::de::Visitor<'de> for ResidualVisitor {
+            type Value = RenderSearchTemplateResponse;
+            fn expecting(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+                f.write_str("a RenderSearchTemplateResponse object")
+            }
+            // locals are named after the field identifiers, which keep a
+            // leading underscore when two JSON names would otherwise clash
+            // (`_nodes` -> `f__nodes`)
+            #[allow(non_snake_case)]
+            fn visit_map<A>(self, mut map: A) -> std::result::Result<Self::Value, A::Error>
+            where
+                A: serde::de::MapAccess<'de>,
+            {
+                let mut f_template_output: Option<
+                    std::collections::BTreeMap<String, Box<serde_json::value::RawValue>>,
+                > = None;
+                let mut residual: std::collections::BTreeMap<
+                    String,
+                    Box<serde_json::value::RawValue>,
+                > = Default::default();
+                while let Some(k) = map.next_key::<String>()? {
+                    match k.as_str() {
+                        "template_output" => {
+                            if f_template_output.is_some() {
+                                return Err(serde::de::Error::duplicate_field("template_output"));
+                            }
+                            f_template_output = Some(map.next_value::<std::collections::BTreeMap<
+                                String,
+                                Box<serde_json::value::RawValue>,
+                            >>()?);
+                        }
+                        _ => {
+                            residual.insert(k, map.next_value()?);
+                        }
+                    }
+                }
+                Ok(RenderSearchTemplateResponse {
+                    template_output: f_template_output
+                        .ok_or_else(|| serde::de::Error::missing_field("template_output"))?,
+                    unknown_fields: residual,
+                })
+            }
+        }
+        deserializer.deserialize_map(ResidualVisitor)
+    }
+}
+impl serde::Serialize for RenderSearchTemplateResponse {
+    fn serialize<S>(&self, serializer: S) -> std::result::Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        use serde::ser::SerializeMap;
+        let mut map = serializer.serialize_map(None)?;
+        map.serialize_entry("template_output", &self.template_output)?;
+        for (k, v) in &self.unknown_fields {
+            map.serialize_entry(k, v)?;
+        }
+        map.end()
+    }
 }
